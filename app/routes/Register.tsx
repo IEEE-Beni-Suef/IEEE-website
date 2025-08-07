@@ -10,6 +10,7 @@ import {
   CardContent,
 } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
+import { FormInput, FormSelect } from "../components/form";
 import {
   User,
   Mail,
@@ -18,7 +19,19 @@ import {
   EyeOff,
   ArrowRight,
   GraduationCap,
+  Phone,
+  MapPin,
 } from "lucide-react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  facultyOptions,
+  genderOptions,
+  roleOptions,
+  yearOptions,
+} from "utils/lists";
+import { registerSchema } from "utils/scemas";
 
 export function meta({}: MetaArgs) {
   return [
@@ -30,39 +43,22 @@ export function meta({}: MetaArgs) {
   ];
 }
 
+type RegisterFormData = z.infer<typeof registerSchema>;
+
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    studentId: "",
-    major: "",
-    graduationYear: "",
-    password: "",
-    confirmPassword: "",
-    agreeToTerms: false,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
   });
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle registration logic here
-    console.log("Registration attempt:", formData);
+  const onSubmit = (data: RegisterFormData) => {
+    console.log("Form submitted:", data);
+    // Handle form submission here
   };
-
-  const majors = [
-    "Computer Engineering",
-    "Electrical Engineering",
-    "Computer Science",
-    "Software Engineering",
-    "Cybersecurity",
-    "Other Engineering",
-    "Other",
-  ];
-
-  const currentYear = new Date().getFullYear();
-  const graduationYears = Array.from({ length: 8 }, (_, i) => currentYear + i);
 
   return (
     <Section
@@ -85,265 +81,140 @@ const Register = () => {
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label
-                    htmlFor="firstName"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    First Name
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      id="firstName"
-                      type="text"
-                      required
-                      value={formData.firstName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, firstName: e.target.value })
-                      }
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      placeholder="John"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label
-                    htmlFor="lastName"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    id="lastName"
-                    type="text"
-                    required
-                    value={formData.lastName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, lastName: e.target.value })
-                    }
-                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Doe"
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <FormInput
+                  id="fName"
+                  label="First Name"
+                  placeholder="John"
+                  register={register}
+                  error={errors.fName}
+                  icon={User}
+                />
+                <FormInput
+                  id="mName"
+                  label="Middle Name"
+                  placeholder="Middle"
+                  register={register}
+                  error={errors.mName}
+                  icon={User}
+                />
+                <FormInput
+                  id="lName"
+                  label="Last Name"
+                  placeholder="Doe"
+                  register={register}
+                  error={errors.lName}
+                />
               </div>
 
               {/* Email Field */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  BSU Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="your.email@boisestate.edu"
-                  />
-                </div>
-              </div>
+              <FormInput
+                id="email"
+                label="Email Address"
+                type="email"
+                placeholder="your.email@example.com"
+                register={register}
+                error={errors.email}
+                icon={Mail}
+              />
 
-              {/* Student ID and Academic Info */}
+              {/* Academic Info */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label
-                    htmlFor="studentId"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Student ID
-                  </label>
-                  <input
-                    id="studentId"
-                    type="text"
-                    required
-                    value={formData.studentId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, studentId: e.target.value })
-                    }
-                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="000000000"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label
-                    htmlFor="graduationYear"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Graduation Year
-                  </label>
-                  <div className="relative">
-                    <GraduationCap className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <select
-                      id="graduationYear"
-                      required
-                      value={formData.graduationYear}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          graduationYear: e.target.value,
-                        })
-                      }
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none"
-                    >
-                      <option value="">Select Year</option>
-                      {graduationYears.map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Major */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="major"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Major
-                </label>
-                <select
-                  id="major"
-                  required
-                  value={formData.major}
-                  onChange={(e) =>
-                    setFormData({ ...formData, major: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none"
-                >
-                  <option value="">Select Your Major</option>
-                  {majors.map((major) => (
-                    <option key={major} value={major}>
-                      {major}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Password Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label
-                    htmlFor="password"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      required
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
-                      className="w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      placeholder="Create password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-5 h-5" />
-                      ) : (
-                        <Eye className="w-5 h-5" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label
-                    htmlFor="confirmPassword"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Confirm Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      id="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      required
-                      value={formData.confirmPassword}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                      className="w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      placeholder="Confirm password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    >
-                      {showConfirmPassword ? (
-                        <EyeOff className="w-5 h-5" />
-                      ) : (
-                        <Eye className="w-5 h-5" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Terms and Conditions */}
-              <div className="flex items-start space-x-3">
-                <input
-                  id="agreeToTerms"
-                  type="checkbox"
-                  required
-                  checked={formData.agreeToTerms}
-                  onChange={(e) =>
-                    setFormData({ ...formData, agreeToTerms: e.target.checked })
-                  }
-                  className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                <FormSelect
+                  id="year"
+                  label="Academic Year"
+                  options={yearOptions}
+                  placeholder="Select Year"
+                  register={register}
+                  error={errors.year}
+                  icon={GraduationCap}
                 />
-                <label
-                  htmlFor="agreeToTerms"
-                  className="text-sm text-gray-600 dark:text-gray-400"
-                >
-                  I agree to the{" "}
-                  <Link
-                    to="/terms"
-                    className="text-blue-600 dark:text-blue-400 hover:underline"
-                  >
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link
-                    to="/privacy"
-                    className="text-blue-600 dark:text-blue-400 hover:underline"
-                  >
-                    Privacy Policy
-                  </Link>
-                </label>
+                <FormSelect
+                  id="sex"
+                  label="Gender"
+                  options={genderOptions}
+                  placeholder="Select Gender"
+                  register={register}
+                  error={errors.sex}
+                />
               </div>
+
+              {/* Faculty */}
+              <FormSelect
+                id="faculty"
+                label="Faculty"
+                options={facultyOptions}
+                placeholder="Select Your Faculty"
+                register={register}
+                error={errors.faculty}
+              />
+
+              {/* Location Info */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormInput
+                  id="government"
+                  label="Government"
+                  placeholder="e.g., Beni Suef"
+                  register={register}
+                  error={errors.government}
+                  icon={MapPin}
+                />
+                <FormInput
+                  id="city"
+                  label="City"
+                  placeholder="Your city"
+                  register={register}
+                  error={errors.city}
+                  icon={MapPin}
+                />
+              </div>
+
+              {/* Phone and Role */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormInput
+                  id="phone"
+                  label="Phone Number"
+                  type="tel"
+                  placeholder="+20 123 456 7890"
+                  register={register}
+                  error={errors.phone}
+                  icon={Phone}
+                />
+                <FormSelect
+                  id="roleId"
+                  label="Role"
+                  options={roleOptions}
+                  placeholder="Select Role"
+                  register={register}
+                  error={errors.roleId}
+                />
+              </div>
+
+              {/* Password Field */}
+              <FormInput
+                id="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Create password"
+                register={register}
+                error={errors.password}
+                icon={Lock}
+                rightElement={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                }
+              />
 
               {/* Submit Button */}
               <Button
@@ -351,7 +222,6 @@ const Register = () => {
                 size="lg"
                 className="w-full"
                 rightIcon={<ArrowRight className="w-5 h-5" />}
-                disabled={!formData.agreeToTerms}
               >
                 Create Account
               </Button>
