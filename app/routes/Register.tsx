@@ -83,6 +83,14 @@ const Register = () => {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name Fields */}
+              <FormInput
+                id="userName"
+                label="Username"
+                placeholder="Enter your username"
+                register={register}
+                error={errors.userName}
+                icon={User}
+              />
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <FormInput
                   id="fName"

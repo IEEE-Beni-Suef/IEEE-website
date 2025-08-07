@@ -1,6 +1,7 @@
 import z from "zod";
 
 export const registerSchema = z.object({
+  userName: z.string().min(1, { message: "Username is required" }),
   fName: z.string().min(1, { message: "First name is required" }),
   mName: z.string().min(1, { message: "Middle name is required" }),
   lName: z.string().min(1, { message: "Last name is required" }),
