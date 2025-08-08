@@ -16,6 +16,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "utils/scemas";
+import { useMutation } from "@tanstack/react-query";
+import { loginApi } from "lib/api";
 
 export function meta({}: MetaArgs) {
   return [
@@ -35,10 +37,20 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
   const [showPassword, setShowPassword] = useState(false);
-
+  const { mutate: Login } = useMutation({
+    mutationFn: (data: LoginFormData) => loginApi(data),
+    onSuccess: () => {
+      console.log("Login successful");
+    },
+    onError: (error: Error) => {
+      console.error("Login failed:", error.message);
+    },
+  });
   const onSubmit = (data: LoginFormData) => {
-    console.log("Login attempt:", data);
-    // Handle login logic here
+    const submitData = {
+      ...data,
+    };
+    Login(submitData);
   };
 
   return (
@@ -65,11 +77,12 @@ const Login = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Username Field */}
               <FormInput
-                id="userName"
-                label="Username"
-                placeholder="Enter your username"
+                id="email"
+                label="Email"
+                type="email"
+                placeholder="Enter your email"
                 register={register}
-                error={errors.userName}
+                error={errors.email}
                 icon={Mail}
               />
 

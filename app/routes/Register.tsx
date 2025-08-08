@@ -2,6 +2,7 @@ import type { MetaArgs } from "react-router";
 import { useState } from "react";
 import { Link } from "react-router";
 import { Section } from "../components/ui/Section";
+import { registerApi } from "lib/api";
 import {
   Card,
   CardHeader,
@@ -10,7 +11,7 @@ import {
   CardContent,
 } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
-import { FormInput, FormSelect } from "../components/form";
+import { FormInput, FormSelect, FormMultiSelect } from "../components/form";
 import {
   User,
   Mail,
@@ -21,6 +22,7 @@ import {
   GraduationCap,
   Phone,
   MapPin,
+  Users,
 } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -32,6 +34,8 @@ import {
   yearOptions,
 } from "utils/lists";
 import { registerSchema } from "utils/scemas";
+import { useMutation } from "@tanstack/react-query";
+import { useCommittees } from "~/hooks/useApi";
 
 export function meta({}: MetaArgs) {
   return [
@@ -49,16 +53,36 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      CommitteeIds: [],
+    },
   });
   const [showPassword, setShowPassword] = useState(false);
 
+  const { mutate: Register } = useMutation({
+    mutationFn: (data: RegisterFormData) => registerApi(data),
+    onSuccess: () => {
+      console.log("Registration successful");
+    },
+    onError: (error: Error) => {
+      console.error("Registration failed:", error.message);
+    },
+  });
   const onSubmit = (data: RegisterFormData) => {
-    console.log("Form submitted:", data);
-    // Handle form submission here
+    // Ensure CommitteeIds is always an array
+    const submitData = {
+      ...data,
+      CommitteeIds: data.CommitteeIds || [],
+    };
+    Register(submitData);
   };
+
+  const committeeOptions = useCommittees();
 
   return (
     <Section
@@ -82,38 +106,29 @@ const Register = () => {
 
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Name Fields */}
-              <FormInput
-                id="userName"
-                label="Username"
-                placeholder="Enter your username"
-                register={register}
-                error={errors.userName}
-                icon={User}
-              />
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <FormInput
-                  id="fName"
+                  id="firstName"
                   label="First Name"
                   placeholder="John"
                   register={register}
-                  error={errors.fName}
+                  error={errors.firstName}
                   icon={User}
                 />
                 <FormInput
-                  id="mName"
+                  id="middleName"
                   label="Middle Name"
                   placeholder="Middle"
                   register={register}
-                  error={errors.mName}
+                  error={errors.middleName}
                   icon={User}
                 />
                 <FormInput
-                  id="lName"
+                  id="lastName"
                   label="Last Name"
                   placeholder="Doe"
                   register={register}
-                  error={errors.lName}
+                  error={errors.lastName}
                 />
               </div>
 
@@ -162,19 +177,11 @@ const Register = () => {
               {/* Location Info */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FormInput
-                  id="government"
+                  id="goverment"
                   label="Government"
                   placeholder="e.g., Beni Suef"
                   register={register}
-                  error={errors.government}
-                  icon={MapPin}
-                />
-                <FormInput
-                  id="city"
-                  label="City"
-                  placeholder="Your city"
-                  register={register}
-                  error={errors.city}
+                  error={errors.goverment}
                   icon={MapPin}
                 />
               </div>
@@ -199,6 +206,19 @@ const Register = () => {
                   error={errors.roleId}
                 />
               </div>
+
+              {/* Committees */}
+              <FormMultiSelect
+                id="CommitteeIds"
+                label="Committees (Optional)"
+                options={committeeOptions.data}
+                placeholder="Select committees you're interested in"
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                error={errors.CommitteeIds as any}
+                icon={Users}
+              />
 
               {/* Password Field */}
               <FormInput

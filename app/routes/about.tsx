@@ -1,34 +1,5 @@
 import type { MetaArgs } from "react-router";
-import {
-  Section,
-  SectionHeader,
-  SectionTitle,
-  SectionSubtitle,
-} from "../components/ui/Section";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "../components/ui/Card";
-import { Button } from "../components/ui/Button";
-import {
-  Users,
-  Award,
-  Target,
-  Eye,
-  Heart,
-  Calendar,
-  Code,
-  Network,
-  Lightbulb,
-  ExternalLink,
-  ArrowRight,
-  Mail,
-  MapPin,
-  Clock,
-} from "lucide-react";
+import { Section } from "../components/ui/Section";
 
 export function meta({}: MetaArgs) {
   return [

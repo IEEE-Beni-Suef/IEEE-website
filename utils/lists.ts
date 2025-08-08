@@ -21,8 +21,8 @@ export const facultyOptions = [
 ];
 
 export const roleOptions = [
-  { value: "0", label: "Member" },
-  { value: "1", label: "Committee Head" },
-  { value: "2", label: "Vice Chair" },
-  { value: "3", label: "Chair" },
+  { value: "1", label: "Member" },
+  { value: "2", label: "Committee Head" },
+  { value: "3", label: "Vice Chair" },
+  { value: "4", label: "Chair" },
 ];
