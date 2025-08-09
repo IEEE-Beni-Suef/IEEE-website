@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { useAuth, clearAuth } from "../hooks/useAuth";
 import ThemeToggle from "./ThemeToggle";
-import { Menu, X, Home, Users, Calendar, LogOut, User } from "lucide-react";
+import { Menu, X, Home, Users, Calendar, LogOut, User, LayoutDashboard } from "lucide-react";
 import logo from "../assets/IEEE.png";
 
 const Navbar = () => {
@@ -35,6 +35,13 @@ const Navbar = () => {
   }, [isUserMenuOpen]);
 
   const navItems = [
+    { label: "Home", path: "/", icon: Home },
+    { label: "About", path: "/about", icon: Users },
+    { label: "Events", path: "/events", icon: Calendar },
+  ];
+
+  const authNavItems = [
+    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Home", path: "/", icon: Home },
     { label: "About", path: "/about", icon: Users },
     { label: "Events", path: "/events", icon: Calendar },
@@ -71,7 +78,7 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1">
-              {navItems.map((item) => {
+              {(isAuthenticated ? authNavItems : navItems).map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
@@ -109,6 +116,23 @@ const Navbar = () => {
                     {/* User Dropdown Menu */}
                     {isUserMenuOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                        <Link
+                          to="/dashboard"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                        >
+                          <LayoutDashboard className="w-4 h-4" />
+                          <span>Dashboard</span>
+                        </Link>
+                        <Link
+                          to="/dashboard/profile"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                        >
+                          <User className="w-4 h-4" />
+                          <span>Profile</span>
+                        </Link>
+                        <hr className="my-1 border-gray-200 dark:border-gray-700" />
                         <button
                           onClick={handleLogout}
                           className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
@@ -163,7 +187,7 @@ const Navbar = () => {
         >
           <div className="px-4 py-3 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
             <div className="space-y-2">
-              {navItems.map((item) => {
+              {(isAuthenticated ? authNavItems : navItems).map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
@@ -191,6 +215,22 @@ const Navbar = () => {
                         {isLoading ? "Loading..." : user?.email || "User"}
                       </span>
                     </div>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    >
+                      <LayoutDashboard className="w-5 h-5" />
+                      <span>Dashboard</span>
+                    </Link>
+                    <Link
+                      to="/dashboard/profile"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    >
+                      <User className="w-5 h-5" />
+                      <span>Profile</span>
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
