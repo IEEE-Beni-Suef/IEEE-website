@@ -55,3 +55,46 @@ export const getUser = async (id: number) => {
     throw new Error("An unexpected error occurred");
   }
 };
+
+// getAllUsers Api
+export const getAllUsersApi = async () => {
+  try {
+    const response = await apiClient.get("/Users/GetAllUsers");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch all users"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// delete user By Id
+
+export const deleteUserByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/Users/DeleteUser/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to delete user");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const ActiveUserByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.put(`/Users/ActiveUser/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to activate user"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};

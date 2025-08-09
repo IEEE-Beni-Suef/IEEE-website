@@ -1,16 +1,21 @@
+import { useAllUsers } from "~/hooks/useApi";
 import { ProtectedRoute } from "../../components/ProtectedRoute";
 
 export default function UsersManagement() {
+  const users = useAllUsers();
+  console.log(users.data);
   return (
     <ProtectedRoute allowedRoles={[0, 1]}>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-900">Users Management</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Users Management
+          </h1>
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
             Add New User
           </button>
         </div>
-        
+
         <div className="bg-white rounded-lg shadow">
           <div className="px-6 py-4 border-b">
             <h2 className="text-lg font-medium">All Users</h2>
@@ -42,7 +47,10 @@ export default function UsersManagement() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       Loading users...
                     </td>
-                    <td colSpan={4} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td
+                      colSpan={4}
+                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
                       User management functionality will be implemented here
                     </td>
                   </tr>
