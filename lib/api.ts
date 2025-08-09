@@ -18,7 +18,7 @@ export const registerApi = async (data: z.infer<typeof registerSchema>) => {
 export const loginApi = async (data: z.infer<typeof loginSchema>) => {
   try {
     const response = await apiClient.post("/Account/Login", data);
-    return response.data;
+    return response.data as { token: string; userId: number };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data.message || "Login failed");
@@ -38,6 +38,19 @@ export const getCommitteesApi = async () => {
       throw new Error(
         error.response?.data.message || "Failed to fetch committees"
       );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// user Api
+export const getUser = async (id: number) => {
+  try {
+    const response = await apiClient.get(`/Users/GetUser/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to fetch user");
     }
     throw new Error("An unexpected error occurred");
   }

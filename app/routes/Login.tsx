@@ -1,6 +1,6 @@
 import type { MetaArgs } from "react-router";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Section } from "../components/ui/Section";
 import {
   Card,
@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "utils/scemas";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "lib/api";
+import { saveAuth } from "~/hooks/useAuth";
 
 export function meta({}: MetaArgs) {
   return [
@@ -37,10 +38,13 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const { mutate: Login } = useMutation({
     mutationFn: (data: LoginFormData) => loginApi(data),
-    onSuccess: () => {
-      console.log("Login successful");
+    onSuccess: (data) => {
+      // data expected: { token, userId }
+      saveAuth(data.token, data.userId);
+      navigate("/");
     },
     onError: (error: Error) => {
       console.error("Login failed:", error.message);
