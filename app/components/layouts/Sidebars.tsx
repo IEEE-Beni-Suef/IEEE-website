@@ -16,7 +16,7 @@ function SidebarItem({ to, icon, label }: SidebarItemProps) {
       className={`flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
         isActive
           ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
-          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+          : "text-gray-600 hover:bg-gray-50 hover:"
       }`}
     >
       <span className="text-lg">{icon}</span>
@@ -47,7 +47,7 @@ export const HighBoardSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">High Board</h2>
+        <h2 className="text-lg font-semibold ">High Board</h2>
         <p className="text-sm text-gray-500">Full system access</p>
       </div>
       <nav className="space-y-2">
@@ -68,7 +68,7 @@ export const HeadSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">Admin</h2>
+        <h2 className="text-lg font-semibold ">Admin</h2>
         <p className="text-sm text-gray-500">Committee management</p>
       </div>
       <nav className="space-y-2">
@@ -89,7 +89,7 @@ export const MemberSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">Member</h2>
+        <h2 className="text-lg font-semibold ">Member</h2>
         <p className="text-sm text-gray-500">Committee member</p>
       </div>
       <nav className="space-y-2">
@@ -106,7 +106,7 @@ export const HrSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">HR</h2>
+        <h2 className="text-lg font-semibold ">HR</h2>
         <p className="text-sm text-gray-500">Human Resources</p>
       </div>
       <nav className="space-y-2">
@@ -122,7 +122,7 @@ export const ViceSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">Vice</h2>
+        <h2 className="text-lg font-semibold ">Vice</h2>
         <p className="text-sm text-gray-500">Vice President</p>
       </div>
       <nav className="space-y-2">
@@ -138,7 +138,7 @@ export const GuestSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">Guest</h2>
+        <h2 className="text-lg font-semibold ">Guest</h2>
         <p className="text-sm text-gray-500">Limited access</p>
       </div>
       <nav className="space-y-2">

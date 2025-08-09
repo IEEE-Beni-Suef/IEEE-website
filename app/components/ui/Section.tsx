@@ -55,9 +55,7 @@ const Section = React.forwardRef<HTMLElement, SectionProps>(
 
         {/* Content container */}
         {container ? (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {children}
-          </div>
+          <div className=" mx-auto flex-1">{children}</div>
         ) : (
           children
         )}

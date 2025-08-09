@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import type { ReactNode } from "react";
+import { Section } from "../ui/Section";
 
 interface DashboardLayoutProps {
   children?: ReactNode;
@@ -7,22 +8,23 @@ interface DashboardLayoutProps {
   header?: ReactNode;
 }
 
-export function DashboardLayout({ children, sidebar, header }: DashboardLayoutProps) {
+export function DashboardLayout({
+  children,
+  sidebar,
+  header,
+}: DashboardLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {header && (
-        <div className="bg-white shadow-sm border-b">
-          {header}
-        </div>
-      )}
-      <div className="flex">
-        <div className="w-64 bg-white shadow-sm border-r min-h-screen">
-          {sidebar}
-        </div>
-        <div className="flex-1 p-6">
-          {children || <Outlet />}
-        </div>
+    <Section
+      variant="gradient"
+      padding="none"
+      className="min-h-screen flex items-center pt-16"
+    >
+      {header && <div className=" shadow-sm ">{header}</div>}
+
+      <div className="flex min-h-[calc(100vh-9rem)]">
+        <div className="w-64 shadow-sm border-r ">{sidebar}</div>
+        <div className="flex-1 p-6">{children || <Outlet />}</div>
       </div>
-    </div>
+    </Section>
   );
 }

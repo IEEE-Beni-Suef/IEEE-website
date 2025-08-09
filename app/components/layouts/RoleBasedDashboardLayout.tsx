@@ -1,7 +1,6 @@
 import { useAuth } from "../../hooks/useAuth";
 import { DashboardLayout } from "./DashboardLayout";
 
-import { InactiveBanner } from "../InactiveBanner";
 import { getRoleName } from "~/utils/utile";
 import React from "react";
 import {
@@ -30,11 +29,10 @@ export function RoleBasedDashboardLayout() {
 
   const header = (
     <div>
-      <InactiveBanner />
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">
+            <h1 className="text-xl font-semibold ">
               Welcome, {user?.firstName} {user?.lastName}
             </h1>
             <p className="text-sm text-gray-500">

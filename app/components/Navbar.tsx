@@ -4,7 +4,16 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { useAuth, clearAuth } from "../hooks/useAuth";
 import ThemeToggle from "./ThemeToggle";
-import { Menu, X, Home, Users, Calendar, LogOut, User, LayoutDashboard } from "lucide-react";
+import {
+  Menu,
+  X,
+  Home,
+  Users,
+  Calendar,
+  LogOut,
+  User,
+  LayoutDashboard,
+} from "lucide-react";
 import logo from "../assets/IEEE.png";
 
 const Navbar = () => {

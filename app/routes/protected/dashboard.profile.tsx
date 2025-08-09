@@ -7,7 +7,7 @@ export default function Profile() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-900">My Profile</h1>
+        <h1 className="text-2xl font-semibold ">My Profile</h1>
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
           Edit Profile
         </button>
@@ -21,35 +21,31 @@ export default function Profile() {
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <dt className="text-sm font-medium text-gray-500">Full Name</dt>
-              <dd className="mt-1 text-sm text-gray-900">
+              <dd className="mt-1 text-sm ">
                 {user?.firstName} {user?.middleName} {user?.lastName}
               </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Email</dt>
-              <dd className="mt-1 text-sm text-gray-900">{user?.email}</dd>
+              <dd className="mt-1 text-sm ">{user?.email}</dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Phone</dt>
-              <dd className="mt-1 text-sm text-gray-900">
-                {user?.phone || "Not provided"}
-              </dd>
+              <dd className="mt-1 text-sm ">{user?.phone || "Not provided"}</dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Year</dt>
-              <dd className="mt-1 text-sm text-gray-900">
-                {user?.year || "Not provided"}
-              </dd>
+              <dd className="mt-1 text-sm ">{user?.year || "Not provided"}</dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Faculty</dt>
-              <dd className="mt-1 text-sm text-gray-900">
+              <dd className="mt-1 text-sm ">
                 {user?.faculty || "Not provided"}
               </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Government</dt>
-              <dd className="mt-1 text-sm text-gray-900">
+              <dd className="mt-1 text-sm ">
                 {user?.goverment || "Not provided"}
               </dd>
             </div>
@@ -69,9 +65,7 @@ export default function Profile() {
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Role</dt>
-              <dd className="mt-1 text-sm text-gray-900">
-                {getRoleName(user?.roleId)}
-              </dd>
+              <dd className="mt-1 text-sm ">{getRoleName(user?.roleId)}</dd>
             </div>
           </dl>
         </div>

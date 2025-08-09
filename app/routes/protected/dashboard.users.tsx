@@ -39,9 +39,7 @@ export default function UsersManagement() {
     <ProtectedRoute allowedRoles={[0, 1]}>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Users Management
-          </h1>
+          <h1 className="text-2xl font-semibold ">Users Management</h1>
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
             Add New User
           </button>
@@ -92,7 +90,7 @@ export default function UsersManagement() {
                           key={u.id}
                           className="hover:bg-gray-50 transition-colors"
                         >
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm ">
                             {u.id}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">

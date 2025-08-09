@@ -5,9 +5,9 @@ export default function SystemSettings() {
     <ProtectedRoute allowedRoles={[0]}>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-900">System Settings</h1>
+          <h1 className="text-2xl font-semibold ">System Settings</h1>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg shadow">
             <div className="px-6 py-4 border-b">
@@ -47,15 +47,23 @@ export default function SystemSettings() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Two-Factor Authentication</h3>
-                    <p className="text-sm text-gray-500">Require 2FA for all admin accounts</p>
+                    <h3 className="text-sm font-medium ">
+                      Two-Factor Authentication
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Require 2FA for all admin accounts
+                    </p>
                   </div>
                   <input type="checkbox" className="h-4 w-4" />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Auto-Lock Inactive Accounts</h3>
-                    <p className="text-sm text-gray-500">Lock accounts after 90 days of inactivity</p>
+                    <h3 className="text-sm font-medium ">
+                      Auto-Lock Inactive Accounts
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Lock accounts after 90 days of inactivity
+                    </p>
                   </div>
                   <input type="checkbox" className="h-4 w-4" defaultChecked />
                 </div>
