@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { useAuth, clearAuth } from "../hooks/useAuth";
 import ThemeToggle from "./ThemeToggle";
-import { Menu, X, Home, Users, Calendar, BookOpen } from "lucide-react";
+import { Menu, X, Home, Users, Calendar, LogOut, User } from "lucide-react";
 import logo from "../assets/IEEE.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isDark = useSelector((state: RootState) => state.theme.isDark);
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +24,16 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isUserMenuOpen) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [isUserMenuOpen]);
+
   const navItems = [
     { label: "Home", path: "/", icon: Home },
     { label: "About", path: "/about", icon: Users },
@@ -27,6 +41,12 @@ const Navbar = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = () => {
+    clearAuth();
+    setIsUserMenuOpen(false);
+    navigate("/");
+  };
 
   return (
     <>
@@ -72,20 +92,51 @@ const Navbar = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-3">
-              <div className="hidden sm:flex items-center space-x-2">
-                <Link
-                  to="/login"
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  Join Now
-                </Link>
-              </div>
+              {isAuthenticated ? (
+                /* Authenticated User Menu */
+                <div className="hidden sm:flex items-center space-x-2">
+                  <div className="relative">
+                    <button
+                      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                      className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                    >
+                      <User className="w-5 h-5" />
+                      <span className="font-medium">
+                        {isLoading ? "Loading..." : user?.email || "User"}
+                      </span>
+                    </button>
+
+                    {/* User Dropdown Menu */}
+                    {isUserMenuOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Sign Out</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                /* Non-authenticated Login/Signup buttons */
+                <div className="hidden sm:flex items-center space-x-2">
+                  <Link
+                    to="/login"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  >
+                    Join Now
+                  </Link>
+                </div>
+              )}
 
               <ThemeToggle />
 
@@ -131,20 +182,42 @@ const Navbar = () => {
                 );
               })}
               <div className="pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
-                <Link
-                  to="/login"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-center font-medium"
-                >
-                  Join Now
-                </Link>
+                {isAuthenticated ? (
+                  /* Authenticated User Mobile Menu */
+                  <>
+                    <div className="flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300">
+                      <User className="w-5 h-5" />
+                      <span className="font-medium">
+                        {isLoading ? "Loading..." : user?.email || "User"}
+                      </span>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </>
+                ) : (
+                  /* Non-authenticated Mobile Menu */
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      to="/register"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-center font-medium"
+                    >
+                      Join Now
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
