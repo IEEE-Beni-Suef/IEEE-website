@@ -87,7 +87,7 @@ export const deleteUserByIdApi = async (id: number) => {
 
 export const ActiveUserByIdApi = async (id: number) => {
   try {
-    const response = await apiClient.put(`/Users/ActiveUser/${id}`);
+    const response = await apiClient.put(`Admin/ActivateUser/${id}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
