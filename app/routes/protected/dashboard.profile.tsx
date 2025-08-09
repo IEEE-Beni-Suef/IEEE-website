@@ -1,3 +1,4 @@
+import { getRoleName } from "~/utils/utile";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function Profile() {
@@ -11,7 +12,7 @@ export default function Profile() {
           Edit Profile
         </button>
       </div>
-      
+
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b">
           <h2 className="text-lg font-medium">Personal Information</h2>
@@ -30,29 +31,39 @@ export default function Profile() {
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Phone</dt>
-              <dd className="mt-1 text-sm text-gray-900">{user?.phone || 'Not provided'}</dd>
+              <dd className="mt-1 text-sm text-gray-900">
+                {user?.phone || "Not provided"}
+              </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Year</dt>
-              <dd className="mt-1 text-sm text-gray-900">{user?.year || 'Not provided'}</dd>
+              <dd className="mt-1 text-sm text-gray-900">
+                {user?.year || "Not provided"}
+              </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Faculty</dt>
-              <dd className="mt-1 text-sm text-gray-900">{user?.faculty || 'Not provided'}</dd>
+              <dd className="mt-1 text-sm text-gray-900">
+                {user?.faculty || "Not provided"}
+              </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Government</dt>
-              <dd className="mt-1 text-sm text-gray-900">{user?.goverment || 'Not provided'}</dd>
+              <dd className="mt-1 text-sm text-gray-900">
+                {user?.goverment || "Not provided"}
+              </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Status</dt>
               <dd className="mt-1">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  user?.isActive 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {user?.isActive ? 'Active' : 'Inactive'}
+                <span
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    user?.isActive
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {user?.isActive ? "Active" : "Inactive"}
                 </span>
               </dd>
             </div>
@@ -67,19 +78,4 @@ export default function Profile() {
       </div>
     </div>
   );
-}
-
-function getRoleName(roleId: number | undefined): string {
-  switch (roleId) {
-    case 0:
-      return "Super Admin";
-    case 1:
-      return "Admin";
-    case 2:
-      return "Member";
-    case 3:
-      return "Guest";
-    default:
-      return "Unknown";
-  }
 }

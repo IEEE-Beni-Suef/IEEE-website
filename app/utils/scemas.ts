@@ -14,7 +14,9 @@ export const registerSchema = z.object({
   phone: z.string().min(1, { message: "Phone number is required" }),
   goverment: z.string().min(1, { message: "Government is required" }),
   CommitteeIds: z.array(z.number()).optional(),
-  roleId: z.enum(["0", "1", "2", "3"]),
+  roleId: z.enum(["1", "2", "3", "4", "5"], {
+    message: "Role ID is required and must be a valid number",
+  }),
 });
 
 export const loginSchema = z.object({

@@ -2,7 +2,7 @@ import type { MetaArgs } from "react-router";
 import { useState } from "react";
 import { Link } from "react-router";
 import { Section } from "../components/ui/Section";
-import { registerApi } from "lib/api";
+import { registerApi } from "~/lib/api";
 import {
   Card,
   CardHeader,
@@ -32,8 +32,8 @@ import {
   genderOptions,
   roleOptions,
   yearOptions,
-} from "utils/lists";
-import { registerSchema } from "utils/scemas";
+} from "~/utils/lists";
+import { registerSchema } from "~/utils/scemas";
 import { useMutation } from "@tanstack/react-query";
 import { useCommittees } from "~/hooks/useApi";
 

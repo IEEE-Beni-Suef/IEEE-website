@@ -1,6 +1,6 @@
 import axios from "axios";
-import apiClient from "config/apiClient";
-import type { loginSchema, registerSchema } from "utils/scemas";
+import apiClient from "~/config/apiClient";
+import type { loginSchema, registerSchema } from "~/utils/scemas";
 import type z from "zod";
 
 export const registerApi = async (data: z.infer<typeof registerSchema>) => {

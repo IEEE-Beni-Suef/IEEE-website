@@ -25,12 +25,29 @@ function SidebarItem({ to, icon, label }: SidebarItemProps) {
   );
 }
 
-// Super Admin Sidebar (roleId: 0)
-export function SuperAdminSidebar() {
+// Role name helper
+export const getRoleName = (roleId?: number): string => {
+  switch (roleId) {
+    case 1:
+      return "High Board";
+    case 2:
+      return "Head";
+    case 3:
+      return "Member";
+    case 4:
+      return "Hr";
+    case 5:
+      return "Vice";
+    default:
+      return "Unknown";
+  }
+};
+
+export const HighBoardSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">Super Admin</h2>
+        <h2 className="text-lg font-semibold text-gray-900">High Board</h2>
         <p className="text-sm text-gray-500">Full system access</p>
       </div>
       <nav className="space-y-2">
@@ -45,10 +62,9 @@ export function SuperAdminSidebar() {
       </nav>
     </div>
   );
-}
+};
 
-// Admin Sidebar (roleId: 1)
-export function AdminSidebar() {
+export const HeadSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
@@ -67,10 +83,9 @@ export function AdminSidebar() {
       </nav>
     </div>
   );
-}
+};
 
-// User Sidebar (roleId: 2)
-export function UserSidebar() {
+export const MemberSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
@@ -85,15 +100,14 @@ export function UserSidebar() {
       </nav>
     </div>
   );
-}
+};
 
-// Guest Sidebar (roleId: 3)
-export function GuestSidebar() {
+export const HrSidebar = () => {
   return (
     <div className="p-4">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">Guest</h2>
-        <p className="text-sm text-gray-500">Limited access</p>
+        <h2 className="text-lg font-semibold text-gray-900">HR</h2>
+        <p className="text-sm text-gray-500">Human Resources</p>
       </div>
       <nav className="space-y-2">
         <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
@@ -102,4 +116,34 @@ export function GuestSidebar() {
       </nav>
     </div>
   );
-}
+};
+
+export const ViceSidebar = () => {
+  return (
+    <div className="p-4">
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold text-gray-900">Vice</h2>
+        <p className="text-sm text-gray-500">Vice President</p>
+      </div>
+      <nav className="space-y-2">
+        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
+        <SidebarItem to="/dashboard/profile" icon="👤" label="My Profile" />
+        <SidebarItem to="/dashboard/events" icon="📅" label="Events" />
+      </nav>
+    </div>
+  );
+};
+
+export const GuestSidebar = () => {
+  return (
+    <div className="p-4">
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold text-gray-900">Guest</h2>
+        <p className="text-sm text-gray-500">Limited access</p>
+      </div>
+      <nav className="space-y-2">
+        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
+      </nav>
+    </div>
+  );
+};

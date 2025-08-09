@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "lib/api";
+import { getUser } from "~/lib/api";
 
 // Util functions for cookie handling
 const AUTH_COOKIE = "auth_token";

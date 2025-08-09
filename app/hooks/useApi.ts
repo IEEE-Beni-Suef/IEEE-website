@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCommitteesApi } from "lib/api";
+import { getCommitteesApi } from "~/lib/api";
 
 export const useCommittees = () => {
   const { data, ...rest } = useQuery({
