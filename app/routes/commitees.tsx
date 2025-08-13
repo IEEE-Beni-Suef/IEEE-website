@@ -29,26 +29,28 @@ const Commitees = () => {
                         (committees as Committee[]).map((committee) => (
                             <div
                                 key={committee.id}
-                                className="relative flex flex-col text-gray-700 bg-gray-300 shadow-md bg-clip-border rounded-xl w-72"
+                                className="relative flex flex-col text-white bg-gray-800 shadow-md bg-clip-border rounded-xl w-72
+                                           transform transition-all duration-300 hover:scale-105 hover:bg-gray-700 group"
                             >
                                 <div className="relative mx-4 mt-4 overflow-hidden text-gray-900 bg-white bg-clip-border rounded-xl h-56">
                                     <img
-                                        src={
-                                            (committee as any).imageUrl ||
-                                            "https://i.pinimg.com/1200x/78/1c/8f/781c8fde22e80756d7fc9b262c6f912d.jpg"
-                                        }
+                                        src="https://i.pinimg.com/1200x/78/1c/8f/781c8fde22e80756d7fc9b262c6f912d.jpg"
+                                        // src={
+                                        //     (committee as any).imageUrl ||
+                                        //     "https://i.pinimg.com/1200x/78/1c/8f/781c8fde22e80756d7fc9b262c6f912d.jpg"
+                                        // }
                                         alt={`${committee.name} card image`}
                                         className="object-cover w-full h-full"
                                     />
                                 </div>
                                 <div className="p-4">
                                     <div className="flex items-center justify-between mb-2">
-                                        <p className="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                                        <p className="block font-sans text-base antialiased font-medium leading-relaxed text-gray-100">
                                             {committee.name}
                                         </p>
                                     </div>
                                     {/* Show member count if available, else show members array length, else N/A */}
-                                    <p className="flex items-center gap-1 text-sm text-gray-700 opacity-75">
+                                    <p className="flex items-center gap-1 text-sm text-gray-100 opacity-75">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"
@@ -73,7 +75,10 @@ const Commitees = () => {
                                               ? (committee as any).members
                                                     .length
                                               : "N/A"}
-                                        <span className="ml-5 px-5 py-1 bg-blue-500 text-gray-200 text-xs rounded-full hover:bg-blue-700">
+                                        <span
+                                            className="ml-5 px-5 py-1 bg-blue-600 text-white text-xs rounded-full
+                                                      transition-all duration-300 group-hover:scale-105 group-hover:bg-blue-700 group-hover:text-sm"
+                                        >
                                             Technical
                                         </span>
                                     </p>
