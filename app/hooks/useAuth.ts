@@ -2,79 +2,69 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "~/lib/api";
 
-// Util functions for cookie handling
+// Cookie constants
 const AUTH_COOKIE = "auth_token";
 const USER_ID_COOKIE = "user_id";
 
-// Create a simple event emitter for auth changes
-const authChangeListeners = new Set<() => void>();
+// Event system for cross-component auth updates
+const authListeners = new Set<() => void>();
+const notifyAuthChange = () => authListeners.forEach((fn) => fn());
 
-function setCookie(name: string, value: string, days = 7) {
+// Cookie utilities
+const setCookie = (name: string, value: string, days = 15) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
-}
+  document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+};
 
-function getCookie(name: string) {
-  return document.cookie
-    .split("; ")
-    .find((row) => row.startsWith(name + "="))
-    ?.split("=")[1];
-}
+const getCookie = (name: string) =>
+  document.cookie.match(new RegExp(`${name}=([^;]+)`))?.[1] || "";
 
-export function saveAuth(token: string, userId: number) {
+// Auth storage operations
+const getAuthFromCookies = () => {
+  const token = getCookie(AUTH_COOKIE);
+  const userId = getCookie(USER_ID_COOKIE);
+  return {
+    token,
+    userId: userId ? Number(userId) : null,
+  };
+};
+
+export const saveAuth = (token: string, userId: number) => {
   setCookie(AUTH_COOKIE, token);
   setCookie(USER_ID_COOKIE, String(userId));
+  notifyAuthChange();
+};
 
-  authChangeListeners.forEach((listener) => listener());
-}
-
-export function clearAuth() {
+export const clearAuth = () => {
   setCookie(AUTH_COOKIE, "", -1);
   setCookie(USER_ID_COOKIE, "", -1);
-  authChangeListeners.forEach((listener) => listener());
-}
-
-function readAuthFromStorage() {
-  try {
-    const token = getCookie(AUTH_COOKIE) || "";
-    const userIdStr = getCookie(USER_ID_COOKIE) || "";
-    const userId = userIdStr ? Number(userIdStr) : undefined;
-    return { token, userId };
-  } catch {
-    return { token: "", userId: undefined };
-  }
-}
+  notifyAuthChange();
+};
 
 export const useAuth = () => {
-  const [{ token, userId }, setAuth] = useState(readAuthFromStorage());
+  const [auth, setAuth] = useState(getAuthFromCookies);
 
+  // Listen for auth changes
   useEffect(() => {
-    const handleAuthChange = () => {
-      const authData = readAuthFromStorage();
-      setAuth(authData);
-    };
-
-    authChangeListeners.add(handleAuthChange);
-
+    const handleChange = () => setAuth(getAuthFromCookies());
+    authListeners.add(handleChange);
     return () => {
-      authChangeListeners.delete(handleAuthChange);
+      authListeners.delete(handleChange);
     };
   }, []);
 
-  const query = useQuery({
-    queryKey: ["user", userId],
-    queryFn: () => getUser(userId!),
-    enabled: !!userId && !!token,
+  // Fetch user data
+  const userQuery = useQuery({
+    queryKey: ["user", auth.userId],
+    queryFn: () => getUser(auth.userId!),
+    enabled: !!(auth.token && auth.userId),
     staleTime: 5 * 60 * 1000,
   });
 
-  const isAuthenticated = !!(token && userId);
-
   return {
-    ...query,
-    token,
-    userId,
-    isAuthenticated,
-    user: query.data,
+    ...userQuery,
+    ...auth,
+    user: userQuery.data,
+    isAuthenticated: !!(auth.token && auth.userId),
   };
 };
