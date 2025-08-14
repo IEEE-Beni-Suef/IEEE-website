@@ -30,6 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   facultyOptions,
   genderOptions,
+  governorateOptions,
   roleOptions,
   yearOptions,
 } from "~/utils/lists";
@@ -176,9 +177,10 @@ const Register = () => {
 
               {/* Location Info */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormInput
+                <FormSelect
                   id="goverment"
                   label="Government"
+                  options={governorateOptions}
                   placeholder="e.g., Beni Suef"
                   register={register}
                   error={errors.goverment}

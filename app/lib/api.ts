@@ -18,7 +18,7 @@ export const registerApi = async (data: z.infer<typeof registerSchema>) => {
 export const loginApi = async (data: z.infer<typeof loginSchema>) => {
   try {
     const response = await apiClient.post("/Account/Login", data);
-    return response.data as { token: string; userId: number };
+    return response.data as { token: string; user: { id: number } };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data.message || "Login failed");
@@ -46,7 +46,7 @@ export const getCommitteesApi = async () => {
 // user Api
 export const getUser = async (id: number) => {
   try {
-    const response = await apiClient.get(`/Users/GetUser/${id}`);
+    const response = await apiClient.get(`/Users/${id}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

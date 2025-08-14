@@ -43,7 +43,7 @@ const Login = () => {
     mutationFn: (data: LoginFormData) => loginApi(data),
     onSuccess: (data) => {
       // data expected: { token, userId }
-      saveAuth(data.token, data.userId);
+      saveAuth(data.token, data.user.id);
       navigate("/");
     },
     onError: (error: Error) => {
