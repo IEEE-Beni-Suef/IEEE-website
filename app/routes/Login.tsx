@@ -1,6 +1,6 @@
 import type { MetaArgs } from "react-router";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Section } from "../components/ui/Section";
 import {
   Card,
@@ -10,7 +10,15 @@ import {
   CardContent,
 } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
+import { FormInput } from "../components/form";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "~/utils/scemas";
+import { useMutation } from "@tanstack/react-query";
+import { loginApi } from "~/lib/api";
+import { saveAuth } from "~/hooks/useAuth";
 
 export function meta({}: MetaArgs) {
   return [
@@ -19,17 +27,34 @@ export function meta({}: MetaArgs) {
   ];
 }
 
-const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+type LoginFormData = z.infer<typeof loginSchema>;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempt:", formData);
+const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { mutate: Login } = useMutation({
+    mutationFn: (data: LoginFormData) => loginApi(data),
+    onSuccess: (data) => {
+      // data expected: { token, userId }
+      saveAuth(data.token, data.user.id);
+      navigate("/");
+    },
+    onError: (error: Error) => {
+      console.error("Login failed:", error.message);
+    },
+  });
+  const onSubmit = (data: LoginFormData) => {
+    const submitData = {
+      ...data,
+    };
+    Login(submitData);
   };
 
   return (
@@ -53,56 +78,32 @@ const Login = () => {
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="your.email@boisestate.edu"
-                  />
-                </div>
-              </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Username Field */}
+              <FormInput
+                id="email"
+                label="Email"
+                type="email"
+                placeholder="Enter your email"
+                register={register}
+                error={errors.email}
+                icon={Mail}
+              />
 
               {/* Password Field */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    required
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    className="w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter your password"
-                  />
+              <FormInput
+                id="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                register={register}
+                error={errors.password}
+                icon={Lock}
+                rightElement={
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -110,8 +111,8 @@ const Login = () => {
                       <Eye className="w-5 h-5" />
                     )}
                   </button>
-                </div>
-              </div>
+                }
+              />
 
               {/* Remember Me & Forgot Password */}
               <div className="flex items-center justify-between">

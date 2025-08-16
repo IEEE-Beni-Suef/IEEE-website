@@ -15,8 +15,6 @@ export function meta({}: MetaArgs) {
 }
 
 export default function Home() {
-  const isDark = useSelector((state: RootState) => state.theme.isDark);
-
   return (
     <Section
       variant="gradient"

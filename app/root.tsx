@@ -14,6 +14,9 @@ import Navbar from "./components/Navbar";
 import { store } from "./store/store";
 import { initializeTheme } from "./store/slices/themeSlice";
 import "./app.css";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "~/config/queryClient";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -30,7 +33,7 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,10 +55,13 @@ export default function App() {
   }, []);
 
   return (
-    <Provider store={store}>
-      <Navbar />
-      <Outlet />
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <Provider store={store}>
+        <Navbar />
+        <Outlet />
+      </Provider>
+    </QueryClientProvider>
   );
 }
 

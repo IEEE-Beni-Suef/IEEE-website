@@ -1,0 +1,100 @@
+import axios from "axios";
+import apiClient from "~/config/apiClient";
+import type { loginSchema, registerSchema } from "~/utils/scemas";
+import type z from "zod";
+
+export const registerApi = async (data: z.infer<typeof registerSchema>) => {
+  try {
+    const response = await apiClient.post("/Account/Register", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Registration failed");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const loginApi = async (data: z.infer<typeof loginSchema>) => {
+  try {
+    const response = await apiClient.post("/Account/Login", data);
+    return response.data as { token: string; user: { id: number } };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Login failed");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// committees Api
+
+export const getCommitteesApi = async () => {
+  try {
+    const response = await apiClient.get("/Committees");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch committees"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// user Api
+export const getUser = async (id: number) => {
+  try {
+    const response = await apiClient.get(`/Users/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to fetch user");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// getAllUsers Api
+export const getAllUsersApi = async () => {
+  try {
+    const response = await apiClient.get("/Users/GetAllUsers");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch all users"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// delete user By Id
+
+export const deleteUserByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/Users/DeleteUser/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to delete user");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const ActiveUserByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.put(`Admin/ActivateUser/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to activate user"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
