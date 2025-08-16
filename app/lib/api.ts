@@ -43,6 +43,63 @@ export const getCommitteesApi = async () => {
   }
 };
 
+export const createCommitteeApi = async (data: any) => {
+  try {
+    const response = await apiClient.post("/Committees", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to create committee"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteCommitteeApi = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/Committees/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to delete committee"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// will add a request generics letter
+export const updateCommitteeApi = async (id: number, data: any) => {
+  try {
+    const response = await apiClient.put(`/Committees/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to update committee"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const getCommitteeByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.get(`/Committees/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch committee by ID"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 // user Api
 export const getUser = async (id: number) => {
   try {

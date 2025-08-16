@@ -53,7 +53,11 @@ export const HighBoardSidebar = () => {
       <nav className="space-y-2">
         <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
         <SidebarItem to="/dashboard/users" icon="👥" label="Users Management" />
-        <SidebarItem to="/dashboard/roles" icon="🔑" label="Role Management" />
+        <SidebarItem
+          to="/dashboard/committees"
+          icon="🔑"
+          label="Committee Management"
+        />
         <SidebarItem
           to="/dashboard/settings"
           icon="⚙️"

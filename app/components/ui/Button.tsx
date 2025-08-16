@@ -13,6 +13,8 @@ const buttonVariants = {
   link: "text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline",
   gradient:
     "bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5",
+  danger:
+    "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg hover:from-red-700 hover:to-red-800 hover:shadow-xl transform hover:-translate-y-0.5",
 };
 
 const sizeVariants = {
