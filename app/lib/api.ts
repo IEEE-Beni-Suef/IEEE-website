@@ -59,7 +59,7 @@ export const getUser = async (id: number) => {
 // getAllUsers Api
 export const getAllUsersApi = async () => {
   try {
-    const response = await apiClient.get("/Users/GetAllUsers");
+    const response = await apiClient.get("/Users");
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
