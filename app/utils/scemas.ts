@@ -23,3 +23,11 @@ export const loginSchema = z.object({
   email: z.string().email().min(1, { message: "Email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
+
+export const committeeSchema = z.object({
+  name: z.string().min(1, { message: "Committee name is required" }),
+  headId: z.string().min(1, { message: "Head is required" }),
+  vicesId: z
+    .array(z.string())
+    .min(1, { message: "At least one vice is required" }),
+});

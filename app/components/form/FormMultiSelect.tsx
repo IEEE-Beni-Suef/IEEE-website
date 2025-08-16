@@ -10,9 +10,8 @@ import type { LucideIcon } from "lucide-react";
 import { ChevronDown, X } from "lucide-react";
 
 interface MultiSelectOption {
-  id: number;
-  name: string;
-  headId: number;
+  value: string;
+  label: string;
 }
 
 interface FormMultiSelectProps {
@@ -43,24 +42,24 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const selectedValues = watch(id) || [];
 
-  const toggleOption = (value: number) => {
+  const toggleOption = (value: string) => {
     const currentValues = selectedValues;
     const newValues = currentValues.includes(value)
-      ? currentValues.filter((v: number) => v !== value)
+      ? currentValues.filter((v: string) => v !== value)
       : [...currentValues, value];
 
     setValue(id, newValues);
   };
 
-  const removeOption = (value: number) => {
-    const newValues = selectedValues.filter((v: number) => v !== value);
+  const removeOption = (value: string) => {
+    const newValues = selectedValues.filter((v: string) => v !== value);
     setValue(id, newValues);
   };
 
   const getSelectedLabels = () => {
     return options
-      .filter((option) => selectedValues.includes(option.id))
-      .map((option) => option.name);
+      .filter((option) => selectedValues.includes(option.value))
+      .map((option) => option.label);
   };
 
   return (
@@ -106,8 +105,8 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      const option = options.find((opt) => opt.name === label);
-                      if (option) removeOption(option.id);
+                      const option = options.find((opt) => opt.label === label);
+                      if (option) removeOption(option.value);
                     }}
                     className="ml-1 hover:text-blue-600 dark:hover:text-blue-300"
                   >
@@ -127,18 +126,18 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
           <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
             {options.map((option) => (
               <button
-                key={option.id}
+                key={option.value}
                 type="button"
-                onClick={() => toggleOption(option.id)}
+                onClick={() => toggleOption(option.value)}
                 className={`w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                  selectedValues.includes(option.id)
+                  selectedValues.includes(option.value)
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
                     : "text-gray-800 dark:text-gray-200"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span>{option.name}</span>
-                  {selectedValues.includes(option.id) && (
+                  <span>{option.label}</span>
+                  {selectedValues.includes(option.value) && (
                     <span className="text-blue-500">✓</span>
                   )}
                 </div>
