@@ -50,17 +50,16 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
 
     setValue(id, newValues);
   };
-
   const removeOption = (value: string) => {
     const newValues = selectedValues.filter((v: string) => v !== value);
     setValue(id, newValues);
   };
 
   const getSelectedLabels = () => {
-    return options
-      .filter((option) => selectedValues.includes(option.value))
-      .map((option) => option.label);
+    return options.map((option) => option.label);
   };
+
+  console.log(getSelectedLabels());
 
   return (
     <div className="space-y-2">

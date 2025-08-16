@@ -88,22 +88,18 @@ export const CommitteeModal: FC<CommitteeModalProps> = ({
     onClose();
   };
 
-  // Filter users to get only those who can be heads (role 2) and vices (role 5)
-  // Assuming users have a roleId property
   const headOptions = users
-    .filter((user: any) => user.roleId === 2 || user.roleId === 1) // Committee Head or High Board
+    .filter((user: any) => user.roleId === 2) // Committee Head or High Board
     .map((user: any) => ({
       value: user.id.toString(),
-      label: `${user.firstName} ${user.lastName}`,
+      label: `${user.fName} ${user.lName}`,
     }));
 
   const viceOptions = users
-    .filter(
-      (user: any) => user.roleId === 5 && user.id !== Number(watchedHeadId)
-    ) // Vice and not the selected head
+    .filter((user: any) => user.roleId === 5)
     .map((user: any) => ({
       value: user.id.toString(),
-      label: `${user.firstName} ${user.lastName}`,
+      label: `${user.fName} ${user.lName}`,
     }));
 
   return (

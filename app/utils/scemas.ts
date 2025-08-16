@@ -27,7 +27,5 @@ export const loginSchema = z.object({
 export const committeeSchema = z.object({
   name: z.string().min(1, { message: "Committee name is required" }),
   headId: z.string().min(1, { message: "Head is required" }),
-  vicesId: z
-    .array(z.string())
-    .min(1, { message: "At least one vice is required" }),
+  vicesId: z.array(z.string()),
 });

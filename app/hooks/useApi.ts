@@ -58,6 +58,9 @@ export const useCreateCommittee = () => {
   const { mutate, ...rest } = useMutation({
     mutationKey: ["createCommittee"],
     mutationFn: (committeeData) => createCommitteeApi(committeeData as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["committees"] });
+    },
   });
 
   return { mutate, ...rest };
@@ -79,6 +82,9 @@ export const useUpdateCommittee = (id: number) => {
   const { mutate, ...rest } = useMutation({
     mutationKey: ["updateCommittee", id],
     mutationFn: (committeeData) => updateCommitteeApi(id, committeeData as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["committees"] });
+    },
   });
 
   return { mutate, ...rest };
