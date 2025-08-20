@@ -56,7 +56,9 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
   };
 
   const getSelectedLabels = () => {
-    return options.map((option) => option.label);
+    return options
+      .filter((option) => selectedValues.includes(option.value))
+      .map((option) => option.label);
   };
 
   console.log(getSelectedLabels());

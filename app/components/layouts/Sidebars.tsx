@@ -1,8 +1,19 @@
+import {
+  Boxes,
+  LayoutDashboard,
+  Split,
+  Users,
+  User,
+  CheckSquare,
+  Building,
+  Calendar,
+  FileText,
+} from "lucide-react";
 import { Link, useLocation } from "react-router";
 
 interface SidebarItemProps {
   to: string;
-  icon: string;
+  icon: React.ReactNode;
   label: string;
 }
 
@@ -19,8 +30,8 @@ function SidebarItem({ to, icon, label }: SidebarItemProps) {
           : "text-gray-600 hover:bg-gray-50 hover:"
       }`}
     >
-      <span className="text-lg">{icon}</span>
-      <span>{label}</span>
+      {icon}
+      <span className="flex-1">{label}</span>
     </Link>
   );
 }
@@ -51,18 +62,18 @@ export const HighBoardSidebar = () => {
         <p className="text-sm text-gray-500">Full system access</p>
       </div>
       <nav className="space-y-2">
-        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
-        <SidebarItem to="/dashboard/users" icon="👥" label="Users Management" />
+        <SidebarItem
+          to="/dashboard"
+          icon={<LayoutDashboard />}
+          label="Dashboard"
+        />
+        <SidebarItem to="/dashboard/users" icon={<Users />} label="Users" />
         <SidebarItem
           to="/dashboard/committees"
-          icon="🔑"
-          label="Committee Management"
+          icon={<Boxes />}
+          label="Committees"
         />
-        <SidebarItem
-          to="/dashboard/settings"
-          icon="⚙️"
-          label="System Settings"
-        />
+        <SidebarItem to="/dashboard/settings" icon={<Split />} label="Branch" />
       </nav>
     </div>
   );
@@ -76,14 +87,22 @@ export const HeadSidebar = () => {
         <p className="text-sm text-gray-500">Committee management</p>
       </div>
       <nav className="space-y-2">
-        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
-        <SidebarItem to="/dashboard/users" icon="👥" label="Users" />
+        <SidebarItem
+          to="/dashboard"
+          icon={<LayoutDashboard />}
+          label="Dashboard"
+        />
+        <SidebarItem to="/dashboard/users" icon={<Users />} label="Users" />
         <SidebarItem
           to="/dashboard/committees"
-          icon="🏛️"
+          icon={<Building />}
           label="My Committee"
         />
-        <SidebarItem to="/dashboard/reports" icon="📈" label="Reports" />
+        <SidebarItem
+          to="/dashboard/reports"
+          icon={<FileText />}
+          label="Reports"
+        />
       </nav>
     </div>
   );
@@ -97,10 +116,26 @@ export const MemberSidebar = () => {
         <p className="text-sm text-gray-500">Committee member</p>
       </div>
       <nav className="space-y-2">
-        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
-        <SidebarItem to="/dashboard/profile" icon="👤" label="My Profile" />
-        <SidebarItem to="/dashboard/tasks" icon="✅" label="My Tasks" />
-        <SidebarItem to="/dashboard/committee" icon="🏛️" label="My Committee" />
+        <SidebarItem
+          to="/dashboard"
+          icon={<LayoutDashboard />}
+          label="Dashboard"
+        />
+        <SidebarItem
+          to="/dashboard/profile"
+          icon={<User />}
+          label="My Profile"
+        />
+        <SidebarItem
+          to="/dashboard/tasks"
+          icon={<CheckSquare />}
+          label="My Tasks"
+        />
+        <SidebarItem
+          to="/dashboard/committee"
+          icon={<Building />}
+          label="My Committee"
+        />
       </nav>
     </div>
   );
@@ -114,9 +149,21 @@ export const HrSidebar = () => {
         <p className="text-sm text-gray-500">Human Resources</p>
       </div>
       <nav className="space-y-2">
-        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
-        <SidebarItem to="/dashboard/profile" icon="👤" label="My Profile" />
-        <SidebarItem to="/dashboard/events" icon="📅" label="Events" />
+        <SidebarItem
+          to="/dashboard"
+          icon={<LayoutDashboard />}
+          label="Dashboard"
+        />
+        <SidebarItem
+          to="/dashboard/profile"
+          icon={<User />}
+          label="My Profile"
+        />
+        <SidebarItem
+          to="/dashboard/events"
+          icon={<Calendar />}
+          label="Events"
+        />
       </nav>
     </div>
   );
@@ -130,9 +177,21 @@ export const ViceSidebar = () => {
         <p className="text-sm text-gray-500">Vice President</p>
       </div>
       <nav className="space-y-2">
-        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
-        <SidebarItem to="/dashboard/profile" icon="👤" label="My Profile" />
-        <SidebarItem to="/dashboard/events" icon="📅" label="Events" />
+        <SidebarItem
+          to="/dashboard"
+          icon={<LayoutDashboard />}
+          label="Dashboard"
+        />
+        <SidebarItem
+          to="/dashboard/profile"
+          icon={<User />}
+          label="My Profile"
+        />
+        <SidebarItem
+          to="/dashboard/events"
+          icon={<Calendar />}
+          label="Events"
+        />
       </nav>
     </div>
   );
@@ -146,7 +205,11 @@ export const GuestSidebar = () => {
         <p className="text-sm text-gray-500">Limited access</p>
       </div>
       <nav className="space-y-2">
-        <SidebarItem to="/dashboard" icon="📊" label="Dashboard" />
+        <SidebarItem
+          to="/dashboard"
+          icon={<LayoutDashboard />}
+          label="Dashboard"
+        />
       </nav>
     </div>
   );
