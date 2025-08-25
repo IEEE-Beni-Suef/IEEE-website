@@ -49,3 +49,9 @@ export interface LoginData {
   email: string;
   password: string;
 }
+
+export interface SidebarItemProps {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+}

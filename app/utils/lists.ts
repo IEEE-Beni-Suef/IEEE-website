@@ -89,3 +89,62 @@ export const governorateOptions = [
   { value: "NorthSinai", label: "North Sinai" },
   { value: "SouthSinai", label: "South Sinai" },
 ];
+
+// Sidebar navigation configurations for different roles
+export const sidebarConfigs = {
+  1: { // High Board
+    title: "High Board",
+    description: "Full system access",
+    navigation: [
+      { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
+      { to: "/dashboard/users", icon: "Users", label: "Users" },
+      { to: "/dashboard/committees", icon: "Boxes", label: "Committees" },
+      { to: "/dashboard/settings", icon: "Split", label: "Branch" },
+    ]
+  },
+  2: { // Head
+    title: "Admin",
+    description: "Committee management",
+    navigation: [
+      { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
+      { to: "/dashboard/users", icon: "Users", label: "Users" },
+      { to: "/dashboard/committees", icon: "Building", label: "My Committee" },
+      { to: "/dashboard/reports", icon: "FileText", label: "Reports" },
+    ]
+  },
+  3: { // Member
+    title: "Member",
+    description: "Committee member",
+    navigation: [
+      { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
+      { to: "/dashboard/profile", icon: "User", label: "My Profile" },
+      { to: "/dashboard/tasks", icon: "CheckSquare", label: "My Tasks" },
+      { to: "/dashboard/committee", icon: "Building", label: "My Committee" },
+    ]
+  },
+  4: { // HR
+    title: "HR",
+    description: "Human Resources",
+    navigation: [
+      { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
+      { to: "/dashboard/profile", icon: "User", label: "My Profile" },
+      { to: "/dashboard/events", icon: "Calendar", label: "Events" },
+    ]
+  },
+  5: { // Vice
+    title: "Vice",
+    description: "Vice President",
+    navigation: [
+      { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
+      { to: "/dashboard/profile", icon: "User", label: "My Profile" },
+      { to: "/dashboard/events", icon: "Calendar", label: "Events" },
+    ]
+  },
+  default: { // Guest
+    title: "Guest",
+    description: "Limited access",
+    navigation: [
+      { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
+    ]
+  }
+};

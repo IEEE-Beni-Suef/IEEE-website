@@ -9,207 +9,49 @@ import {
   Calendar,
   FileText,
 } from "lucide-react";
-import { Link, useLocation } from "react-router";
+import { sidebarConfigs } from "../../utils/lists";
+import { SidebarItem } from "./SidebarItem";
 
-interface SidebarItemProps {
-  to: string;
-  icon: React.ReactNode;
-  label: string;
+// Icon mapping helper
+const getIconComponent = (iconName: string) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    LayoutDashboard: <LayoutDashboard />,
+    Users: <Users />,
+    Boxes: <Boxes />,
+    Split: <Split />,
+    User: <User />,
+    CheckSquare: <CheckSquare />,
+    Building: <Building />,
+    Calendar: <Calendar />,
+    FileText: <FileText />,
+  };
+  return iconMap[iconName] || <LayoutDashboard />;
+};
+
+interface DynamicSidebarProps {
+  roleId?: number;
 }
 
-function SidebarItem({ to, icon, label }: SidebarItemProps) {
-  const location = useLocation();
-  const isActive = location.pathname === to;
+export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
+  const config =
+    sidebarConfigs[roleId as keyof typeof sidebarConfigs] ||
+    sidebarConfigs.default;
 
   return (
-    <Link
-      to={to}
-      className={`flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-        isActive
-          ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
-          : "text-gray-600 hover:bg-gray-50 hover:"
-      }`}
-    >
-      {icon}
-      <span className="flex-1">{label}</span>
-    </Link>
-  );
-}
-
-// Role name helper
-export const getRoleName = (roleId?: number): string => {
-  switch (roleId) {
-    case 1:
-      return "High Board";
-    case 2:
-      return "Head";
-    case 3:
-      return "Member";
-    case 4:
-      return "Hr";
-    case 5:
-      return "Vice";
-    default:
-      return "Unknown";
-  }
-};
-
-export const HighBoardSidebar = () => {
-  return (
-    <div className="p-4">
+    <div className="h-full">
       <div className="mb-8">
-        <h2 className="text-lg font-semibold ">High Board</h2>
-        <p className="text-sm text-gray-500">Full system access</p>
+        <h2 className="text-lg font-semibold">{config.title}</h2>
+        <p className="text-sm text-gray-500">{config.description}</p>
       </div>
       <nav className="space-y-2">
-        <SidebarItem
-          to="/dashboard"
-          icon={<LayoutDashboard />}
-          label="Dashboard"
-        />
-        <SidebarItem to="/dashboard/users" icon={<Users />} label="Users" />
-        <SidebarItem
-          to="/dashboard/committees"
-          icon={<Boxes />}
-          label="Committees"
-        />
-        <SidebarItem to="/dashboard/settings" icon={<Split />} label="Branch" />
-      </nav>
-    </div>
-  );
-};
-
-export const HeadSidebar = () => {
-  return (
-    <div className="p-4">
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold ">Admin</h2>
-        <p className="text-sm text-gray-500">Committee management</p>
-      </div>
-      <nav className="space-y-2">
-        <SidebarItem
-          to="/dashboard"
-          icon={<LayoutDashboard />}
-          label="Dashboard"
-        />
-        <SidebarItem to="/dashboard/users" icon={<Users />} label="Users" />
-        <SidebarItem
-          to="/dashboard/committees"
-          icon={<Building />}
-          label="My Committee"
-        />
-        <SidebarItem
-          to="/dashboard/reports"
-          icon={<FileText />}
-          label="Reports"
-        />
-      </nav>
-    </div>
-  );
-};
-
-export const MemberSidebar = () => {
-  return (
-    <div className="p-4">
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold ">Member</h2>
-        <p className="text-sm text-gray-500">Committee member</p>
-      </div>
-      <nav className="space-y-2">
-        <SidebarItem
-          to="/dashboard"
-          icon={<LayoutDashboard />}
-          label="Dashboard"
-        />
-        <SidebarItem
-          to="/dashboard/profile"
-          icon={<User />}
-          label="My Profile"
-        />
-        <SidebarItem
-          to="/dashboard/tasks"
-          icon={<CheckSquare />}
-          label="My Tasks"
-        />
-        <SidebarItem
-          to="/dashboard/committee"
-          icon={<Building />}
-          label="My Committee"
-        />
-      </nav>
-    </div>
-  );
-};
-
-export const HrSidebar = () => {
-  return (
-    <div className="p-4">
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold ">HR</h2>
-        <p className="text-sm text-gray-500">Human Resources</p>
-      </div>
-      <nav className="space-y-2">
-        <SidebarItem
-          to="/dashboard"
-          icon={<LayoutDashboard />}
-          label="Dashboard"
-        />
-        <SidebarItem
-          to="/dashboard/profile"
-          icon={<User />}
-          label="My Profile"
-        />
-        <SidebarItem
-          to="/dashboard/events"
-          icon={<Calendar />}
-          label="Events"
-        />
-      </nav>
-    </div>
-  );
-};
-
-export const ViceSidebar = () => {
-  return (
-    <div className="p-4">
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold ">Vice</h2>
-        <p className="text-sm text-gray-500">Vice President</p>
-      </div>
-      <nav className="space-y-2">
-        <SidebarItem
-          to="/dashboard"
-          icon={<LayoutDashboard />}
-          label="Dashboard"
-        />
-        <SidebarItem
-          to="/dashboard/profile"
-          icon={<User />}
-          label="My Profile"
-        />
-        <SidebarItem
-          to="/dashboard/events"
-          icon={<Calendar />}
-          label="Events"
-        />
-      </nav>
-    </div>
-  );
-};
-
-export const GuestSidebar = () => {
-  return (
-    <div className="p-4">
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold ">Guest</h2>
-        <p className="text-sm text-gray-500">Limited access</p>
-      </div>
-      <nav className="space-y-2">
-        <SidebarItem
-          to="/dashboard"
-          icon={<LayoutDashboard />}
-          label="Dashboard"
-        />
+        {config.navigation.map((item, index) => (
+          <SidebarItem
+            key={index}
+            to={item.to}
+            icon={getIconComponent(item.icon)}
+            label={item.label}
+          />
+        ))}
       </nav>
     </div>
   );

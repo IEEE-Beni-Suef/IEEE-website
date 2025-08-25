@@ -1,6 +1,5 @@
 import { Outlet } from "react-router";
 import type { ReactNode } from "react";
-import { Section } from "../ui/Section";
 
 interface DashboardLayoutProps {
   children?: ReactNode;
@@ -9,9 +8,22 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
   return (
-    <div className="flex mt-16 min-h-[calc(100vh-9rem)]">
-      <div className="w-64 shadow-sm border-r ">{sidebar}</div>
-      <div className="flex-1 p-6">{children || <Outlet />}</div>
+    <div className="h-screen bg-gray-50 dark:bg-gray-900 pt-16">
+      <div className="flex h-full">
+        {/* Sidebar */}
+        <div className="w-64 py-6 pl-6 h-full">{sidebar}</div>
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto">
+            <div className="h-full p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-full overflow-y-auto">
+                <div className="p-6">{children || <Outlet />}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
