@@ -9,6 +9,7 @@ import {
   getCommitteeByIdApi,
   getCommitteesApi,
   updateCommitteeApi,
+  UpdateUserById,
 } from "~/lib/api";
 
 export const useCommittees = () => {
@@ -99,4 +100,16 @@ export const useGetCommittee = (id: number) => {
   });
 
   return { data, ...rest };
+};
+
+export const useUpdateUser = (id: number) => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["updateUser", id],
+    mutationFn: (userData: any) => UpdateUserById(id, userData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users","user"] });
+    },
+  });
+
+  return { mutate, ...rest };
 };

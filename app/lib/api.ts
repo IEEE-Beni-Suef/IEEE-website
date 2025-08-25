@@ -155,3 +155,18 @@ export const ActiveUserByIdApi = async (id: number) => {
     throw new Error("An unexpected error occurred");
   }
 };
+
+export const UpdateUserById = async (id: number, data: any) => {
+    try {
+    const response = await apiClient.put(`/Users/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to update user"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+

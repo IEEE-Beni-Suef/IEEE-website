@@ -1,73 +1,295 @@
+import { useState } from "react";
 import { getRoleName } from "~/utils/utile";
 import { useAuth } from "../../hooks/useAuth";
+import { useUpdateUser } from "../../hooks/useApi";
+import {
+  facultyOptions,
+  genderOptions,
+  governorateOptions,
+  yearOptions,
+} from "~/utils/lists";
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  GraduationCap,
+  Calendar,
+  Users,
+  Edit3,
+  Save,
+  X,
+  CheckCircle,
+} from "lucide-react";
 
 export default function Profile() {
   const { user } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedUser, setEditedUser] = useState({
+    fName: user?.fName || "",
+    mName: user?.mName || "",
+    lName: user?.lName || "",
+    email: user?.email || "",
+    phoneNumber: user?.phoneNumber || "",
+    goverment: user?.goverment || "",
+    faculty: user?.faculty || "",
+    year: user?.year || "",
+    sex: user?.sex || "",
+  });
+
+  const updateUserMutation = useUpdateUser(user?.id || 0);
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      setEditedUser({
+        fName: user?.fName || "",
+        mName: user?.mName || "",
+        lName: user?.lName || "",
+        email: user?.email || "",
+        phoneNumber: user?.phoneNumber || "",
+        goverment: user?.goverment || "",
+        faculty: user?.faculty || "",
+        year: user?.year || "",
+        sex: user?.sex || "",
+      });
+    }
+    setIsEditing(!isEditing);
+  };
+
+  const handleSave = () => {
+    updateUserMutation.mutate(editedUser, {
+      onSuccess: () => {
+        setIsEditing(false);
+      },
+    });
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setEditedUser((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const InputField = ({
+    label,
+    value,
+    field,
+    icon: Icon,
+    type = "text",
+    options = [],
+  }: {
+    label: string;
+    value: string;
+    field: string;
+    icon: any;
+    type?: string;
+    options?: Array<{ value: string; label: string }>;
+  }) => (
+    <div className="space-y-2">
+      <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+        <Icon className="w-4 h-4 mr-2 text-gray-500" />
+        {label}
+      </label>
+      {isEditing ? (
+        type === "select" ? (
+          <select
+            value={value}
+            onChange={(e) => handleInputChange(field, e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Select {label}</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type={type}
+            value={value}
+            onChange={(e) => handleInputChange(field, e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        )
+      ) : (
+        <p className="px-3 py-2 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+          {type === "select" && options.length > 0
+            ? options.find((opt) => opt.value === value)?.label ||
+              value ||
+              "Not provided"
+            : value || "Not provided"}
+        </p>
+      )}
+    </div>
+  );
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold ">My Profile</h1>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-          Edit Profile
-        </button>
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+            My Profile
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Manage your personal information
+          </p>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                disabled={updateUserMutation.isPending}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {updateUserMutation.isPending ? "Saving..." : "Save"}
+              </button>
+              <button
+                onClick={handleEditToggle}
+                className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Cancel
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleEditToggle}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+            >
+              <Edit3 className="w-4 h-4 mr-2" />
+              Edit Profile
+            </button>
+          )}
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b">
-          <h2 className="text-lg font-medium">Personal Information</h2>
+      {updateUserMutation.isSuccess && !isEditing && (
+        <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mr-3" />
+          <p className="text-green-700 dark:text-green-300">
+            Profile updated successfully!
+          </p>
         </div>
+      )}
+
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Personal Information
+          </h2>
+        </div>
+
         <div className="p-6">
-          <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Full Name</dt>
-              <dd className="mt-1 text-sm ">
-                {user?.firstName} {user?.middleName} {user?.lastName}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Email</dt>
-              <dd className="mt-1 text-sm ">{user?.email}</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Phone</dt>
-              <dd className="mt-1 text-sm ">{user?.phone || "Not provided"}</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Year</dt>
-              <dd className="mt-1 text-sm ">{user?.year || "Not provided"}</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Faculty</dt>
-              <dd className="mt-1 text-sm ">
-                {user?.faculty || "Not provided"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Government</dt>
-              <dd className="mt-1 text-sm ">
-                {user?.goverment || "Not provided"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Status</dt>
-              <dd className="mt-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputField
+              label="First Name"
+              value={isEditing ? editedUser.fName : user?.fName || ""}
+              field="fName"
+              icon={User}
+            />
+
+            <InputField
+              label="Middle Name"
+              value={isEditing ? editedUser.mName : user?.mName || ""}
+              field="mName"
+              icon={User}
+            />
+
+            <InputField
+              label="Last Name"
+              value={isEditing ? editedUser.lName : user?.lName || ""}
+              field="lName"
+              icon={User}
+            />
+
+            <InputField
+              label="Email Address"
+              value={isEditing ? editedUser.email : user?.email || ""}
+              field="email"
+              icon={Mail}
+              type="email"
+            />
+
+            <InputField
+              label="Phone Number"
+              value={
+                isEditing ? editedUser.phoneNumber : user?.phoneNumber || ""
+              }
+              field="phoneNumber"
+              icon={Phone}
+            />
+
+            <InputField
+              label="Gender"
+              value={isEditing ? editedUser.sex : user?.sex || ""}
+              field="sex"
+              icon={Users}
+              type="select"
+              options={genderOptions}
+            />
+
+            <InputField
+              label="Government"
+              value={isEditing ? editedUser.goverment : user?.goverment || ""}
+              field="goverment"
+              icon={MapPin}
+              type="select"
+              options={governorateOptions}
+            />
+
+            <InputField
+              label="Faculty"
+              value={isEditing ? editedUser.faculty : user?.faculty || ""}
+              field="faculty"
+              icon={GraduationCap}
+              type="select"
+              options={facultyOptions}
+            />
+
+            <InputField
+              label="Academic Year"
+              value={isEditing ? editedUser.year : user?.year || ""}
+              field="year"
+              icon={Calendar}
+              type="select"
+              options={yearOptions}
+            />
+
+            {/* Read-only fields */}
+            <div className="space-y-2">
+              <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                <CheckCircle className="w-4 h-4 mr-2 text-gray-500" />
+                Account Status
+              </label>
+              <div className="px-3 py-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     user?.isActive
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
+                      ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                      : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
                   }`}
                 >
                   {user?.isActive ? "Active" : "Inactive"}
                 </span>
-              </dd>
+              </div>
             </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Role</dt>
-              <dd className="mt-1 text-sm ">{getRoleName(user?.roleId)}</dd>
+
+            <div className="space-y-2">
+              <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                <Users className="w-4 h-4 mr-2 text-gray-500" />
+                Role
+              </label>
+              <p className="px-3 py-2 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                {getRoleName(user?.roleId)}
+              </p>
             </div>
-          </dl>
+          </div>
         </div>
       </div>
     </div>

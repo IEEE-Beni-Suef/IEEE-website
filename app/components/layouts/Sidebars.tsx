@@ -48,7 +48,6 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isProfileExpanded, setIsProfileExpanded] = useState(false);
-  console.log(user);
 
   const handleLogout = () => {
     clearAuth();
