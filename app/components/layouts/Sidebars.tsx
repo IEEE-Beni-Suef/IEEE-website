@@ -8,6 +8,8 @@ import {
   Building,
   Calendar,
   FileText,
+  Clock,
+  CheckCircle,
 } from "lucide-react";
 import { Link, useLocation } from "react-router";
 
@@ -73,6 +75,8 @@ export const HighBoardSidebar = () => {
           icon={<Boxes />}
           label="Committees"
         />
+        <SidebarItem to="/meetings" icon={<Clock />} label="Create Meeting" />
+        <SidebarItem to="/meetings-attendance" icon={<CheckCircle />} label="Meeting Attendance" />
         <SidebarItem to="/dashboard/settings" icon={<Split />} label="Branch" />
       </nav>
     </div>
@@ -98,6 +102,8 @@ export const HeadSidebar = () => {
           icon={<Building />}
           label="My Committee"
         />
+        <SidebarItem to="/meetings" icon={<Clock />} label="Create Meeting" />
+        <SidebarItem to="/meetings-attendance" icon={<CheckCircle />} label="Meeting Attendance" />
         <SidebarItem
           to="/dashboard/reports"
           icon={<FileText />}

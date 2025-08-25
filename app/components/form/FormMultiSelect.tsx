@@ -30,7 +30,7 @@ interface FormMultiSelectProps {
 export const FormMultiSelect: FC<FormMultiSelectProps> = ({
   id,
   label,
-  options,
+  options = [],
   register,
   setValue,
   watch,

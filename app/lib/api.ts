@@ -155,3 +155,54 @@ export const ActiveUserByIdApi = async (id: number) => {
     throw new Error("An unexpected error occurred");
   }
 };
+
+// meetings Api
+
+export type CreateMeetingPayload = {
+  title: string;
+  description: string;
+  recap: string;
+  type: string;
+  dateTime: string; // ISO string expected by backend
+  committeeId: number|null;
+  headId: number|null;
+};
+
+export const apiCreateMeeting = async (data: CreateMeetingPayload) => {
+  try {
+    const response = await apiClient.post("/Meetings", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to create meeting"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export type AttendanceItem = {
+  userId: number;
+  isAttend: boolean;
+  score: number;
+};
+
+export type SubmitAttendancePayload = {
+  usersAttendents: AttendanceItem[];
+  meetingId: number;
+};
+
+export const apiSubmitAttendance = async (data: SubmitAttendancePayload) => {
+  try {
+    const response = await apiClient.post("/Meetings/attendent", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to submit attendance"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};

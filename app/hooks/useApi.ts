@@ -100,3 +100,4 @@ export const useGetCommittee = (id: number) => {
 
   return { data, ...rest };
 };
+
