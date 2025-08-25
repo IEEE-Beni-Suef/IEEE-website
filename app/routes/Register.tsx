@@ -37,6 +37,7 @@ import {
 import { registerSchema } from "~/utils/scemas";
 import { useMutation } from "@tanstack/react-query";
 import { useCommittees } from "~/hooks/useApi";
+import type { Committee } from "~/types";
 
 export function meta({}: MetaArgs) {
   return [
@@ -84,6 +85,13 @@ const Register = () => {
   };
 
   const committeeOptions = useCommittees();
+  console.log(committeeOptions);
+
+  const transformedCommitteeOptions =
+    committeeOptions?.data?.map((committee: Committee) => ({
+      value: committee.id.toString(),
+      label: committee.name,
+    })) ?? [];
 
   return (
     <Section
@@ -213,7 +221,7 @@ const Register = () => {
               <FormMultiSelect
                 id="CommitteeIds"
                 label="Committees (Optional)"
-                options={committeeOptions.data}
+                options={transformedCommitteeOptions}
                 placeholder="Select committees you're interested in"
                 register={register}
                 setValue={setValue}

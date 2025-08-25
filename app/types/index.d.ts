@@ -18,9 +18,11 @@ export interface User {
 
 export interface Committee {
   id: number;
+  headId:number;
+  imageUrl:string;
+  memberCount:number;
   name: string;
-  description?: string;
-  isActive: boolean;
+  vicesId:Array;
 }
 
 export interface LoginResponse {
