@@ -19,7 +19,6 @@ import logo from "../assets/IEEE.png";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isDark = useSelector((state: RootState) => state.theme.isDark);
@@ -32,16 +31,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isUserMenuOpen) {
-        setIsUserMenuOpen(false);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [isUserMenuOpen]);
 
   const navItems = [
     { label: "Home", path: "/", icon: Home },
@@ -60,7 +49,6 @@ const Navbar = () => {
 
   const handleLogout = () => {
     clearAuth();
-    setIsUserMenuOpen(false);
     navigate("/");
   };
 
@@ -108,52 +96,7 @@ const Navbar = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-3">
-              {isAuthenticated ? (
-                /* Authenticated User Menu */
-                <div className="hidden sm:flex items-center space-x-2">
-                  <div className="relative">
-                    <button
-                      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                      className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-                    >
-                      <User className="w-5 h-5" />
-                      <span className="font-medium">
-                        {isLoading ? "Loading..." : user?.email || "User"}
-                      </span>
-                    </button>
-
-                    {/* User Dropdown Menu */}
-                    {isUserMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
-                        <Link
-                          to="/dashboard"
-                          onClick={() => setIsUserMenuOpen(false)}
-                          className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                        >
-                          <LayoutDashboard className="w-4 h-4" />
-                          <span>Dashboard</span>
-                        </Link>
-                        <Link
-                          to="/dashboard/profile"
-                          onClick={() => setIsUserMenuOpen(false)}
-                          className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                        >
-                          <User className="w-4 h-4" />
-                          <span>Profile</span>
-                        </Link>
-                        <hr className="my-1 border-gray-200 dark:border-gray-700" />
-                        <button
-                          onClick={handleLogout}
-                          className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ) : (
+              {!isAuthenticated && (
                 /* Non-authenticated Login/Signup buttons */
                 <div className="hidden sm:flex items-center space-x-2">
                   <Link
@@ -215,40 +158,7 @@ const Navbar = () => {
                 );
               })}
               <div className="pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
-                {isAuthenticated ? (
-                  /* Authenticated User Mobile Menu */
-                  <>
-                    <div className="flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300">
-                      <User className="w-5 h-5" />
-                      <span className="font-medium">
-                        {isLoading ? "Loading..." : user?.email || "User"}
-                      </span>
-                    </div>
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                    >
-                      <LayoutDashboard className="w-5 h-5" />
-                      <span>Dashboard</span>
-                    </Link>
-                    <Link
-                      to="/dashboard/profile"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                    >
-                      <User className="w-5 h-5" />
-                      <span>Profile</span>
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      <span>Sign Out</span>
-                    </button>
-                  </>
-                ) : (
+                {!isAuthenticated && (
                   /* Non-authenticated Mobile Menu */
                   <>
                     <Link

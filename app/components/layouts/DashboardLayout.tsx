@@ -11,7 +11,7 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
     <div className="h-screen bg-gray-50 dark:bg-gray-900 pt-16">
       <div className="flex h-full">
         {/* Sidebar */}
-        <div className="w-64 py-6 pl-6 h-full">{sidebar}</div>
+        <aside className="w-64 py-6 pl-6 h-full">{sidebar}</aside>
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
