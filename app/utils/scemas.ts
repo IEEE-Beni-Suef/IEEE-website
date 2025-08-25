@@ -51,3 +51,15 @@ export const articleSchema = z.object({
   photo: z.string().min(1, { message: "Article photo is required" }),
   categoryId: z.number().min(1, { message: "Category is required" }),
 });
+
+
+export const attendanceItemSchema = z.object({
+  userId: z.string().min(1, { message: "User ID is required" }),
+  isAttend: z.boolean(),
+  score: z.string().min(1, { message: "Score is required" }),
+});
+
+export const submitAttendanceSchema = z.object({
+  meetingId: z.string().min(1, { message: "Meeting ID is required" }),
+  usersAttendents: z.array(attendanceItemSchema).min(1, { message: "At least one attendee is required" }),
+});

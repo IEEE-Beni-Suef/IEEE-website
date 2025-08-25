@@ -13,6 +13,8 @@ import {
   LogOut,
   User,
   LayoutDashboard,
+  Clock,
+  CheckCircle,
 } from "lucide-react";
 import Logo from "./ui/Logo";
 
@@ -36,6 +38,8 @@ const Navbar = () => {
     { label: "Home", path: "/", icon: Home },
     { label: "About", path: "/about", icon: Users },
     { label: "Events", path: "/events", icon: Calendar },
+    { label: "Create Meeting", path: "/meetings", icon: Clock },
+    { label: "Attendance", path: "/meetings-attendance", icon: CheckCircle },
   ];
 
   const authNavItems = [
@@ -43,6 +47,8 @@ const Navbar = () => {
     { label: "Home", path: "/", icon: Home },
     { label: "About", path: "/about", icon: Users },
     { label: "Events", path: "/events", icon: Calendar },
+    { label: "Create Meeting", path: "/meetings", icon: Clock },
+    { label: "Attendance", path: "/meetings-attendance", icon: CheckCircle },
   ];
 
   const isActive = (path: string) => location.pathname === path;
