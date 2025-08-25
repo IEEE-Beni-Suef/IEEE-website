@@ -6,7 +6,7 @@ export interface User {
   email: string;
   phone?: string;
   year?: string;
-  sex?: 'male' | 'female';
+  sex?: "male" | "female";
   faculty?: string;
   goverment?: string;
   roleId: number;
@@ -18,11 +18,11 @@ export interface User {
 
 export interface Committee {
   id: number;
-  headId:number;
-  imageUrl:string;
-  memberCount:number;
+  headId: number;
+  imageUrl: string;
+  memberCount: number;
   name: string;
-  vicesId:Array;
+  vicesId: Array;
 }
 
 export interface LoginResponse {
@@ -37,7 +37,7 @@ export interface RegisterData {
   password: string;
   email: string;
   year: string;
-  sex: 'male' | 'female';
+  sex: "male" | "female";
   faculty: string;
   phone: string;
   goverment: string;
@@ -54,4 +54,12 @@ export interface SidebarItemProps {
   to: string;
   icon: React.ReactNode;
   label: string;
+}
+
+export interface Article {
+  title: string;
+  description: string;
+  keywords: Array;
+  photo: string;
+  categoryId: number;
 }

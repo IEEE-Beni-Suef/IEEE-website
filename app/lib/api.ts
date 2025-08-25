@@ -157,16 +157,96 @@ export const ActiveUserByIdApi = async (id: number) => {
 };
 
 export const UpdateUserById = async (id: number, data: any) => {
-    try {
+  try {
     const response = await apiClient.put(`/Users/${id}`, data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to update user");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+//Article Apis
+export const getAllArticlesApi = async () => {
+  try {
+    const response = await apiClient.get("/Articles");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to get Articles");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const getArticleByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.get(`/Articles/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to update user"
+        error.response?.data.message || "Failed to get Article data"
       );
     }
     throw new Error("An unexpected error occurred");
   }
 };
 
+export const createArticle = async (data: any) => {
+  try {
+    const response = await apiClient.post("/Articles", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to create Article"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteArticleApi = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/Articles/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to delete Article"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateArticleApi = async (id: number, data: any) => {
+  try {
+    const response = await apiClient.put(`/Articles/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to update Article"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const getArticleSubsectionByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.get(`/Articles/${id}/show`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to show Articles"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
