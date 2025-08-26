@@ -2,6 +2,19 @@ import { useParams, Link } from "react-router";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { useGetArticleSubsection } from "~/hooks/useApi";
 import { Section } from "~/components/ui/Section";
+import type { MetaArgs } from "react-router";
+
+export function meta({ params }: MetaArgs) {
+  const articleId = params.id ? parseInt(params.id) : 0;
+  return [
+    { title: `Article ${articleId} - IEEE BSU` },
+    {
+      name: "description",
+      content:
+        "Read the latest article from IEEE BSU - Beni Suef University Student Branch.",
+    },
+  ];
+}
 
 export default function ArticleView() {
   const { id } = useParams();
