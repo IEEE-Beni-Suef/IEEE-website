@@ -29,3 +29,15 @@ export const committeeSchema = z.object({
   headId: z.string().min(1, { message: "Head is required" }),
   vicesId: z.array(z.string()),
 });
+
+export const articleSchema = z.object({
+  title: z.string().min(1, { message: "Article title is required" }),
+  description: z
+    .string()
+    .min(1, { message: "Article description is required" }),
+  keywords: z
+    .array(z.string())
+    .min(1, { message: "At least one keyword is required" }),
+  photo: z.string().min(1, { message: "Article photo is required" }),
+  categoryId: z.number().min(1, { message: "Category is required" }),
+});

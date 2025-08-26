@@ -7,6 +7,7 @@ export default [
   route("/login", "routes/Login.tsx"),
   route("/register", "routes/Register.tsx"),
   route("/commitees", "routes/commitees.tsx"),
+  route("/article/:id", "routes/article.$id.tsx"),
 
   // Protected dashboard routes
   route("/dashboard", "routes/protected/dashboard.tsx", [
@@ -15,5 +16,6 @@ export default [
     route("profile", "routes/protected/dashboard.profile.tsx"),
     route("settings", "routes/protected/dashboard.settings.tsx"),
     route("committees", "routes/protected/dashboard.committees.tsx"),
+    route("articles", "routes/protected/dashboard.articles.tsx"),
   ]),
 ] satisfies RouteConfig;

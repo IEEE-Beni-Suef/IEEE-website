@@ -57,9 +57,29 @@ export interface SidebarItemProps {
 }
 
 export interface Article {
+  id?: number;
   title: string;
   description: string;
-  keywords: Array;
+  keywords: Array<string>;
   photo: string;
-  categoryId: number;
+  categoryId?: number;
+  categoryName?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  subsections?: Subsection[];
+}
+
+export interface Category {
+  id: number;
+  name: string;
+}
+
+export interface Subsection {
+  id: number;
+  subtitle: string;
+  paragraph: string;
+  photo: string;
+  articleId: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

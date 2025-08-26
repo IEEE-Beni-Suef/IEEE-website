@@ -197,7 +197,16 @@ export const getArticleByIdApi = async (id: number) => {
 
 export const createArticle = async (data: any) => {
   try {
-    const response = await apiClient.post("/Articles", data);
+    const config =
+      data instanceof FormData
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {};
+
+    const response = await apiClient.post("/Articles", data, config);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -225,7 +234,16 @@ export const deleteArticleApi = async (id: number) => {
 
 export const updateArticleApi = async (id: number, data: any) => {
   try {
-    const response = await apiClient.put(`/Articles/${id}`, data);
+    const config =
+      data instanceof FormData
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {};
+
+    const response = await apiClient.put(`/Articles/${id}`, data, config);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -245,6 +263,138 @@ export const getArticleSubsectionByIdApi = async (id: number) => {
     if (axios.isAxiosError(error)) {
       throw new Error(
         error.response?.data.message || "Failed to show Articles"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// category APIs
+
+export const getAllCategoryApi = async () => {
+  try {
+    const response = await apiClient.get("/Category");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to get Category");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const createCategory = async (data: any) => {
+  try {
+    const response = await apiClient.post("/Category", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to create Category"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteCategoryApi = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/Category/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to delete Category"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateCategoryApi = async (id: number, data: any) => {
+  try {
+    const response = await apiClient.put(`/Category/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to update Category"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// subsecton Apis
+
+export const getAllSubsectionsApi = async () => {
+  try {
+    const response = await apiClient.get("/Subsections");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to get Subsections"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const createSubsections = async (data: any) => {
+  try {
+    const config =
+      data instanceof FormData
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {};
+
+    const response = await apiClient.post("/Subsections", data, config);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to create Subsections"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteSubsectionsApi = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/Subsections/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to delete Subsections"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateSubsectionsApi = async (id: number, data: any) => {
+  try {
+    const config =
+      data instanceof FormData
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {};
+
+    const response = await apiClient.put(`/Subsections/${id}`, data, config);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to update Subsections"
       );
     }
     throw new Error("An unexpected error occurred");

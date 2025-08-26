@@ -10,6 +10,20 @@ import {
   getCommitteesApi,
   updateCommitteeApi,
   UpdateUserById,
+  getAllArticlesApi,
+  getArticleByIdApi,
+  createArticle,
+  updateArticleApi,
+  deleteArticleApi,
+  getArticleSubsectionByIdApi,
+  getAllCategoryApi,
+  createCategory,
+  deleteCategoryApi,
+  updateCategoryApi,
+  getAllSubsectionsApi,
+  createSubsections,
+  deleteSubsectionsApi,
+  updateSubsectionsApi,
 } from "~/lib/api";
 
 export const useCommittees = () => {
@@ -107,7 +121,174 @@ export const useUpdateUser = (id: number) => {
     mutationKey: ["updateUser", id],
     mutationFn: (userData: any) => UpdateUserById(id, userData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users","user"] });
+      queryClient.invalidateQueries({ queryKey: ["users", "user"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+// Articles hooks
+
+export const useAllArticles = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["articles"],
+    queryFn: getAllArticlesApi,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+export const useGetArticle = (id: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["article", id],
+    queryFn: () => getArticleByIdApi(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+    enabled: !!id,
+  });
+
+  return { data, ...rest };
+};
+
+export const useCreateArticle = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["createArticle"],
+    mutationFn: (articleData: any) => createArticle(articleData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useUpdateArticle = (id: number) => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["updateArticle", id],
+    mutationFn: (articleData: any) => updateArticleApi(id, articleData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useDeleteArticle = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["deleteArticle"],
+    mutationFn: (id: number) => deleteArticleApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useGetArticleSubsection = (id: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["articleSubsection", id],
+    queryFn: () => getArticleSubsectionByIdApi(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+    enabled: !!id,
+  });
+
+  return { data, ...rest };
+};
+
+// Categories hooks
+
+export const useAllCategories = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getAllCategoryApi,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+export const useCreateCategory = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["createCategory"],
+    mutationFn: (categoryData: any) => createCategory(categoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useUpdateCategory = (id: number) => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["updateCategory", id],
+    mutationFn: (categoryData: any) => updateCategoryApi(id, categoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useDeleteCategory = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["deleteCategory"],
+    mutationFn: (id: number) => deleteCategoryApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+// Subsections hooks
+
+export const useCreateSubsection = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["createSubsection"],
+    mutationFn: (subsectionData: any) => createSubsections(subsectionData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["articleSubsection"],
+      });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useUpdateSubsection = (id: number) => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["updateSubsection", id],
+    mutationFn: (subsectionData: any) =>
+      updateSubsectionsApi(id, subsectionData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["articleSubsection"],
+      });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useDeleteSubsection = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["deleteSubsection"],
+    mutationFn: (id: number) => deleteSubsectionsApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["articleSubsection"],
+      });
     },
   });
 

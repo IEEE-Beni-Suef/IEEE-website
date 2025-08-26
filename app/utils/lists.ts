@@ -92,27 +92,32 @@ export const governorateOptions = [
 
 // Sidebar navigation configurations for different roles
 export const sidebarConfigs = {
-  1: { // High Board
+  1: {
+    // High Board
     title: "High Board",
     description: "Full system access",
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/users", icon: "Users", label: "Users" },
       { to: "/dashboard/committees", icon: "Boxes", label: "Committees" },
+      { to: "/dashboard/articles", icon: "FileText", label: "Articles" },
       { to: "/dashboard/settings", icon: "Split", label: "Branch" },
-    ]
+    ],
   },
-  2: { // Head
+  2: {
+    // Head
     title: "Admin",
     description: "Committee management",
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/users", icon: "Users", label: "Users" },
       { to: "/dashboard/committees", icon: "Building", label: "My Committee" },
+      { to: "/dashboard/articles", icon: "FileText", label: "Articles" },
       { to: "/dashboard/reports", icon: "FileText", label: "Reports" },
-    ]
+    ],
   },
-  3: { // Member
+  3: {
+    // Member
     title: "Member",
     description: "Committee member",
     navigation: [
@@ -120,31 +125,34 @@ export const sidebarConfigs = {
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
       { to: "/dashboard/tasks", icon: "CheckSquare", label: "My Tasks" },
       { to: "/dashboard/committee", icon: "Building", label: "My Committee" },
-    ]
+    ],
   },
-  4: { // HR
+  4: {
+    // HR
     title: "HR",
     description: "Human Resources",
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
       { to: "/dashboard/events", icon: "Calendar", label: "Events" },
-    ]
+    ],
   },
-  5: { // Vice
+  5: {
+    // Vice
     title: "Vice",
     description: "Vice President",
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
       { to: "/dashboard/events", icon: "Calendar", label: "Events" },
-    ]
+    ],
   },
-  default: { // Guest
+  default: {
+    // Guest
     title: "Guest",
     description: "Limited access",
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
-    ]
-  }
+    ],
+  },
 };

@@ -16,6 +16,7 @@ interface FormSelectProps {
   icon?: LucideIcon;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 export const FormSelect: FC<FormSelectProps> = ({
@@ -27,6 +28,7 @@ export const FormSelect: FC<FormSelectProps> = ({
   icon: Icon,
   placeholder = "Select an option",
   className = "",
+  disabled = false,
 }) => {
   return (
     <div className="space-y-2">
@@ -43,7 +45,8 @@ export const FormSelect: FC<FormSelectProps> = ({
         <select
           id={id}
           {...register(id)}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none ${className}`}
+          disabled={disabled}
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
         >
           <option value="">{placeholder}</option>
           {options.map((option) => (

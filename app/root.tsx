@@ -8,6 +8,7 @@ import {
 } from "react-router";
 import { Provider } from "react-redux";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 import type { Route } from "./+types/root";
 import Navbar from "./components/Navbar";
@@ -60,6 +61,22 @@ export default function App() {
       <Provider store={store}>
         <Navbar />
         <Outlet />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: "var(--toast-bg, #363636)",
+              color: "var(--toast-color, #fff)",
+            },
+            success: {
+              duration: 3000,
+            },
+            error: {
+              duration: 5000,
+            },
+          }}
+        />
       </Provider>
     </QueryClientProvider>
   );
