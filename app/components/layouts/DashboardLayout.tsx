@@ -33,7 +33,7 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
             isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="h-full py-6 pl-6 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+          <div className="h-full py-6 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
             {sidebar}
           </div>
         </aside>
