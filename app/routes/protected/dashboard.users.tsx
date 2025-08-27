@@ -5,6 +5,7 @@ import { ActiveUserByIdApi, deleteUserByIdApi } from "~/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { facultyOptions, governorateOptions } from "~/utils/lists";
+import { UsersModal } from "~/components/UsersModal";
 
 export default function UsersManagement() {
   const { data, isLoading, isError, error } = useAllUsers();
@@ -12,6 +13,12 @@ export default function UsersManagement() {
   const [actionLoadingId, setActionLoadingId] = useState<number | null>(null);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const handleAddUser = (userData: any) => {
+    console.log("Creating new user:", userData);
+    setShowAddModal(false);
+  };
 
   // Helper functions to get display names
   const getFacultyName = (faculty: string) => {
@@ -70,7 +77,10 @@ export default function UsersManagement() {
               </p>
             </div>
             <div className="mt-4 sm:mt-0">
-              <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900 transition-colors duration-200">
+              <button 
+                onClick={() => setShowAddModal(true)}
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900 transition-colors duration-200"
+              >
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="none"
@@ -661,6 +671,13 @@ export default function UsersManagement() {
             </div>
           </div>
         )}
+        {/* Add/Edit User Modal */}
+        <UsersModal
+          isOpen={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          onSubmit={handleAddUser}
+          isLoading={false}
+        />
       </div>
     </ProtectedRoute>
   );
