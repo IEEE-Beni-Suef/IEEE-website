@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { getRoleName } from "~/utils/utile";
 import { useAuth } from "../../hooks/useAuth";
 import { useUpdateUser } from "../../hooks/useApi";
@@ -39,6 +39,22 @@ export default function Profile() {
 
   const updateUserMutation = useUpdateUser(user?.id || 0);
 
+  useEffect(() => {
+    if (user) {
+      setEditedUser({
+        fName: user.fName || "",
+        mName: user.mName || "",
+        lName: user.lName || "",
+        email: user.email || "",
+        phoneNumber: user.phoneNumber || "",
+        goverment: user.goverment || "",
+        faculty: user.faculty || "",
+        year: user.year || "",
+        sex: user.sex || "",
+      });
+    }
+  }, [user]);
+
   const handleEditToggle = () => {
     if (isEditing) {
       setEditedUser({
@@ -64,65 +80,72 @@ export default function Profile() {
     });
   };
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = useCallback((field: string, value: string) => {
     setEditedUser((prev) => ({
       ...prev,
       [field]: value,
     }));
-  };
+  }, []);
 
-  const InputField = ({
-    label,
-    value,
-    field,
-    icon: Icon,
-    type = "text",
-    options = [],
-  }: {
-    label: string;
-    value: string;
-    field: string;
-    icon: any;
-    type?: string;
-    options?: Array<{ value: string; label: string }>;
-  }) => (
-    <div className="space-y-2">
-      <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-        <Icon className="w-4 h-4 mr-2 text-gray-500" />
-        {label}
-      </label>
-      {isEditing ? (
-        type === "select" ? (
-          <select
-            value={value}
-            onChange={(e) => handleInputChange(field, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">Select {label}</option>
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type={type}
-            value={value}
-            onChange={(e) => handleInputChange(field, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        )
-      ) : (
-        <p className="px-3 py-2 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-          {type === "select" && options.length > 0
-            ? options.find((opt) => opt.value === value)?.label ||
-              value ||
-              "Not provided"
-            : value || "Not provided"}
-        </p>
-      )}
-    </div>
+  const InputField = useCallback(
+    ({
+      label,
+      value,
+      field,
+      icon: Icon,
+      type = "text",
+      options = [],
+    }: {
+      label: string;
+      value: string;
+      field: string;
+      icon: any;
+      type?: string;
+      options?: Array<{ value: string; label: string }>;
+    }) => {
+      const displayValue = isEditing ? value : (user as any)?.[field] || "";
+
+      return (
+        <div className="space-y-2">
+          <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+            <Icon className="w-4 h-4 mr-2 text-gray-500" />
+            {label}
+          </label>
+          {isEditing ? (
+            type === "select" ? (
+              <select
+                value={value}
+                onChange={(e) => handleInputChange(field, e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select {label}</option>
+                {options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type={type}
+                value={value}
+                onChange={(e) => handleInputChange(field, e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            )
+          ) : (
+            <p className="px-3 py-2 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+              {type === "select" && options.length > 0
+                ? options.find((opt) => opt.value === displayValue)?.label ||
+                  displayValue ||
+                  "Not provided"
+                : displayValue || "Not provided"}
+            </p>
+          )}
+        </div>
+      );
+    },
+    [isEditing, user, handleInputChange]
   );
 
   return (
@@ -189,28 +212,28 @@ export default function Profile() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <InputField
               label="First Name"
-              value={isEditing ? editedUser.fName : user?.fName || ""}
+              value={editedUser.fName}
               field="fName"
               icon={User}
             />
 
             <InputField
               label="Middle Name"
-              value={isEditing ? editedUser.mName : user?.mName || ""}
+              value={editedUser.mName}
               field="mName"
               icon={User}
             />
 
             <InputField
               label="Last Name"
-              value={isEditing ? editedUser.lName : user?.lName || ""}
+              value={editedUser.lName}
               field="lName"
               icon={User}
             />
 
             <InputField
               label="Email Address"
-              value={isEditing ? editedUser.email : user?.email || ""}
+              value={editedUser.email}
               field="email"
               icon={Mail}
               type="email"
@@ -218,16 +241,14 @@ export default function Profile() {
 
             <InputField
               label="Phone Number"
-              value={
-                isEditing ? editedUser.phoneNumber : user?.phoneNumber || ""
-              }
+              value={editedUser.phoneNumber}
               field="phoneNumber"
               icon={Phone}
             />
 
             <InputField
               label="Gender"
-              value={isEditing ? editedUser.sex : user?.sex || ""}
+              value={editedUser.sex}
               field="sex"
               icon={Users}
               type="select"
@@ -236,7 +257,7 @@ export default function Profile() {
 
             <InputField
               label="Government"
-              value={isEditing ? editedUser.goverment : user?.goverment || ""}
+              value={editedUser.goverment}
               field="goverment"
               icon={MapPin}
               type="select"
@@ -245,7 +266,7 @@ export default function Profile() {
 
             <InputField
               label="Faculty"
-              value={isEditing ? editedUser.faculty : user?.faculty || ""}
+              value={editedUser.faculty}
               field="faculty"
               icon={GraduationCap}
               type="select"
@@ -254,7 +275,7 @@ export default function Profile() {
 
             <InputField
               label="Academic Year"
-              value={isEditing ? editedUser.year : user?.year || ""}
+              value={editedUser.year}
               field="year"
               icon={Calendar}
               type="select"
