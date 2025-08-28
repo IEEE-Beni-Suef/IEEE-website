@@ -1,55 +1,43 @@
 import { useForm, useFieldArray } from "react-hook-form";
+import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { FormInput } from "../components/form";
-import { submitAttendanceSchema } from "../utils/scemas";
+import { submitAttendanceSchema,type SubmitAttendanceFormData } from "../utils/scemas";
 import { apiSubmitAttendance, type SubmitAttendancePayload } from "../lib/api";
-import { Users, CheckCircle, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { useMeetingAttendents } from "~/hooks/useApi";
 import { useEffect } from "react";
 
-type SubmitAttendanceFormData = z.infer<typeof submitAttendanceSchema>;
-
 export default function MeetingsAttendance({ meetingId }: { meetingId: number }) {
   const { data: attendents } = useMeetingAttendents(meetingId);
 
-  const attendentsMember = {
-    attendents:
-      attendents?.map((a) => ({
-        userId: a.userId, // keep as number
-        isAttend: a.isAttend,
-        score: a.score,
-      })) ?? [],
-  };
-
   const {
-  register,
-  handleSubmit,
-  control,
-  formState: { errors },
-  reset,
-} = useForm<SubmitAttendanceFormData>({
-  resolver: zodResolver(submitAttendanceSchema),
-  defaultValues: {
-  meetingId,
-  usersAttendents:
-    attendentsMember.attendents.length > 0
-      ? attendentsMember.attendents
-      : [{ userId: 0, isAttend: true, score: 0 }],
-}
-
-});
-
-useEffect(() => {
-  if (attendentsMember.attendents.length > 0) {
-    reset({
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm<SubmitAttendanceFormData>({
+    resolver: zodResolver(submitAttendanceSchema),
+    defaultValues: {
       meetingId,
-      usersAttendents: attendentsMember.attendents,
-    });
-  }
-}, [attendentsMember, meetingId, reset]);
+      usersAttendents: [], // start empty
+    },
+  });
 
+  useEffect(() => {
+    if (attendents && attendents.length > 0) {
+      reset({
+        meetingId,
+        usersAttendents: attendents.map((a) => ({
+          userId: a.userId,
+          isAttend: a.isAttend,
+          score: a.score,
+        })),
+      });
+    }
+  }, [attendents, meetingId, reset]);
 
   const { fields, prepend, remove } = useFieldArray({
     control,
@@ -60,22 +48,18 @@ useEffect(() => {
     mutationFn: (payload: SubmitAttendancePayload) => apiSubmitAttendance(payload),
   });
 
-  const onSubmit = (data: SubmitAttendanceFormData) => {
-    const payload: SubmitAttendancePayload = {
-      meetingId: data.meetingId,
-      usersAttendents: data.usersAttendents.map((item) => ({
-        userId: Number(item.userId),
-        isAttend: item.isAttend,
-        score: Number(item.score),
-      })),
-    };
-
-    mutate(payload);
-    console.log("Submitted Data:", payload);
+const onSubmit = (data: SubmitAttendanceFormData) => {
+  const payload: SubmitAttendancePayload = {
+    meetingId: data.meetingId,
+    usersAttendents: data.usersAttendents,
   };
 
+  mutate(payload);
+  console.log("Submitted Data:", payload);
+};
+
   const addAttendee = () => {
-    prepend({ userId: 0, isAttend: true, score: 0 });
+    prepend({ userId: 1, isAttend: true, score: 0 }); // start with userId=1
   };
 
   const removeAttendee = (index: number) => {
@@ -138,7 +122,7 @@ useEffect(() => {
                   label="User ID"
                   type="number"
                   placeholder="Enter user ID"
-                  register={register}
+                  register={(name) => register(name, { valueAsNumber: true })}
                   error={errors.usersAttendents?.[index]?.userId}
                 />
 
@@ -163,7 +147,7 @@ useEffect(() => {
                   label="Score"
                   type="number"
                   placeholder="Enter score"
-                  register={register}
+                  register={(name) => register(name, { valueAsNumber: true })}
                   error={errors.usersAttendents?.[index]?.score}
                 />
 
@@ -179,7 +163,9 @@ useEffect(() => {
             ))}
 
             {errors.usersAttendents && (
-              <p className="text-sm text-red-600">{errors.usersAttendents.message}</p>
+              <p className="text-sm text-red-600">
+                {errors.usersAttendents.message}
+              </p>
             )}
           </div>
 

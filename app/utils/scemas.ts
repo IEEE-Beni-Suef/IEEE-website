@@ -36,15 +36,22 @@ export const attendanceItemSchema = z.object({
   isAttend: z.boolean(),
   score: z.string().min(1, { message: "Score is required" }),
 });
-
+export type SubmitAttendanceFormData = {
+  meetingId: number;
+  usersAttendents: {
+    userId: number;
+    isAttend: boolean;
+    score: number;
+  }[];
+};
 export const submitAttendanceSchema = z.object({
-  meetingId: z.number().min(1, { message: "Meeting ID is required" }),
+  meetingId: z.coerce.number().min(1, { message: "Meeting ID is required" }),
   usersAttendents: z
     .array(
       z.object({
-        userId: z.number().min(1, { message: "User ID is required" }),
+        userId: z.coerce.number().min(1, { message: "User ID is required" }),
         isAttend: z.boolean(),
-        score: z.number().min(0, { message: "Score is required" }),
+        score: z.coerce.number().min(0, { message: "Score is required" }),
       })
     )
     .min(1, { message: "At least one attendee is required" }),
