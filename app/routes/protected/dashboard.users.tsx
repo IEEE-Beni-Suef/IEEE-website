@@ -1,10 +1,10 @@
-import { useAllUsers } from "~/hooks/useApi";
 import { ProtectedRoute } from "../../components/ProtectedRoute";
 import { getRoleName, getFullName, getInitials } from "~/utils/utile";
 import { ActiveUserByIdApi, deleteUserByIdApi } from "~/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { facultyOptions, governorateOptions } from "~/utils/lists";
+import { useAllUsers, useCreateUser, useUpdateUser } from "~/hooks/useApi";
 import { UsersModal } from "~/components/UsersModal";
 
 export default function UsersManagement() {
@@ -14,10 +14,38 @@ export default function UsersManagement() {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingUser, setEditingUser] = useState<any>(null);
+  const { mutate: createUser} = useCreateUser();
+  const { mutate: updateUser } = useUpdateUser(editingUser?.id || 0);
 
-  const handleAddUser = (userData: any) => {
-    console.log("Creating new user:", userData);
+  const handleCreateClick = () => {
+    setEditingUser(null);
+    setShowAddModal(true);
+  };
+
+  const handleEditClick = (user: any) => {
+    setEditingUser(user);
+    setShowAddModal(true);
+  };
+
+  const handleCloseModal = () => {
     setShowAddModal(false);
+    setEditingUser(null);
+  };
+
+  const handleAddUser = async (userData: any) => {
+    try {
+      if (editingUser) {
+        await updateUser(userData);
+        alert("User updated successfully!");
+      } else {
+        await createUser(userData);
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error handling user:', error);
+      alert((error as Error).message);
+    }
   };
 
   // Helper functions to get display names
@@ -78,7 +106,7 @@ export default function UsersManagement() {
             </div>
             <div className="mt-4 sm:mt-0">
               <button 
-                onClick={() => setShowAddModal(true)}
+                onClick={handleCreateClick}
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900 transition-colors duration-200"
               >
                 <svg
@@ -99,6 +127,14 @@ export default function UsersManagement() {
             </div>
           </div>
         </div>
+
+        {/* User Modal */}
+        <UsersModal
+          isOpen={showAddModal}
+          onClose={handleCloseModal}
+          onSubmit={handleAddUser}
+          user={editingUser}
+        />
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

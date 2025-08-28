@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Modal } from "./Modal";
 import { FormInput, FormSelect, FormMultiSelect } from "./form";
 import { Button } from "./ui/Button";
-import { registerSchema } from "~/utils/scemas";
+import { createUserSchema } from "~/utils/scemas";
 import { useCommittees } from "~/hooks/useApi";
 import {
   User,
@@ -27,7 +27,7 @@ import {
 } from "~/utils/lists";
 import type { Committee } from "~/types";
 
-type UserFormData = z.infer<typeof registerSchema>;
+type UserFormData = z.infer<typeof createUserSchema>;
 
 interface UserModalProps {
   isOpen: boolean;
@@ -55,10 +55,8 @@ export const UsersModal: FC<UserModalProps> = ({
     watch,
     formState: { errors },
   } = useForm<UserFormData>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      CommitteeIds: [],
-    },
+    resolver: zodResolver(createUserSchema),
+    defaultValues: {},
   });
 
   // Reset form when modal opens/closes or user changes
@@ -78,18 +76,31 @@ export const UsersModal: FC<UserModalProps> = ({
           faculty: "",
           goverment: "",
           sex: undefined,
-          roleId: undefined,
+          roleId: "3", // Default role ID as string
           CommitteeIds: [],
+          isActive: true, // ✅ default active for new users
         });
       }
     }
   }, [isOpen, user, reset]);
 
   const handleFormSubmit = (data: UserFormData) => {
-    onSubmit({
-      ...data,
-      CommitteeIds: data.CommitteeIds || [],
-    });
+    try {
+      console.log("Form data before submission:", data);
+
+      const submitData = {
+        ...data,
+        CommitteeIds: data.CommitteeIds || [],
+        roleId: data.roleId, // already string
+        // ✅ keep isActive from checkbox, don’t override
+      };
+
+      console.log("Transformed data:", submitData);
+      onSubmit(submitData);
+    } catch (error) {
+      console.error("Error in form submission:", error);
+      alert((error as Error).message);
+    }
   };
 
   const handleClose = () => {
@@ -134,16 +145,6 @@ export const UsersModal: FC<UserModalProps> = ({
             error={errors.lastName}
           />
         </div>
-
-        <FormInput
-          id="email"
-          label="Email Address"
-          type="email"
-          placeholder="your.email@example.com"
-          register={register}
-          error={errors.email}
-          icon={Mail}
-        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormSelect
@@ -218,6 +219,16 @@ export const UsersModal: FC<UserModalProps> = ({
         </div>
 
         <FormInput
+          id="email"
+          label="Email Address"
+          type="email"
+          placeholder="your.email@example.com"
+          register={register}
+          error={errors.email}
+          icon={Mail}
+        />
+
+        <FormInput
           id="password"
           label="Password"
           type={showPassword ? "text" : "password"}
@@ -240,6 +251,21 @@ export const UsersModal: FC<UserModalProps> = ({
           }
         />
 
+        <div className="flex items-center space-x-2">
+          <label
+            htmlFor="isActive"
+            className="text-m font-medium text-gray-700 dark:text-gray-200"
+          >
+            Active User
+          </label>
+          <input
+            type="checkbox"
+            id="isActive"
+            {...register("isActive")}
+            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-400"
+          />
+        </div>
+
         <div className="flex justify-end space-x-3 pt-4">
           <Button
             type="button"
@@ -250,7 +276,7 @@ export const UsersModal: FC<UserModalProps> = ({
             Cancel
           </Button>
           <Button type="submit" variant="primary" disabled={isLoading}>
-            {isLoading ? "Saving..." : user ? "Update User" : "Create User"}
+            {isLoading ? "Creating..." : user ? "Update User" : "Create User"}
           </Button>
         </div>
       </form>

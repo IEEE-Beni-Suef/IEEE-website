@@ -24,6 +24,7 @@ import {
   createSubsections,
   deleteSubsectionsApi,
   updateSubsectionsApi,
+  createUser
 } from "~/lib/api";
 
 export const useCommittees = () => {
@@ -75,6 +76,18 @@ export const useCreateCommittee = () => {
     mutationFn: (committeeData) => createCommitteeApi(committeeData as any),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["committees"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useCreateUser = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["createUser"],
+    mutationFn: (userData) => createUser(userData as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 

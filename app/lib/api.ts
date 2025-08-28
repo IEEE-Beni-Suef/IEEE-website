@@ -1,6 +1,6 @@
 import axios from "axios";
 import apiClient from "~/config/apiClient";
-import type { loginSchema, registerSchema } from "~/utils/scemas";
+import type { loginSchema, registerSchema, createUserSchema } from "~/utils/scemas";
 import type z from "zod";
 
 export const registerApi = async (data: z.infer<typeof registerSchema>) => {
@@ -22,6 +22,18 @@ export const loginApi = async (data: z.infer<typeof loginSchema>) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data.message || "Login failed");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const createUser = async (data: z.infer<typeof createUserSchema>) => {
+  try {
+    const response = await apiClient.post("/Users", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "failed to create user");
     }
     throw new Error("An unexpected error occurred");
   }
