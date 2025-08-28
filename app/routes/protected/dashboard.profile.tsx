@@ -104,6 +104,7 @@ export default function Profile() {
       options?: Array<{ value: string; label: string }>;
     }) => {
       const displayValue = isEditing ? value : (user as any)?.[field] || "";
+      console.log(`${isEditing} ${displayValue} ${value} ${field}`);
 
       return (
         <div className="space-y-2">

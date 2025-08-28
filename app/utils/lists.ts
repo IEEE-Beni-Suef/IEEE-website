@@ -1,15 +1,15 @@
 // List might come form the backend
 export const yearOptions = [
-  { value: "1", label: "First Year" },
-  { value: "2", label: "Second Year" },
-  { value: "3", label: "Third Year" },
-  { value: "4", label: "Fourth Year" },
-  { value: "5", label: "Fifth Year" },
+  { value: "First", label: "First Year" },
+  { value: "Second", label: "Second Year" },
+  { value: "Third", label: "Third Year" },
+  { value: "Fourth", label: "Fourth Year" },
+  { value: "Fifth", label: "Fifth Year" },
 ];
 
 export const genderOptions = [
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
+  { value: "Male", label: "Male" },
+  { value: "Female", label: "Female" },
 ];
 
 export const facultyOptions = [

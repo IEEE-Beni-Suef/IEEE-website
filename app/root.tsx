@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 
 import type { Route } from "./+types/root";
 import Navbar from "./components/Navbar";
+import { InactiveBanner } from "./components/InactiveBanner";
 import { store } from "./store/store";
 import { initializeTheme } from "./store/slices/themeSlice";
 import "./app.css";
@@ -60,6 +61,7 @@ export default function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <Provider store={store}>
         <Navbar />
+        <InactiveBanner />
         <Outlet />
         <Toaster
           position="top-right"

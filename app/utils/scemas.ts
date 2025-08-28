@@ -9,7 +9,7 @@ export const registerSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters" }),
   email: z.string().email({ message: "Invalid email address" }),
   year: z.string().min(1, { message: "Year is required" }),
-  sex: z.enum(["male", "female"], { message: "Sex is required" }),
+  sex: z.enum(["Male", "Female"], { message: "Sex is required" }),
   faculty: z.string().min(1, { message: "Faculty is required" }),
   phone: z.string().min(1, { message: "Phone number is required" }),
   goverment: z.string().min(1, { message: "Government is required" }),
