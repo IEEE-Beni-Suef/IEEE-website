@@ -8,8 +8,7 @@ export default [
   route("/register", "routes/Register.tsx"),
   route("/commitees", "routes/commitees.tsx"),
   route("/meetings", "routes/meetings.tsx"),
-  route("/meetings-attendance", "routes/meetings-attendance.tsx"),
-
+  route("/showMettings", "routes/showMettings.tsx"),
   // Protected dashboard routes
   route("/dashboard", "routes/protected/dashboard.tsx", [
     index("routes/protected/dashboard._index.tsx"),

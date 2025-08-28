@@ -50,7 +50,8 @@ const Navbar = () => {
     { label: "About", path: "/about", icon: Users },
     { label: "Events", path: "/events", icon: Calendar },
     { label: "Create Meeting", path: "/meetings", icon: Clock },
-    { label: "Attendance", path: "/meetings-attendance", icon: CheckCircle },
+    { label: "Show Meetings", path: "/showMettings", icon: Clock },
+    // { label: "Attendance", path: "/meetings-attendance", icon: CheckCircle },
   ];
 
   const authNavItems = [
@@ -59,7 +60,8 @@ const Navbar = () => {
     { label: "About", path: "/about", icon: Users },
     { label: "Events", path: "/events", icon: Calendar },
     { label: "Create Meeting", path: "/meetings", icon: Clock },
-    { label: "Attendance", path: "/meetings-attendance", icon: CheckCircle },
+    { label: "Show Meetings", path: "/showMettings", icon: Clock },
+    // { label: "Attendance", path: "/meetings-attendance", icon: CheckCircle },
   ];
 
   const isActive = (path: string) => location.pathname === path;

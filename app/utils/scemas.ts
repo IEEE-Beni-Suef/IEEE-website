@@ -38,6 +38,14 @@ export const attendanceItemSchema = z.object({
 });
 
 export const submitAttendanceSchema = z.object({
-  meetingId: z.string().min(1, { message: "Meeting ID is required" }),
-  usersAttendents: z.array(attendanceItemSchema).min(1, { message: "At least one attendee is required" }),
+  meetingId: z.number().min(1, { message: "Meeting ID is required" }),
+  usersAttendents: z
+    .array(
+      z.object({
+        userId: z.number().min(1, { message: "User ID is required" }),
+        isAttend: z.boolean(),
+        score: z.number().min(0, { message: "Score is required" }),
+      })
+    )
+    .min(1, { message: "At least one attendee is required" }),
 });

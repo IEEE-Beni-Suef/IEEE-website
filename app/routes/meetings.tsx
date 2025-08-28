@@ -1,8 +1,9 @@
-
 import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "~/config/queryClient";
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { apiCreateMeeting, type CreateMeetingPayload } from "../lib/api";
+import { useCommittees } from "../hooks/useApi";
 
 export default function MeetingsCreate() {
   const [form, setForm] = useState<CreateMeetingPayload>({
@@ -10,44 +11,40 @@ export default function MeetingsCreate() {
     description: "",
     recap: "",
     type: "",
-    // keep as local datetime string (no Z at end)
-    dateTime: new Date().toISOString().slice(0, 16),
+    dateTime: new Date().toISOString().slice(0, 16), // local datetime string
     committeeId: null,
     headId: null,
   });
- const {
-  mutate,
-  isSuccess,
-  isError,
-  error,
-  isPending,
-} = useMutation({
+
+  const { mutate, isSuccess, isError, error, isPending } = useMutation({
     mutationFn: (payload: CreateMeetingPayload) => apiCreateMeeting(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["meetings"] });
+    },
   });
 
+  const committeeOptions = useCommittees();
 
-  async function onSubmit(e:FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
-  
     try {
       const payload: CreateMeetingPayload = {
-        title: form.title,
-        description: form.description,
-        recap: form.recap,
-        type: form.type,
-        // convert to ISO at submission
+        ...form,
         dateTime: new Date(form.dateTime).toISOString(),
         committeeId: Number(form.committeeId) || 0,
-        headId: Number(form.headId) || 0,
+        headId: Number(form.headId) || 0, // comes automatically from committee
       };
-    mutate(payload);
-    console.log("Creating meeting with data:", payload);
+      mutate(payload);
+      console.log("Creating meeting with data:", payload);
     } catch (err) {
       console.error("Error creating meeting:", err);
     }
   }
 
-  function update<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
+  function update<K extends keyof typeof form>(
+    key: K,
+    value: (typeof form)[K]
+  ) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
@@ -55,7 +52,7 @@ export default function MeetingsCreate() {
     "w-full border border-gray-300 dark:border-gray-700 bg-white/80 dark:bg-gray-900/60 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 dark:placeholder-gray-400 dark:text-white";
 
   return (
-    <section className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4">
+    <section className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 mt-10">
       <div className="w-full max-w-2xl rounded-2xl border border-gray-200/70 dark:border-gray-800 bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl shadow-xl p-6 sm:p-8">
         <div className="text-center space-y-2 mb-6">
           <h1 className="text-3xl sm:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-400 dark:to-indigo-300">
@@ -69,77 +66,97 @@ export default function MeetingsCreate() {
         <form onSubmit={onSubmit} className="grid gap-4">
           {/* Title + Type */}
           <div className="grid sm:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Title"
-              value={form.title}
-              onChange={(e) => update("title", e.target.value)}
-              className={inputBase}
-            />
-            <input
-              type="text"
-              placeholder="Type (e.g. General, Board)"
-              value={form.type}
-              onChange={(e) => update("type", e.target.value)}
-              className={inputBase}
-            />
+            <div>
+              <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                Title
+              </label>
+              <input
+                type="text"
+                value={form.title}
+                onChange={(e) => update("title", e.target.value)}
+                className={inputBase}
+                placeholder="Enter meeting title"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                Type
+              </label>
+              <input
+                type="text"
+                value={form.type}
+                onChange={(e) => update("type", e.target.value)}
+                className={inputBase}
+                placeholder="e.g. General, Board"
+              />
+            </div>
           </div>
 
           {/* Description */}
-          <textarea
-            placeholder="Description"
-            value={form.description}
-            onChange={(e) => update("description", e.target.value)}
-            className={`min-h-28 ${inputBase}`}
-          />
+          <div>
+            <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+              Description
+            </label>
+            <textarea
+              value={form.description}
+              onChange={(e) => update("description", e.target.value)}
+              className={`min-h-28 ${inputBase}`}
+              placeholder="Enter meeting description"
+            />
+          </div>
 
           {/* Recap */}
-          <input
-            type="text"
-            placeholder="Recap / Agenda"
-            value={form.recap}
-            onChange={(e) => update("recap", e.target.value)}
-            className={inputBase}
-          />
+          <div>
+            <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+              Recap / Agenda
+            </label>
+            <input
+              type="text"
+              value={form.recap}
+              onChange={(e) => update("recap", e.target.value)}
+              className={inputBase}
+              placeholder="Enter agenda/recap"
+            />
+          </div>
 
-          {/* Date + Committee/Head IDs */}
+          {/* Date + Committee */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                Date & Time
+                Meeting Date & Time
               </label>
               <input
                 type="datetime-local"
                 value={form.dateTime}
+                min={new Date().toISOString().slice(0, 16)} // prevent past times
                 onChange={(e) => update("dateTime", e.target.value)}
                 className={inputBase}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                  Committee ID
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter committee ID"
-                  value={form.committeeId || ""}
-                  onChange={(e) => update("committeeId", Number(e.target.value))}
-                  className={inputBase}
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                  Head ID
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter head ID"
-                  value={form.headId || ""}
-                  onChange={(e) => update("headId", Number(e.target.value))}
-                  className={inputBase}
-                />
-              </div>
+
+            <div>
+              <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                Committee
+              </label>
+              <select
+                value={form.committeeId ?? ""}
+                onChange={(e) => {
+                  const selectedId = e.target.value ? Number(e.target.value) : null;
+                  const selectedCommittee = committeeOptions.data?.find(
+                    (c) => c.id === selectedId
+                  );
+                  update("committeeId", selectedId);
+                  update("headId", selectedCommittee?.headId ?? null);
+                }}
+                className={inputBase}
+              >
+                <option value="">Select Committee</option>
+                {committeeOptions.data?.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -157,7 +174,11 @@ export default function MeetingsCreate() {
                 Meeting created successfully.
               </span>
             )}
-            {isError && <span className="text-red-600 text-sm">{isError}</span>}
+            {isError && (
+              <span className="text-red-600 text-sm">
+                {error instanceof Error ? error.message : "Error creating meeting"}
+              </span>
+            )}
           </div>
         </form>
       </div>

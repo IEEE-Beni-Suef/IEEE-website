@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,10 +6,25 @@ import { submitAttendanceSchema } from "../utils/scemas";
 import { apiSubmitAttendance, type SubmitAttendancePayload } from "../lib/api";
 import { Users, CheckCircle, Plus, Trash2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
+import { useMeetingAttendents } from "~/hooks/useApi";
 
 type SubmitAttendanceFormData = z.infer<typeof submitAttendanceSchema>;
 
-export default function MeetingsAttendance() {
+export default function MeetingsAttendance({ meetingId }: { meetingId: number }) {
+  const { data: attendents } = useMeetingAttendents(meetingId);
+  console.log("Fetched attendents:", attendents);
+
+  const attendentsMember = {
+    attendents:
+      attendents?.map((a) => ({
+        userId: a.userId, // keep number
+        isAttend: a.isAttend,
+        score: a.score, // keep number
+      })) ?? [],
+  };
+
+  console.log(attendentsMember);
+
   const {
     register,
     handleSubmit,
@@ -19,10 +33,11 @@ export default function MeetingsAttendance() {
   } = useForm<SubmitAttendanceFormData>({
     resolver: zodResolver(submitAttendanceSchema),
     defaultValues: {
-      meetingId: "",
-      usersAttendents: [
-        { userId: "", isAttend: true, score: "" },
-      ],
+      meetingId,
+      usersAttendents:
+        attendentsMember.attendents.length > 0
+          ? attendentsMember.attendents
+          : [{ userId: 0, isAttend: true, score: 0 }],
     },
   });
 
@@ -31,24 +46,24 @@ export default function MeetingsAttendance() {
     name: "usersAttendents",
   });
 
-const {
-  mutate,
-  isSuccess,
-  isError,
-  error,
-  isPending,
-} = useMutation({
-  mutationFn: (payload: SubmitAttendancePayload) => apiSubmitAttendance(payload),
-});
-
+  const {
+    mutate,
+    isSuccess,
+    isError,
+    error,
+    isPending,
+  } = useMutation({
+    mutationFn: (payload: SubmitAttendancePayload) =>
+      apiSubmitAttendance(payload),
+  });
 
   const onSubmit = (data: SubmitAttendanceFormData) => {
     const payload: SubmitAttendancePayload = {
-      meetingId: Number(data.meetingId),
+      meetingId: data.meetingId,
       usersAttendents: data.usersAttendents.map((item) => ({
-        userId: Number(item.userId),
+        userId: item.userId,
         isAttend: item.isAttend,
-        score: Number(item.score),
+        score: item.score,
       })),
     };
     mutate(payload);
@@ -56,7 +71,7 @@ const {
   };
 
   const addAttendee = () => {
-    prepend({ userId: "", isAttend: true, score: "" });
+    prepend({ userId: 0, isAttend: true, score: 0 });
   };
 
   const removeAttendee = (index: number) => {
@@ -79,28 +94,21 @@ const {
 
         {isSuccess && (
           <div className="mb-4 p-4 bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-            <p className="text-green-700 dark:text-green-300">Attendance submitted successfully!</p>
+            <p className="text-green-700 dark:text-green-300">
+              Attendance submitted successfully!
+            </p>
           </div>
         )}
 
         {isError && (
           <div className="mb-4 p-4 bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-red-700 dark:text-red-300">{error?.message || "Failed to submit attendance"}</p>
+            <p className="text-red-700 dark:text-red-300">
+              {error?.message || "Failed to submit attendance"}
+            </p>
           </div>
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Meeting ID */}
-          <FormInput
-            id="meetingId"
-            label="Meeting ID"
-            placeholder="Enter meeting ID"
-            register={register}
-            error={errors.meetingId}
-            icon={CheckCircle}
-          />
-
-          {/* Attendees */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -117,15 +125,20 @@ const {
             </div>
 
             {fields.map((field, index) => (
-              <div key={field.id} className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+              <div
+                key={field.id}
+                className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800/50"
+              >
                 <FormInput
                   id={`usersAttendents.${index}.userId`}
                   label="User ID"
+                  type="number"
                   placeholder="Enter user ID"
                   register={register}
+                  registerOptions={{ valueAsNumber: true }}
                   error={errors.usersAttendents?.[index]?.userId}
                 />
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Attended
@@ -136,15 +149,19 @@ const {
                       {...register(`usersAttendents.${index}.isAttend`)}
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Present</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      Present
+                    </span>
                   </div>
                 </div>
 
                 <FormInput
                   id={`usersAttendents.${index}.score`}
                   label="Score"
+                  type="number"
                   placeholder="Enter score"
                   register={register}
+                  registerOptions={{ valueAsNumber: true }}
                   error={errors.usersAttendents?.[index]?.score}
                 />
 
@@ -161,7 +178,9 @@ const {
             ))}
 
             {errors.usersAttendents && (
-              <p className="text-sm text-red-600">{errors.usersAttendents.message}</p>
+              <p className="text-sm text-red-600">
+                {errors.usersAttendents.message}
+              </p>
             )}
           </div>
 
@@ -176,5 +195,4 @@ const {
       </div>
     </section>
   );
-} 
-
+}

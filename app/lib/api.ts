@@ -206,3 +206,132 @@ export const apiSubmitAttendance = async (data: SubmitAttendancePayload) => {
     throw new Error("An unexpected error occurred");
   }
 };
+
+// get all meetings
+export type Meeting = {
+  id: number;
+  title: string;
+  description: string;
+  recap: string;
+  dateTime: string;
+  type: string;
+  committeeName: string;
+  headName: string;
+  committeeId?: number;
+  headId?: number;
+};
+
+export const getMeetingsApi = async (): Promise<Meeting[]> => {
+  try {
+    const response = await apiClient.get("/Meetings");
+    return response.data as Meeting[];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch meetings"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const getMeetingByIdApi = async (id: number): Promise<Meeting> => {
+  try {
+    const response = await apiClient.get(`/Meetings/${id}`);
+    return response.data as Meeting;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch meeting"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateMeetingApi = async (
+  id: number,
+  data: Partial<CreateMeetingPayload>
+) => {
+  try {
+    const response = await apiClient.put(`/Meetings/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to update meeting"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteMeetingApi = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/Meetings/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to delete meeting"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export type MeetingAttendent = {
+  userId: number;
+  userName?: string;
+  isAttend: boolean;
+  score: number;
+};
+
+export const getMeetingAttendentsApi = async (
+  meetingId: number
+): Promise<MeetingAttendent[]> => {
+  try {
+    const response = await apiClient.get(`/Meetings/attendents/${meetingId}`);
+    return response.data as MeetingAttendent[];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch attendents"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// Edit Meeting with attendance payload as requested by backend
+export type EditMeetingUser = {
+  userId: number;
+  attended: boolean;
+  mark: number;
+};
+
+export type EditMeetingPayload = {
+  title?: string;
+  description?: string;
+  recap?: string;
+  committeeId?: number;
+  headId?: number;
+  users?: EditMeetingUser[];
+};
+
+export const apiEditMeetingWithUsers = async (
+  id: number,
+  data: EditMeetingPayload
+) => {
+  try {
+    const response = await apiClient.put(`/Meetings/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to edit meeting"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};

@@ -8,6 +8,11 @@ import {
   getAllUsersApi,
   getCommitteeByIdApi,
   getCommitteesApi,
+  getMeetingsApi,
+  getMeetingByIdApi,
+ 
+  deleteMeetingApi,
+  getMeetingAttendentsApi,
   updateCommitteeApi,
 } from "~/lib/api";
 
@@ -95,6 +100,55 @@ export const useGetCommittee = (id: number) => {
     queryKey: ["committee", id],
     queryFn: () => getCommitteeByIdApi(id),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+// Meetings
+export const useMeetings = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["meetings"],
+    queryFn: getMeetingsApi,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+export const useMeeting = (id: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["meeting", id],
+    queryFn: () => getMeetingByIdApi(id),
+    enabled: Boolean(id),
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+
+export const useDeleteMeeting = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["deleteMeeting"],
+    mutationFn: (id: number) => deleteMeetingApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useMeetingAttendents = (meetingId: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["meeting-attendents", meetingId],
+    queryFn: () => getMeetingAttendentsApi(meetingId),
+    enabled: Boolean(meetingId),
+    staleTime: 5 * 60 * 1000,
     retry: 1,
   });
 
