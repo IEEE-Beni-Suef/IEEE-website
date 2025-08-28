@@ -7,65 +7,69 @@ import { apiSubmitAttendance, type SubmitAttendancePayload } from "../lib/api";
 import { Users, CheckCircle, Plus, Trash2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { useMeetingAttendents } from "~/hooks/useApi";
+import { useEffect } from "react";
 
 type SubmitAttendanceFormData = z.infer<typeof submitAttendanceSchema>;
 
 export default function MeetingsAttendance({ meetingId }: { meetingId: number }) {
   const { data: attendents } = useMeetingAttendents(meetingId);
-  console.log("Fetched attendents:", attendents);
 
   const attendentsMember = {
     attendents:
       attendents?.map((a) => ({
-        userId: a.userId, // keep number
+        userId: a.userId, // keep as number
         isAttend: a.isAttend,
-        score: a.score, // keep number
+        score: a.score,
       })) ?? [],
   };
 
-  console.log(attendentsMember);
-
   const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<SubmitAttendanceFormData>({
-    resolver: zodResolver(submitAttendanceSchema),
-    defaultValues: {
+  register,
+  handleSubmit,
+  control,
+  formState: { errors },
+  reset,
+} = useForm<SubmitAttendanceFormData>({
+  resolver: zodResolver(submitAttendanceSchema),
+  defaultValues: {
+  meetingId,
+  usersAttendents:
+    attendentsMember.attendents.length > 0
+      ? attendentsMember.attendents
+      : [{ userId: 0, isAttend: true, score: 0 }],
+}
+
+});
+
+useEffect(() => {
+  if (attendentsMember.attendents.length > 0) {
+    reset({
       meetingId,
-      usersAttendents:
-        attendentsMember.attendents.length > 0
-          ? attendentsMember.attendents
-          : [{ userId: 0, isAttend: true, score: 0 }],
-    },
-  });
+      usersAttendents: attendentsMember.attendents,
+    });
+  }
+}, [attendentsMember, meetingId, reset]);
+
 
   const { fields, prepend, remove } = useFieldArray({
     control,
     name: "usersAttendents",
   });
 
-  const {
-    mutate,
-    isSuccess,
-    isError,
-    error,
-    isPending,
-  } = useMutation({
-    mutationFn: (payload: SubmitAttendancePayload) =>
-      apiSubmitAttendance(payload),
+  const { mutate, isSuccess, isError, error, isPending } = useMutation({
+    mutationFn: (payload: SubmitAttendancePayload) => apiSubmitAttendance(payload),
   });
 
   const onSubmit = (data: SubmitAttendanceFormData) => {
     const payload: SubmitAttendancePayload = {
       meetingId: data.meetingId,
       usersAttendents: data.usersAttendents.map((item) => ({
-        userId: item.userId,
+        userId: Number(item.userId),
         isAttend: item.isAttend,
-        score: item.score,
+        score: Number(item.score),
       })),
     };
+
     mutate(payload);
     console.log("Submitted Data:", payload);
   };
@@ -109,6 +113,7 @@ export default function MeetingsAttendance({ meetingId }: { meetingId: number })
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Attendees */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -119,8 +124,7 @@ export default function MeetingsAttendance({ meetingId }: { meetingId: number })
                 onClick={addAttendee}
                 className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors"
               >
-                <Plus className="w-4 h-4" />
-                Add Attendee
+                <Plus className="w-4 h-4" /> Add Attendee
               </button>
             </div>
 
@@ -135,7 +139,6 @@ export default function MeetingsAttendance({ meetingId }: { meetingId: number })
                   type="number"
                   placeholder="Enter user ID"
                   register={register}
-                  registerOptions={{ valueAsNumber: true }}
                   error={errors.usersAttendents?.[index]?.userId}
                 />
 
@@ -161,7 +164,6 @@ export default function MeetingsAttendance({ meetingId }: { meetingId: number })
                   type="number"
                   placeholder="Enter score"
                   register={register}
-                  registerOptions={{ valueAsNumber: true }}
                   error={errors.usersAttendents?.[index]?.score}
                 />
 
@@ -171,16 +173,13 @@ export default function MeetingsAttendance({ meetingId }: { meetingId: number })
                   disabled={fields.length === 1}
                   className="flex items-center justify-center gap-2 px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Trash2 className="w-4 h-4" />
-                  Remove
+                  <Trash2 className="w-4 h-4" /> Remove
                 </button>
               </div>
             ))}
 
             {errors.usersAttendents && (
-              <p className="text-sm text-red-600">
-                {errors.usersAttendents.message}
-              </p>
+              <p className="text-sm text-red-600">{errors.usersAttendents.message}</p>
             )}
           </div>
 
