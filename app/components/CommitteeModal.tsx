@@ -3,26 +3,32 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Modal } from "./Modal";
-import { FormInput } from "./form/FormInput";
-import { FormSelect } from "./form/FormSelect";
-import { FormMultiSelect } from "./form/FormMultiSelect";
+import {
+  FormInput,
+  FormSelect,
+  FormMultiSelect,
+  FormFileInput,
+  FormTextarea,
+} from "./form";
 import { Button } from "./ui/Button";
 import { committeeSchema } from "~/utils/scemas";
 import { useAllUsers } from "~/hooks/useApi";
-import { Users, UserCheck, Building2 } from "lucide-react";
+import { Users, UserCheck, Building2, FileText, Image } from "lucide-react";
 
 type CommitteeFormData = z.infer<typeof committeeSchema>;
 
 interface CommitteeSubmissionData {
   name: string;
+  description: string;
   headId: number;
   vicesId: number[];
+  image?: File;
 }
 
 interface CommitteeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: CommitteeSubmissionData) => void;
+  onSubmit: (data: FormData) => void;
   committee?: CommitteeSubmissionData & { id?: number };
   isLoading?: boolean;
 }
@@ -47,8 +53,10 @@ export const CommitteeModal: FC<CommitteeModalProps> = ({
     resolver: zodResolver(committeeSchema),
     defaultValues: {
       name: "",
+      description: "",
       headId: "",
       vicesId: [],
+      image: undefined,
     },
   });
 
@@ -60,27 +68,41 @@ export const CommitteeModal: FC<CommitteeModalProps> = ({
       if (committee) {
         reset({
           name: committee.name,
+          description: committee.description,
           headId: committee.headId.toString(),
           vicesId: committee.vicesId.map((id) => id.toString()),
+          image: undefined,
         });
       } else {
         reset({
           name: "",
+          description: "",
           headId: "",
           vicesId: [],
+          image: undefined,
         });
       }
     }
   }, [isOpen, committee, reset]);
 
   const handleFormSubmit = (data: CommitteeFormData) => {
-    // Convert string values back to numbers for submission
-    const submitData = {
-      name: data.name,
-      headId: Number(data.headId),
-      vicesId: data.vicesId.map((id) => Number(id)),
-    };
-    onSubmit(submitData);
+    // Create FormData for submission to handle file upload
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("headId", data.headId);
+
+    // Append vice members as separate entries
+    data.vicesId.forEach((id) => {
+      formData.append("vicesId", id);
+    });
+
+    // Append image if provided
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+
+    onSubmit(formData as any);
   };
 
   const handleClose = () => {
@@ -116,6 +138,28 @@ export const CommitteeModal: FC<CommitteeModalProps> = ({
           register={register}
           error={errors.name}
           icon={Building2}
+        />
+
+        <FormTextarea
+          id="description"
+          label="Committee Description"
+          placeholder="Enter committee description"
+          register={register}
+          error={errors.description}
+          icon={FileText}
+          rows={3}
+        />
+
+        <FormFileInput
+          id="image"
+          label="Committee Image"
+          accept="image/*"
+          register={register}
+          setValue={setValue}
+          watch={watch}
+          error={errors.image as any}
+          icon={Image}
+          placeholder="Choose committee image..."
         />
 
         <FormSelect

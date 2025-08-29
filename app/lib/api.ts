@@ -45,7 +45,16 @@ export const getCommitteesApi = async () => {
 
 export const createCommitteeApi = async (data: any) => {
   try {
-    const response = await apiClient.post("/Committees", data);
+    const config =
+      data instanceof FormData
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {};
+
+    const response = await apiClient.post("/Committees", data, config);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -74,7 +83,16 @@ export const deleteCommitteeApi = async (id: number) => {
 // will add a request generics letter
 export const updateCommitteeApi = async (id: number, data: any) => {
   try {
-    const response = await apiClient.put(`/Committees/${id}`, data);
+    const config =
+      data instanceof FormData
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {};
+
+    const response = await apiClient.put(`/Committees/${id}`, data, config);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -26,8 +26,12 @@ export const loginSchema = z.object({
 
 export const committeeSchema = z.object({
   name: z.string().min(1, { message: "Committee name is required" }),
+  description: z
+    .string()
+    .min(1, { message: "Committee description is required" }),
   headId: z.string().min(1, { message: "Head is required" }),
   vicesId: z.array(z.string()),
+  image: z.any().optional(),
 });
 
 export const articleSchema = z.object({

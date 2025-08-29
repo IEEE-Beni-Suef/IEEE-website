@@ -96,6 +96,11 @@ const CommitteesManagement = () => {
                       <span className="font-medium text-gray-900 dark:text-gray-100">
                         {committee.name}
                       </span>
+                      {committee.description && (
+                        <span className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                          {committee.description}
+                        </span>
+                      )}
                       <span className="text-sm text-gray-500 dark:text-gray-400">
                         Head ID: {committee.headId}
                       </span>
