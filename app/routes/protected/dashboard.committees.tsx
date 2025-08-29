@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { CommitteeModal } from "~/components/CommitteeModal";
 import { ProtectedRoute } from "~/components/ProtectedRoute";
 import { Button } from "~/components/ui/Button";
@@ -22,8 +23,9 @@ const CommitteesManagement = () => {
     if (!confirm("Are you sure you want to delete this committee?")) return;
     try {
       await deleteCommittee(id);
+      toast.success("Committee deleted successfully!");
     } catch (e) {
-      alert((e as Error).message);
+      toast.error((e as Error).message);
     }
   };
 
@@ -46,14 +48,14 @@ const CommitteesManagement = () => {
     try {
       if (editingCommittee) {
         await updateCommittee(data);
-        alert("Committee updated successfully!");
+        toast.success("Committee updated successfully!");
       } else {
         await createCommittee(data);
-        alert("Committee created successfully!");
+        toast.success("Committee created successfully!");
       }
       handleCloseModal();
     } catch (error) {
-      alert((error as Error).message);
+      toast.error((error as Error).message);
     }
   };
 
