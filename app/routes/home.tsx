@@ -1,9 +1,28 @@
-import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
-import { Section } from "../components/ui/Section";
+import {
+  Section,
+  SectionHeader,
+  SectionTitle,
+  SectionSubtitle,
+} from "../components/ui/Section";
+import { Card } from "../components/ui/Card";
+import { Button } from "../components/ui/Button";
 import { ArticleDisplay } from "../components/ArticleDisplay";
-import { useAllArticles } from "../hooks/useApi";
-import type { MetaArgs } from "react-router";
+import { useAllArticles, useCommittees } from "../hooks/useApi";
+import { Link, type MetaArgs } from "react-router";
+import type { Article } from "../types";
+import IEEEImg from "../assets/IEEE.png";
+import {
+  Users,
+  Calendar,
+  Wrench,
+  Handshake,
+  ArrowRight,
+  Rocket,
+  BookOpen,
+  ChevronRight,
+  ChevronLeft,
+} from "lucide-react";
+import { useState } from "react";
 
 export function meta({}: MetaArgs) {
   return [
@@ -18,78 +37,251 @@ export function meta({}: MetaArgs) {
 
 export default function Home() {
   const { data: articles, isLoading, error } = useAllArticles();
+  const {
+    data: committees,
+    isLoading: committeesLoading,
+    error: committeesError,
+  } = useCommittees();
+
+  const statistics = [
+    { label: "Active Members", value: "250+", icon: Users },
+    { label: "Events Organized", value: "50+", icon: Calendar },
+    { label: "Technical Workshops", value: "30+", icon: Wrench },
+    { label: "Industry Partnerships", value: "15+", icon: Handshake },
+  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 3;
+
+  // Calculate pagination
+  const totalPages = articles
+    ? Math.ceil(articles.length / articlesPerPage)
+    : 0;
+  const startIndex = (currentPage - 1) * articlesPerPage;
+  const endIndex = startIndex + articlesPerPage;
+  const currentArticles = articles ? articles.slice(startIndex, endIndex) : [];
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
-    <Section variant="gradient" padding="xl" className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Hero Section */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
-            IEEE BSU
-          </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 lg:mb-8">
-            Beni Suef University Student Branch
-          </p>
-          <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Connecting students with technology, innovation, and professional
-            development opportunities in electrical engineering and related
-            fields.
-          </p>
-        </div>
-
-        {/* Articles Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8 text-center">
-            Latest Articles
-          </h2>
-
-          {isLoading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {[...Array(6)].map((_, index) => (
-                <div
-                  key={index}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden animate-pulse"
-                >
-                  <div className="aspect-video bg-gray-200 dark:bg-gray-700"></div>
-                  <div className="p-4 sm:p-6">
-                    <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2 sm:mb-3"></div>
-                    <div className="h-4 sm:h-6 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-                    <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded mb-3 sm:mb-4"></div>
-                    <div className="flex gap-2">
-                      <div className="h-5 sm:h-6 w-12 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+    <>
+      {/* Hero Section */}
+      <Section padding="xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="space-y-8">
+            {/* IEEE Logo and Navigation */}
+            <div className="flex flex-col items-center space-y-4 mb-12">
+              <img
+                src={IEEEImg}
+                alt="IEEE Logo"
+                className="w-32 h-32 object-contain"
+              />
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                Institute of Electrical and Electronics Engineers
+              </p>
             </div>
-          )}
 
-          {error && (
-            <div className="text-center py-8 sm:py-12">
-              <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg">
+            {/* Main Tagline */}
+            <div className="space-y-4">
+              <p className="text-blue-600 dark:text-blue-400 text-lg sm:text-xl font-medium tracking-wide uppercase">
+                It's not faith in technology
+              </p>
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-tight">
+                IEEE BSU
+              </h1>
+              <p className="text-blue-600 dark:text-blue-400 text-lg sm:text-xl font-medium tracking-wide uppercase">
+                It's faith in people
+              </p>
+            </div>
+
+            {/* Subtitle */}
+            <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Beni Suef University Student Branch - Empowering the next
+              generation of engineers and innovators
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
+              <Button size="xl" variant="gradient" className="min-w-48">
+                <Rocket className="w-5 h-5" />
+                Join IEEE BSU
+              </Button>
+              <Button size="xl" variant="outline" className="min-w-48">
+                Learn More
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* About IEEE Section */}
+      <Section variant="primary" padding="xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader>
+            <SectionTitle className="text-blue-600 dark:text-blue-400">
+              IEEE BSU: Where Knowledge Meets Passion!
+            </SectionTitle>
+            <SectionSubtitle>
+              Connecting students with cutting-edge technology, professional
+              development, and innovation opportunities
+            </SectionSubtitle>
+          </SectionHeader>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <Card variant="feature" className="p-8">
+                <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-4">
+                  What is IEEE?
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  IEEE is the world's largest technical professional
+                  association, focused on advancing technology for the benefit
+                  of humanity. It publishes a wide range of journals and
+                  standards in the fields of electrical engineering and computer
+                  science.
+                </p>
+              </Card>
+
+              <Card variant="elevated" className="p-8">
+                <h3 className="text-2xl font-bold text-purple-800 dark:text-purple-300 mb-4">
+                  Who Are We?
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  IEEE BSU Student Branch is a volunteer organization at Beni
+                  Suef University, led by students. Our branch consists of two
+                  societies: Technical Society and Non-Technical Society.
+                </p>
+              </Card>
+            </div>
+
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                {statistics.map((stat, index) => {
+                  const IconComponent = stat.icon;
+                  return (
+                    <Card
+                      key={index}
+                      variant="glass"
+                      hover
+                      glow
+                      className="p-6 text-center"
+                    >
+                      <div className="flex justify-center mb-2">
+                        <IconComponent className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                        {stat.value}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        {stat.label}
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section padding="xl" className="bg-white dark:bg-gray-900">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Latest News & Articles
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Stay updated with the latest developments, events, and insights
+              from our IEEE BSU community.
+            </p>
+          </div>
+
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="text-gray-600 dark:text-gray-400 mt-4">
+                Loading articles...
+              </p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-600 dark:text-red-400">
                 Failed to load articles. Please try again later.
               </p>
             </div>
-          )}
+          ) : currentArticles.length > 0 ? (
+            <>
+              <div className="grid md:grid-cols-3 gap-8 mb-8">
+                {currentArticles.map((article: Article) => (
+                  <ArticleDisplay key={article.id} article={article} />
+                ))}
+              </div>
 
-          {articles && articles.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {articles.map((article: any) => (
-                <ArticleDisplay key={article.id} article={article} />
-              ))}
-            </div>
-          )}
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center space-x-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={prevPage}
+                    disabled={currentPage === 1}
+                    className="flex items-center"
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-2" />
+                    Previous
+                  </Button>
 
-          {articles && articles.length === 0 && !isLoading && (
-            <div className="text-center py-8 sm:py-12">
-              <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg">
+                  <div className="flex items-center space-x-2">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                            currentPage === page
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={nextPage}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-400">
                 No articles available at the moment.
               </p>
             </div>
           )}
         </div>
-      </div>
-    </Section>
+      </Section>
+    </>
   );
 }

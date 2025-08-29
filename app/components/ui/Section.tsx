@@ -7,7 +7,6 @@ const sectionVariants = {
   gradient:
     "bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950/20 text-gray-900 dark:text-gray-100",
   feature: "bg-gradient-to-r from-blue-600 to-purple-700 text-white",
-  hero: "bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden",
 };
 
 const paddingVariants = {
