@@ -3,10 +3,10 @@ import { Section } from "~/components/ui/Section";
 
 export function meta({}: MetaArgs) {
   return [
-    { title: "Events - IEEE BSU" },
+    { title: "Events - IEEE BNS" },
     {
       name: "description",
-      content: "Discover upcoming IEEE BSU events, workshops, and activities",
+      content: "Discover upcoming IEEE BNS events, workshops, and activities",
     },
   ];
 }

@@ -26,11 +26,11 @@ import { useState } from "react";
 
 export function meta({}: MetaArgs) {
   return [
-    { title: "IEEE BSU - Beni Suef University Student Branch" },
+    { title: "IEEE BNS - Beni Suef University Student Branch" },
     {
       name: "description",
       content:
-        "Join IEEE BSU - Connecting students with technology, innovation, and professional development opportunities in electrical engineering and related fields.",
+        "Join IEEE BNS - Connecting students with technology, innovation, and professional development opportunities in electrical engineering and related fields.",
     },
   ];
 }
@@ -96,7 +96,7 @@ export default function Home() {
                 It's not faith in technology
               </p>
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-tight">
-                IEEE BSU
+                IEEE BNS
               </h1>
               <p className="text-blue-600 dark:text-blue-400 text-lg sm:text-xl font-medium tracking-wide uppercase">
                 It's faith in people
@@ -113,7 +113,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
               <Button size="xl" variant="gradient" className="min-w-48">
                 <Rocket className="w-5 h-5" />
-                Join IEEE BSU
+                Join IEEE BNS
               </Button>
               <Button size="xl" variant="outline" className="min-w-48">
                 Learn More
@@ -129,7 +129,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader>
             <SectionTitle className="text-blue-600 dark:text-blue-400">
-              IEEE BSU: Where Knowledge Meets Passion!
+              IEEE BNS: Where Knowledge Meets Passion!
             </SectionTitle>
             <SectionSubtitle>
               Connecting students with cutting-edge technology, professional
@@ -157,7 +157,7 @@ export default function Home() {
                   Who Are We?
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  IEEE BSU Student Branch is a volunteer organization at Beni
+                  IEEE BNS Student Branch is a volunteer organization at Beni
                   Suef University, led by students. Our branch consists of two
                   societies: Technical Society and Non-Technical Society.
                 </p>
@@ -202,7 +202,7 @@ export default function Home() {
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Stay updated with the latest developments, events, and insights
-              from our IEEE BSU community.
+              from our IEEE BNS community.
             </p>
           </div>
 

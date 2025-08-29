@@ -3,10 +3,10 @@ import { Section } from "../components/ui/Section";
 
 export function meta({}: MetaArgs) {
   return [
-    { title: "About - IEEE BSU" },
+    { title: "About - IEEE BNS" },
     {
       name: "description",
-      content: "Learn about IEEE BSU and our mission at Beni Suef University",
+      content: "Learn about IEEE BNS and our mission at Beni Suef University",
     },
   ];
 }

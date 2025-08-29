@@ -7,11 +7,11 @@ import type { MetaArgs } from "react-router";
 export function meta({ params }: MetaArgs) {
   const articleId = params.id ? parseInt(params.id) : 0;
   return [
-    { title: `Article ${articleId} - IEEE BSU` },
+    { title: `Article ${articleId} - IEEE BNS` },
     {
       name: "description",
       content:
-        "Read the latest article from IEEE BSU - Beni Suef University Student Branch.",
+        "Read the latest article from IEEE BNS - Beni Suef University Student Branch.",
     },
   ];
 }
