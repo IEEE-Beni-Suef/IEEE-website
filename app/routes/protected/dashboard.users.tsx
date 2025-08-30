@@ -91,7 +91,7 @@ export default function UsersManagement() {
   };
 
   return (
-    <ProtectedRoute allowedRoles={[0, 1]}>
+    <ProtectedRoute allowedRoles={[1, 2]}>
       <div className="min-h-screen  transition-colors duration-200">
         {/* Header */}
         <div className="mb-8">

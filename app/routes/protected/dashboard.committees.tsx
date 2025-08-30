@@ -71,7 +71,7 @@ const CommitteesManagement = () => {
   };
 
   return (
-    <ProtectedRoute allowedRoles={[1]}>
+    <ProtectedRoute allowedRoles={[1, 2]}>
       <div className="space-y-6 rounded-2xl ">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">

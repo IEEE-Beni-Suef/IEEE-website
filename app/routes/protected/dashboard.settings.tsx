@@ -2,7 +2,7 @@ import { ProtectedRoute } from "../../components/ProtectedRoute";
 
 export default function SystemSettings() {
   return (
-    <ProtectedRoute allowedRoles={[0]}>
+    <ProtectedRoute allowedRoles={[1, 2]}>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold ">System Settings</h1>
