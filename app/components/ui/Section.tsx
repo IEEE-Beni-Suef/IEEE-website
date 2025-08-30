@@ -11,10 +11,10 @@ const sectionVariants = {
 
 const paddingVariants = {
   none: "",
-  sm: "pb-4 pt-8 sm:pt-12",
-  default: "pb-4 pt-12 sm:pt-16 lg:pt-20",
-  lg: "pb-4 pt-16 sm:pt-20 lg:pt-24",
-  xl: "pb-4 pt-20 sm:pt-24 lg:pt-32",
+  sm: "py-8 sm:py-12",
+  default: "py-12 sm:py-16 lg:py-20",
+  lg: "py-16 sm:py-20 lg:py-24",
+  xl: "py-20 sm:py-24 lg:py-32",
 };
 
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
