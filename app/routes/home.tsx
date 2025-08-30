@@ -10,7 +10,6 @@ import { ArticleDisplay } from "../components/ArticleDisplay";
 import { useAllArticles, useCommittees } from "../hooks/useApi";
 import { Link, type MetaArgs } from "react-router";
 import type { Article, Committee } from "../types";
-import IEEEImg from "../assets/IEEE.png";
 import {
   Users,
   Calendar,

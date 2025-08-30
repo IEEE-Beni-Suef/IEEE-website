@@ -14,7 +14,6 @@ import {
   User,
   LayoutDashboard,
 } from "lucide-react";
-import logo from "../assets/logo.svg";
 import Logo from "./ui/Logo";
 
 const Navbar = () => {
