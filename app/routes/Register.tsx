@@ -1,6 +1,6 @@
 import type { MetaArgs } from "react-router";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Section } from "../components/ui/Section";
 import { registerApi } from "~/lib/api";
 import {
@@ -41,6 +41,7 @@ import { registerSchema } from "~/utils/scemas";
 import { useMutation } from "@tanstack/react-query";
 import { useCommittees } from "~/hooks/useApi";
 import type { Committee } from "~/types";
+import toast from "react-hot-toast";
 
 export function meta({}: MetaArgs) {
   return [
@@ -71,6 +72,7 @@ const steps = [
 
 const Register = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -90,10 +92,11 @@ const Register = () => {
   const { mutate: Register } = useMutation({
     mutationFn: (data: RegisterFormData) => registerApi(data),
     onSuccess: () => {
-      console.log("Registration successful");
+      toast.success("Registration successful! Please log in.");
+      navigate("/login");
     },
     onError: (error: Error) => {
-      console.error("Registration failed:", error.message);
+      toast.error("Registration failed: " + error.message);
     },
   });
 

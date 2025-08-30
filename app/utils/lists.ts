@@ -100,6 +100,7 @@ export const sidebarConfigs = {
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/users", icon: "Users", label: "Users" },
       { to: "/dashboard/committees", icon: "Boxes", label: "Committees" },
+      { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
       { to: "/dashboard/articles", icon: "FileText", label: "Articles" },
       { to: "/dashboard/settings", icon: "Split", label: "Branch" },
     ],
@@ -112,6 +113,7 @@ export const sidebarConfigs = {
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/users", icon: "Users", label: "Users" },
       { to: "/dashboard/committees", icon: "Building", label: "My Committee" },
+      { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
       { to: "/dashboard/articles", icon: "FileText", label: "Articles" },
       { to: "/dashboard/reports", icon: "FileText", label: "Reports" },
     ],
@@ -123,6 +125,7 @@ export const sidebarConfigs = {
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
+      { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
       { to: "/dashboard/tasks", icon: "CheckSquare", label: "My Tasks" },
       { to: "/dashboard/committee", icon: "Building", label: "My Committee" },
     ],
@@ -134,6 +137,7 @@ export const sidebarConfigs = {
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
+      { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
       { to: "/dashboard/events", icon: "Calendar", label: "Events" },
     ],
   },
@@ -144,6 +148,7 @@ export const sidebarConfigs = {
     navigation: [
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
+      { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
       { to: "/dashboard/events", icon: "Calendar", label: "Events" },
     ],
   },

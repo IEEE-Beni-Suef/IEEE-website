@@ -51,6 +51,32 @@ export interface LoginData {
   password: string;
 }
 
+export interface Meeting {
+  id: number;
+  title: string;
+  type: string;
+  description: string;
+  recap: string;
+  committeeId: number;
+  headId: number;
+  users: MeetingUser[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface MeetingUser {
+  userId: number;
+  attended: boolean;
+  mark: number;
+}
+
+export interface MeetingAttendance {
+  userId: number;
+  userName: string;
+  isAttend: boolean;
+  score: number;
+}
+
 export interface SidebarItemProps {
   to: string;
   icon: React.ReactNode;

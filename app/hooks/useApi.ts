@@ -24,7 +24,12 @@ import {
   createSubsections,
   deleteSubsectionsApi,
   updateSubsectionsApi,
-  createUser
+  createUser,
+  getAllMeetingsApi,
+  getMeetingByIdApi,
+  getMeetingAttendanceApi,
+  apiCreateMeeting,
+  apiSubmitAttendance
 } from "~/lib/api";
 
 export const useCommittees = () => {
@@ -302,6 +307,67 @@ export const useDeleteSubsection = () => {
       queryClient.invalidateQueries({
         queryKey: ["articleSubsection"],
       });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+// Meetings hooks
+
+export const useAllMeetings = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["meetings"],
+    queryFn: getAllMeetingsApi,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+export const useGetMeeting = (id: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["meeting", id],
+    queryFn: () => getMeetingByIdApi(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+    enabled: !!id,
+  });
+
+  return { data, ...rest };
+};
+
+export const useGetMeetingAttendance = (meetingId: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["meetingAttendance", meetingId],
+    queryFn: () => getMeetingAttendanceApi(meetingId),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+    enabled: !!meetingId,
+  });
+
+  return { data, ...rest };
+};
+
+export const useCreateMeeting = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["createMeeting"],
+    mutationFn: (meetingData: any) => apiCreateMeeting(meetingData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useSubmitAttendance = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["submitAttendance"],
+    mutationFn: (attendanceData: any) => apiSubmitAttendance(attendanceData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meetingAttendance"] });
     },
   });
 

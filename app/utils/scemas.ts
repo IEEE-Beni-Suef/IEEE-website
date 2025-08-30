@@ -63,3 +63,20 @@ export const submitAttendanceSchema = z.object({
   meetingId: z.string().min(1, { message: "Meeting ID is required" }),
   usersAttendents: z.array(attendanceItemSchema).min(1, { message: "At least one attendee is required" }),
 });
+
+// New meeting schemas
+export const meetingUserSchema = z.object({
+  userId: z.number().min(1, { message: "User ID is required" }),
+  attended: z.boolean(),
+  mark: z.number().min(0, { message: "Mark must be 0 or greater" }).max(10, { message: "Mark cannot exceed 10" }),
+});
+
+export const createMeetingSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  type: z.string().min(1, { message: "Type is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+  recap: z.string().min(1, { message: "Recap is required" }),
+  committeeId: z.number().min(1, { message: "Committee ID is required" }),
+  headId: z.number().min(1, { message: "Head ID is required" }),
+  users: z.array(meetingUserSchema).min(1, { message: "At least one user is required" }),
+});
