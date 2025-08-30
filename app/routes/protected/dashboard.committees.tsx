@@ -19,14 +19,16 @@ const CommitteesManagement = () => {
   const { mutate: updateCommittee } = useUpdateCommittee(
     editingCommittee?.id || 0
   );
-  const handleDelete = async (id: number) => {
+  const handleDelete = (id: number) => {
     if (!confirm("Are you sure you want to delete this committee?")) return;
-    try {
-      await deleteCommittee(id);
-      toast.success("Committee deleted successfully!");
-    } catch (e) {
-      toast.error((e as Error).message);
-    }
+    deleteCommittee(id, {
+      onSuccess: () => {
+        toast.success("Committee deleted successfully!");
+      },
+      onError: (error: Error) => {
+        toast.error(error.message);
+      },
+    });
   };
 
   const handleCreateClick = () => {
@@ -44,18 +46,27 @@ const CommitteesManagement = () => {
     setEditingCommittee(null);
   };
 
-  const handleSubmit = async (data: any) => {
-    try {
-      if (editingCommittee) {
-        await updateCommittee(data);
-        toast.success("Committee updated successfully!");
-      } else {
-        await createCommittee(data);
-        toast.success("Committee created successfully!");
-      }
-      handleCloseModal();
-    } catch (error) {
-      toast.error((error as Error).message);
+  const handleSubmit = (data: any) => {
+    if (editingCommittee) {
+      updateCommittee(data, {
+        onSuccess: () => {
+          toast.success("Committee updated successfully!");
+          handleCloseModal();
+        },
+        onError: (error: Error) => {
+          toast.error(error.message);
+        },
+      });
+    } else {
+      createCommittee(data, {
+        onSuccess: () => {
+          toast.success("Committee created successfully!");
+          handleCloseModal();
+        },
+        onError: (error: Error) => {
+          toast.error(error.message);
+        },
+      });
     }
   };
 
