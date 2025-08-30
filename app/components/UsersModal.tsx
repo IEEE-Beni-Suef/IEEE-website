@@ -47,6 +47,7 @@ export const UsersModal: FC<UserModalProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const { data: committees = [] } = useCommittees();
   
+
   const committeeOptions = React.useMemo(() => 
     committees.map((committee: Committee) => ({
       value: committee.id.toString(),
@@ -100,7 +101,9 @@ export const UsersModal: FC<UserModalProps> = ({
   }, [isOpen, user, reset]);
 
   const handleFormSubmit = async (data: UserFormData) => {
-    try {      
+    try {
+      console.log("Form data before submission:", data);
+      
       // The schema will handle the conversion of CommitteeIds to numbers
       const submitData = {
         ...data,
