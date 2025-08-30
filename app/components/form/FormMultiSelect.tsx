@@ -102,17 +102,16 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
                   className="inline-flex items-center px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-md"
                 >
                   {label}
-                  <button
-                    type="button"
+                  <div
                     onClick={(e) => {
                       e.stopPropagation();
                       const option = options.find((opt) => opt.label === label);
                       if (option) removeOption(option.value);
                     }}
-                    className="ml-1 hover:text-blue-600 dark:hover:text-blue-300"
+                    className="ml-1 hover:text-blue-600 dark:hover:text-blue-300 cursor-pointer inline-flex"
                   >
                     <X className="w-3 h-3" />
-                  </button>
+                  </div>
                 </span>
               ))
             )}

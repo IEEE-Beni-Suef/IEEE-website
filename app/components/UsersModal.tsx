@@ -46,24 +46,39 @@ export const UsersModal: FC<UserModalProps> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { data: committees = [] } = useCommittees();
+  
+  const committeeOptions = React.useMemo(() => 
+    committees.map((committee: Committee) => ({
+      value: committee.id.toString(),
+      label: committee.name,
+    })), [committees]);
 
   const {
     register,
-    handleSubmit,
+    handleSubmit: handleRHFSubmit,
     reset,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<UserFormData>({
+  } = useForm({
     resolver: zodResolver(createUserSchema),
-    defaultValues: {},
+    defaultValues: {
+      CommitteeIds: [] as string[],
+      isActive: true,
+      roleId: "3" as const
+    },
   });
 
   // Reset form when modal opens/closes or user changes
   useEffect(() => {
     if (isOpen) {
       if (user) {
-        reset(user);
+        // Convert numbers to strings for the form if needed
+        const formUser = {
+          ...user,
+          CommitteeIds: user.CommitteeIds?.map(id => id.toString()) || [],
+        };
+        reset(formUser);
       } else {
         reset({
           firstName: "",
@@ -76,23 +91,20 @@ export const UsersModal: FC<UserModalProps> = ({
           faculty: "",
           goverment: "",
           sex: undefined,
-          roleId: "3", // Default role ID as string
-          CommitteeIds: [],
-          isActive: true, // ✅ default active for new users
+          roleId: "3" as const,
+          CommitteeIds: [] as string[],
+          isActive: true,
         });
       }
     }
   }, [isOpen, user, reset]);
 
-  const handleFormSubmit = (data: UserFormData) => {
-    try {
-      console.log("Form data before submission:", data);
-
+  const handleFormSubmit = async (data: UserFormData) => {
+    try {      
+      // The schema will handle the conversion of CommitteeIds to numbers
       const submitData = {
         ...data,
-        CommitteeIds: data.CommitteeIds || [],
-        roleId: data.roleId, // already string
-        // ✅ keep isActive from checkbox, don’t override
+        CommitteeIds: data.CommitteeIds || []
       };
 
       console.log("Transformed data:", submitData);
@@ -108,18 +120,13 @@ export const UsersModal: FC<UserModalProps> = ({
     onClose();
   };
 
-  const committeeOptions = committees.map((committee: Committee) => ({
-    value: committee.id.toString(),
-    label: committee.name,
-  }));
-
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
       title={user ? "Edit User" : "Create User"}
     >
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+      <form onSubmit={handleRHFSubmit(handleFormSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FormInput
             id="firstName"

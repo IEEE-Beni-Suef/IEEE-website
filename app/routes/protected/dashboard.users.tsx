@@ -545,161 +545,133 @@ export default function UsersManagement() {
           </div>
         </div>
 
-        {/* User Details Modal */}
+                {/* User Details Modal */}
         {showDetails && selectedUser && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                   User Details
                 </h3>
                 <button
                   onClick={() => setShowDetails(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                 >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                  <span className="sr-only">Close</span>
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-
               <div className="p-6 space-y-6">
-                <div className="flex items-center space-x-4">
-                  <div className="h-16 w-16 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
-                    <span className="text-xl font-medium text-white">
-                      {getInitials(selectedUser)}
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-semibold text-gray-900 dark:text-white">
-                      {getFullName(selectedUser)}
-                    </h4>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      ID: {selectedUser.id}
+                <div>
+                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                    Personal Information
+                  </h5>
+                  <div className="space-y-2 text-sm">
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        First Name:
+                      </span>{" "}
+                      {selectedUser.fName || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Middle Name:
+                      </span>{" "}
+                      {selectedUser.mName || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Last Name:
+                      </span>{" "}
+                      {selectedUser.lName || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Gender:
+                      </span>{" "}
+                      {selectedUser.sex || "N/A"}
                     </p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
-                      Personal Information
-                    </h5>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          First Name:
-                        </span>{" "}
-                        {selectedUser.fName || "N/A"}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Middle Name:
-                        </span>{" "}
-                        {selectedUser.mName || "N/A"}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Last Name:
-                        </span>{" "}
-                        {selectedUser.lName || "N/A"}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Gender:
-                        </span>{" "}
-                        {selectedUser.sex || "N/A"}
-                      </p>
-                    </div>
+                <div>
+                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                    Contact Information
+                  </h5>
+                  <div className="space-y-2 text-sm">
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Email:
+                      </span>{" "}
+                      {selectedUser.email || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Phone:
+                      </span>{" "}
+                      {selectedUser.phoneNumber || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Governorate:
+                      </span>{" "}
+                      {getGovernorateName(selectedUser.goverment || "")}
+                    </p>
                   </div>
+                </div>
 
-                  <div>
-                    <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
-                      Contact Information
-                    </h5>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Email:
-                        </span>{" "}
-                        {selectedUser.email || "N/A"}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Phone:
-                        </span>{" "}
-                        {selectedUser.phoneNumber || "N/A"}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Governorate:
-                        </span>{" "}
-                        {getGovernorateName(selectedUser.goverment || "")}
-                      </p>
-                    </div>
+                <div>
+                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                    Academic Information
+                  </h5>
+                  <div className="space-y-2 text-sm">
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Faculty:
+                      </span>{" "}
+                      {getFacultyName(selectedUser.faculty || "")}
+                    </p>
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Year:
+                      </span>{" "}
+                      {selectedUser.year || "N/A"}
+                    </p>
                   </div>
+                </div>
 
-                  <div>
-                    <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
-                      Academic Information
-                    </h5>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Faculty:
-                        </span>{" "}
-                        {getFacultyName(selectedUser.faculty || "")}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Year:
-                        </span>{" "}
-                        {selectedUser.year || "N/A"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
-                      IEEE Information
-                    </h5>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Role:
-                        </span>{" "}
-                        {getRoleName(selectedUser.roleId)}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">
-                          Committees:
-                        </span>{" "}
-                        {getCommitteeNames(selectedUser.committeesId)}
-                      </p>
-                      <div className="flex items-center">
-                        <span className="font-medium text-gray-600 dark:text-gray-400 mr-2">
-                          Status:
+                <div>
+                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                    IEEE Information
+                  </h5>
+                  <div className="space-y-2 text-sm">
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Role:
+                      </span>{" "}
+                      {getRoleName(selectedUser.roleId)}
+                    </p>
+                    <p>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                        Committees:
+                      </span>{" "}
+                      {getCommitteeNames(selectedUser.committeesId)}
+                    </p>
+                    <div className="flex items-center">
+                      <span className="font-medium text-gray-600 dark:text-gray-400 mr-2">
+                        Status:
+                      </span>
+                      {selectedUser.isActive ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                          Active
                         </span>
-                        {selectedUser.isActive ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                            Active
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                            Inactive
-                          </span>
-                        )}
-                      </div>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                          Inactive
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -707,13 +679,6 @@ export default function UsersManagement() {
             </div>
           </div>
         )}
-        {/* Add/Edit User Modal */}
-        <UsersModal
-          isOpen={showAddModal}
-          onClose={() => setShowAddModal(false)}
-          onSubmit={handleAddUser}
-          isLoading={false}
-        />
       </div>
     </ProtectedRoute>
   );

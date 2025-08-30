@@ -13,7 +13,7 @@ export const registerSchema = z.object({
   faculty: z.string().min(1, { message: "Faculty is required" }),
   phone: z.string().min(1, { message: "Phone number is required" }),
   goverment: z.string().min(1, { message: "Government is required" }),
-  CommitteeIds: z.array(z.number()).optional(),
+  CommitteeIds: z.array(z.string().transform((val) => Number(val))).optional(),
   roleId: z.enum(["1", "2", "3", "4", "5"], {
     message: "Role ID is required and must be a valid number",
   }),
