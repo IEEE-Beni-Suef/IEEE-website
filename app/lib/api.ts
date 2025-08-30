@@ -492,7 +492,7 @@ export const getMeetingByIdApi = async (id: number) => {
 // Get meeting attendance
 export const getMeetingAttendanceApi = async (meetingId: number) => {
   try {
-    const response = await apiClient.get(`/Meetings/${meetingId}/attendance`);
+    const response = await apiClient.get(`/Meetings/attendents/${meetingId}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
