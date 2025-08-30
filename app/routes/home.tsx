@@ -20,6 +20,11 @@ import {
   BookOpen,
   ChevronRight,
   ChevronLeft,
+  MapPin,
+  Mail,
+  Facebook,
+  Linkedin,
+  Github,
 } from "lucide-react";
 import { useState } from "react";
 import Commitees from "../routes/commitees";
@@ -135,7 +140,7 @@ export default function Home() {
       </Section>
 
       {/* About IEEE Section */}
-      <Section variant="primary" padding="xl">
+      <Section id="about" variant="primary" padding="xl">
         <div className="max-w-7xl mx-auto ">
           <SectionHeader>
             <SectionTitle className="text-blue-600 dark:text-blue-400">
@@ -205,9 +210,9 @@ export default function Home() {
       </Section>
 
       {/* Committees Section */}
-      <Commitees />
+      <Commitees id="commitees" />
 
-      <Section padding="xl" className="bg-white dark:bg-gray-900">
+      <Section id="articles" padding="xl" className="bg-white dark:bg-gray-900">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -298,6 +303,153 @@ export default function Home() {
           )}
         </div>
       </Section>
+
+
+      <footer className="relative bg-gray-900 text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          {[...Array(100)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            {/* Company Info */}
+            <div className="lg:col-span-2">
+              <div className="flex items-center mb-6 h-24 w-fit">
+                <Logo />
+              </div>
+              <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
+                Empowering students through technology, fostering innovation, and building a community of future engineering leaders at Beni Suef University.
+              </p>
+              
+              {/* Social Media Links */}
+              <div className="flex flex-wrap gap-3">
+                <a 
+                  href="https://www.facebook.com/ieee.bns" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a 
+                  href="https://www.linkedin.com/company/ieee-benisuef-student-branch" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-blue-500 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a 
+                  href="https://github.com/orgs/IEEE-Beni-Suef" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-black rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+                  aria-label="GitHub"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-lg font-semibold mb-6 text-white flex items-center">
+                <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                Quick Links
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link to="/about" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                    <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/events" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                    <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                    Events
+                  </Link>
+                </li>
+                <li>
+                  <a href="#commitees" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                    <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                    Committees
+                  </a>
+                </li>
+                <li>
+                  <a href="#articles" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                    <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                    Articles
+                  </a>
+                </li>
+                <li>
+                  <Link to="/contact" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                    <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/register" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                    <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                    Join IEEE
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              <h3 className="text-lg font-semibold mb-6 text-white flex items-center">
+                <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                Contact Info
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3 group">
+                  <MapPin className="w-5 h-5 text-green-400 mt-1 flex-shrink-0 group-hover:text-green-300 transition-colors" />
+                  <div>
+                    <span className="text-gray-300 group-hover:text-white transition-colors">Beni Suef University</span>
+                    <br />
+                    <span className="text-gray-400 text-sm">Beni Suef, Egypt</span>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3 group">
+                  <Mail className="w-5 h-5 text-green-400 flex-shrink-0 group-hover:text-green-300 transition-colors" />
+                  <a 
+                    href="mailto:info@ieeebns.org" 
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    benisuef.ieee@gmail.com
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+         
+
+          {/* Bottom Bar */}
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="flex items-center space-x-2 mb-4 md:mb-0">
+                <p className="text-gray-400 text-sm">
+                  © {new Date().getFullYear()} IEEE BNS. All rights reserved.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
