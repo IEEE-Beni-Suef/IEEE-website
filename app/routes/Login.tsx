@@ -58,7 +58,7 @@ const Login = () => {
       padding="xl"
       className="min-h-screen flex items-center"
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <div className="w-full  max-w-6xl mx-auto">
         <div className="lg:hidden text-center mb-8">
           <AuthIllustration type="login" className="max-w-xs mx-auto mb-6" />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">

@@ -44,7 +44,7 @@ const Section = React.forwardRef<HTMLElement, SectionProps>(
     return (
       <section
         ref={ref}
-        className={`${baseClasses} ${variantClasses} ${paddingClasses} ${className}`}
+        className={` ${baseClasses} ${variantClasses} ${paddingClasses} ${className} px-4 sm:px-6 lg:px-8`}
         {...props}
       >
         {/* Background element */}

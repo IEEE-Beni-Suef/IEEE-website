@@ -29,7 +29,7 @@ export default function ArticleView() {
   if (isLoading) {
     return (
       <Section variant="default" padding="xl" className="min-h-screen">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto ">
           <div className="animate-pulse">
             <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded mb-4 sm:mb-6"></div>
             <div className="h-48 sm:h-64 bg-gray-200 dark:bg-gray-700 rounded mb-4 sm:mb-6"></div>
@@ -47,7 +47,7 @@ export default function ArticleView() {
   if (error || !article) {
     return (
       <Section variant="default" padding="xl" className="min-h-screen">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-4xl mx-auto  text-center">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Article Not Found
           </h1>
@@ -68,7 +68,7 @@ export default function ArticleView() {
 
   return (
     <Section variant="default" padding="xl" className="min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto ">
         {/* Back Navigation */}
         <nav className="mb-6 sm:mb-8">
           <Link

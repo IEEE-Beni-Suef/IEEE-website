@@ -301,7 +301,7 @@ const Register = () => {
       padding="xl"
       className="min-h-screen flex items-center"
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="w-full  max-w-7xl mx-auto">
         {/* Mobile header with illustration */}
         <div className="lg:hidden text-center mb-8">
           <AuthIllustration type="register" className="max-w-xs mx-auto mb-6" />

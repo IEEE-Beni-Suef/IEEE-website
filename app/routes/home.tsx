@@ -77,7 +77,7 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <Section padding="xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-7xl mx-auto  text-center">
           <div className="space-y-8">
             {/* IEEE Logo and Navigation */}
             <div className="flex flex-col items-center space-y-4 mb-12">
@@ -127,7 +127,7 @@ export default function Home() {
 
       {/* About IEEE Section */}
       <Section variant="primary" padding="xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto ">
           <SectionHeader>
             <SectionTitle className="text-blue-600 dark:text-blue-400">
               IEEE BNS: Where Knowledge Meets Passion!
