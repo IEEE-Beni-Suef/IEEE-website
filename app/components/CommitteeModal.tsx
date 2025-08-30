@@ -99,7 +99,7 @@ export const CommitteeModal: FC<CommitteeModalProps> = ({
 
     // Append image if provided
     if (data.image) {
-      formData.append("image", data.image);
+      formData.append("imageUrl", data.image);
     }
 
     onSubmit(formData as any);
