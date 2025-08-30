@@ -13,14 +13,16 @@ export const registerSchema = z.object({
   faculty: z.string().min(1, { message: "Faculty is required" }),
   phone: z.string().min(1, { message: "Phone number is required" }),
   goverment: z.string().min(1, { message: "Government is required" }),
-  CommitteeIds: z.array(z.string().transform((val) => Number(val))).min(1, { message: "Commitee(s) is required" }),
+  CommitteeIds: z
+    .array(z.string().transform((val) => Number(val)))
+    .min(1, { message: "Commitee(s) is required" }),
   roleId: z.enum(["1", "2", "3", "4", "5"], {
     message: "Role ID is required and must be a valid number",
   }),
 });
 
 export const createUserSchema = registerSchema.extend({
-  isActive: z.boolean()
+  isActive: z.boolean(),
 });
 
 export const loginSchema = z.object({
@@ -33,7 +35,7 @@ export const committeeSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Committee description is required" }),
-  headId: z.string().min(1, { message: "Head is required" }),
+  headId: z.string(),
   vicesId: z.array(z.string()),
   image: z.any().optional(),
 });
