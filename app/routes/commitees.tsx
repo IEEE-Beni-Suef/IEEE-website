@@ -4,7 +4,7 @@ import type { Committee } from "../types";
 import { Users } from "lucide-react";
 import { Section } from "../components/ui/Section";
 
-const Commitees = ({ id }: { id: string }) => {
+const Commitees = () => {
     const { data: committees, isLoading, isError, error } = useCommittees();
 
     if (isLoading) {
@@ -24,7 +24,7 @@ const Commitees = ({ id }: { id: string }) => {
     }
 
     return (
-        <Section id={id} padding="xl" className="bg-white dark:bg-gray-900">
+        <Section id="committees" padding="xl" className="bg-white dark:bg-gray-900">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">

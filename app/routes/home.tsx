@@ -210,7 +210,7 @@ export default function Home() {
       </Section>
 
       {/* Committees Section */}
-      <Commitees id="commitees" />
+      <Commitees />
 
       <Section id="articles" padding="xl" className="bg-white dark:bg-gray-900">
         <div className="max-w-6xl mx-auto">
@@ -305,12 +305,12 @@ export default function Home() {
       </Section>
 
 
-      <footer className="relative bg-gray-900 text-white overflow-hidden">
+      <footer className="relative bg-white dark:bg-gray-900 text-gray-600 dark:text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           {[...Array(100)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-white rounded-full"
+              className="absolute w-1 h-1 bg-gray-500 dark:bg-white rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -326,7 +326,7 @@ export default function Home() {
               <div className="flex items-center mb-6 h-24 w-fit">
                 <Logo />
               </div>
-              <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
+              <p className="text-gray-800 dark:text-gray-300  mb-6 max-w-md leading-relaxed">
                 Empowering students through technology, fostering innovation, and building a community of future engineering leaders at Beni Suef University.
               </p>
               
@@ -336,7 +336,7 @@ export default function Home() {
                   href="https://www.facebook.com/ieee.bns" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+                  className="w-10 h-10 bg-gray-300 hover:text-white dark:bg-gray-800  hover:bg-blue-600  rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -345,7 +345,7 @@ export default function Home() {
                   href="https://www.linkedin.com/company/ieee-benisuef-student-branch" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 hover:bg-blue-500 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+                  className="w-10 h-10 bg-gray-300 hover:text-white dark:bg-gray-800 hover:bg-blue-500 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
                   aria-label="LinkedIn"
                 >
                   <Linkedin className="w-5 h-5" />
@@ -354,7 +354,7 @@ export default function Home() {
                   href="https://github.com/orgs/IEEE-Beni-Suef" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 hover:bg-black rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+                  className="w-10 h-10 bg-gray-300 hover:text-white dark:bg-gray-800 hover:bg-black rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
                   aria-label="GitHub"
                 >
                   <Github className="w-5 h-5" />
@@ -364,43 +364,43 @@ export default function Home() {
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-lg font-semibold mb-6 text-white flex items-center">
+              <h3 className="text-lg font-semibold mb-6 text-gray-800 dark:text-gray-300 flex items-center">
                 <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
                 Quick Links
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/about" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link to="/events" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link to="/events" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Events
                   </Link>
                 </li>
                 <li>
-                  <a href="#commitees" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <a href="#committees" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Committees
                   </a>
                 </li>
                 <li>
-                  <a href="#articles" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <a href="#articles" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Articles
                   </a>
                 </li>
                 <li>
-                  <Link to="/contact" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link to="/contact" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Contact
                   </Link>
                 </li>
                 <li>
-                  <Link to="/register" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link to="/register" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Join IEEE
                   </Link>
@@ -410,24 +410,24 @@ export default function Home() {
 
             {/* Contact Info */}
             <div>
-              <h3 className="text-lg font-semibold mb-6 text-white flex items-center">
+              <h3 className="text-lg font-semibold mb-6 text-gray-800 dark:text-gray-300 flex items-center">
                 <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
                 Contact Info
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3 group">
-                  <MapPin className="w-5 h-5 text-green-400 mt-1 flex-shrink-0 group-hover:text-green-300 transition-colors" />
+                  <MapPin className="w-5 h-5 text-green-400 mt-1 flex-shrink-0 group-hover:text-green-500 dark:group-hover:text-green-300 transition-colors" />
                   <div>
-                    <span className="text-gray-300 group-hover:text-white transition-colors">Beni Suef University</span>
+                    <span className="text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">Beni Suef University</span>
                     <br />
                     <span className="text-gray-400 text-sm">Beni Suef, Egypt</span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 group">
-                  <Mail className="w-5 h-5 text-green-400 flex-shrink-0 group-hover:text-green-300 transition-colors" />
-                  <a 
-                    href="mailto:info@ieeebns.org" 
-                    className="text-gray-300 hover:text-white transition-colors"
+                  <Mail className="w-5 h-5 text-green-400 flex-shrink-0 group-hover:text-green-500 dark:group-hover:text-green-300 transition-colors" />
+                  <a
+                    href="mailto:info@ieeebns.org"
+                    className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
                   >
                     benisuef.ieee@gmail.com
                   </a>
@@ -435,9 +435,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-         
-
           {/* Bottom Bar */}
           <div className="border-t border-gray-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
