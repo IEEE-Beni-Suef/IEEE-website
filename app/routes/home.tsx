@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import Commitees from "../routes/commitees";
+import Logo from "~/components/ui/Logo";
 
 export function meta({}: MetaArgs) {
   return [
@@ -73,6 +74,17 @@ export default function Home() {
     }
   };
 
+  const getVisiblePages = (currentPage: number, totalPages: number) => {
+    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const pages: (number | string)[] = [];
+    if (currentPage > 3) pages.push(1, '...');
+    const start = Math.max(1, currentPage - 1);
+    const end = Math.min(totalPages, currentPage + 1);
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (currentPage < totalPages - 2) pages.push('...', totalPages);
+    return pages;
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -81,11 +93,9 @@ export default function Home() {
           <div className="space-y-8">
             {/* IEEE Logo and Navigation */}
             <div className="flex flex-col items-center space-y-4 mb-12">
-              <img
-                src={IEEEImg}
-                alt="IEEE Logo"
-                className="w-32 h-32 object-contain"
-              />
+                <figure className="h-24 p-2">
+                <Logo />
+              </figure>
               <p className="text-gray-600 dark:text-gray-400 text-sm">
                 Institute of Electrical and Electronics Engineers
               </p>
@@ -241,13 +251,16 @@ export default function Home() {
                     disabled={currentPage === 1}
                     className="flex items-center"
                   >
-                    <ChevronLeft className="w-4 h-4 mr-2" />
-                    Previous
+                    <ChevronLeft className="w-4 h-4 mr-0  md:mr-2" />
+                    <span className="hidden md:inline">Previous</span>
                   </Button>
 
                   <div className="flex items-center space-x-2">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                      (page) => (
+                    {getVisiblePages(currentPage, totalPages).map((page) => {
+                      if (typeof page === 'string') {
+                        return <span key={page} className="px-2 text-gray-500">...</span>;
+                      }
+                      return (
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
@@ -259,8 +272,8 @@ export default function Home() {
                         >
                           {page}
                         </button>
-                      )
-                    )}
+                      );
+                    })}
                   </div>
 
                   <Button
@@ -270,8 +283,8 @@ export default function Home() {
                     disabled={currentPage === totalPages}
                     className="flex items-center"
                   >
-                    Next
-                    <ChevronRight className="w-4 h-4 ml-2" />
+                    <span className="hidden md:inline">Next</span>
+                    <ChevronRight className="w-4 h-4 ml-0 md:ml-2" />
                   </Button>
                 </div>
               )}

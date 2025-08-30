@@ -14,7 +14,8 @@ import {
   User,
   LayoutDashboard,
 } from "lucide-react";
-import logo from "../assets/IEEE.png";
+import logo from "../assets/logo.svg";
+import Logo from "./ui/Logo";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -66,11 +67,9 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
-              <img
-                src={logo}
-                alt="IEEE Logo"
-                className="h-16 w-auto transition-transform duration-200 group-hover:scale-105 filter brightness-0 dark:filter-none dark:invert"
-              />
+              <figure className="h-16 p-2">
+                <Logo />
+              </figure>
             </Link>
 
             {/* Desktop Navigation */}
