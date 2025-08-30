@@ -9,7 +9,7 @@ import { Button } from "../components/ui/Button";
 import { ArticleDisplay } from "../components/ArticleDisplay";
 import { useAllArticles, useCommittees } from "../hooks/useApi";
 import { Link, type MetaArgs } from "react-router";
-import type { Article } from "../types";
+import type { Article, Committee } from "../types";
 import IEEEImg from "../assets/IEEE.png";
 import {
   Users,
@@ -23,6 +23,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useState } from "react";
+import Commitees from "../routes/commitees";
 
 export function meta({}: MetaArgs) {
   return [
@@ -193,6 +194,9 @@ export default function Home() {
           </div>
         </div>
       </Section>
+
+      {/* Committees Section */}
+      <Commitees />
 
       <Section padding="xl" className="bg-white dark:bg-gray-900">
         <div className="max-w-6xl mx-auto">

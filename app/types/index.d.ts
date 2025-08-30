@@ -22,6 +22,7 @@ export interface Committee {
   imageUrl: string;
   memberCount: number;
   name: string;
+  description?: string;
   vicesId: Array;
 }
 
