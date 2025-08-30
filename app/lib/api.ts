@@ -162,7 +162,7 @@ export const getAllUsersApi = async () => {
 
 export const deleteUserByIdApi = async (id: number) => {
   try {
-    const response = await apiClient.delete(`/Users/DeleteUser/${id}`);
+    const response = await apiClient.delete(`/Users/${id}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -433,12 +433,16 @@ export const updateSubsectionsApi = async (id: number, data: any) => {
 
 export type CreateMeetingPayload = {
   title: string;
+  type: string;
   description: string;
   recap: string;
-  type: string;
-  dateTime: string; // ISO string expected by backend
-  committeeId: number|null;
-  headId: number|null;
+  committeeId: number;
+  headId: number;
+  users: Array<{
+    userId: number;
+    attended: boolean;
+    mark: number;
+  }>;
 };
 
 export const apiCreateMeeting = async (data: CreateMeetingPayload) => {
@@ -449,6 +453,51 @@ export const apiCreateMeeting = async (data: CreateMeetingPayload) => {
     if (axios.isAxiosError(error)) {
       throw new Error(
         error.response?.data.message || "Failed to create meeting"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// Get all meetings
+export const getAllMeetingsApi = async () => {
+  try {
+    const response = await apiClient.get("/Meetings");
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch meetings"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// Get meeting by ID
+export const getMeetingByIdApi = async (id: number) => {
+  try {
+    const response = await apiClient.get(`/Meetings/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch meeting"
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// Get meeting attendance
+export const getMeetingAttendanceApi = async (meetingId: number) => {
+  try {
+    const response = await apiClient.get(`/Meetings/${meetingId}/attendance`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch meeting attendance"
       );
     }
     throw new Error("An unexpected error occurred");
