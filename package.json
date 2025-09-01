@@ -27,6 +27,7 @@
     "zod": "^4.0.15"
   },
   "devDependencies": {
+    "@gradio/client": "^1.17.1",
     "@react-router/dev": "^7.7.1",
     "@tailwindcss/vite": "^4.1.4",
     "@types/node": "^20",

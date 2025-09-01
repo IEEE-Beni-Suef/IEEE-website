@@ -528,3 +528,19 @@ export const apiSubmitAttendance = async (data: SubmitAttendancePayload) => {
     throw new Error("An unexpected error occurred");
   }
 };
+
+// Chatbot API
+export const sendChatMessage = async (message: string): Promise<string> => {
+  try {
+    const { Client } = await import("@gradio/client");
+    const client = await Client.connect("amrhassank/IEEE_AI_ChatBot");
+    const result = await client.predict("/predict", { 
+      message: message
+    });
+    
+    return (result.data as string[])[0] || "No response received";
+  } catch (error) {
+    console.error("Chatbot API error:", error);
+    throw new Error("Failed to send message to chatbot");
+  }
+};

@@ -29,7 +29,8 @@ import {
   getMeetingByIdApi,
   getMeetingAttendanceApi,
   apiCreateMeeting,
-  apiSubmitAttendance
+  apiSubmitAttendance,
+  sendChatMessage
 } from "~/lib/api";
 
 export const useCommittees = () => {
@@ -369,6 +370,16 @@ export const useSubmitAttendance = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meetingAttendance"] });
     },
+  });
+
+  return { mutate, ...rest };
+};
+
+// Chatbot hook
+export const useChatbot = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["chatbot"],
+    mutationFn: (message: string) => sendChatMessage(message),
   });
 
   return { mutate, ...rest };
