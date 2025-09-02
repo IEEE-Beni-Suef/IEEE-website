@@ -23,6 +23,7 @@ export const registerSchema = z.object({
 
 export const createUserSchema = registerSchema.extend({
   isActive: z.boolean(),
+  CommitteeIds: z.array(z.string().transform((val) => Number(val)))
 });
 
 export const loginSchema = z.object({
