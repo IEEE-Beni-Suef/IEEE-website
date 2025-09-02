@@ -82,16 +82,19 @@ export function Chatbot() {
     <div className="fixed bottom-4 right-4 z-50 w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
-          IEEE AI Assistant
-        </h3>
+        <div className="flex ">
+          <BotMessageSquare />
+          <h3 className="font-semibold text-gray-900 dark:text-white ml-2">
+            IEEE AI Assistant
+          </h3>
+        </div>
         <Button
           onClick={() => setIsOpen(false)}
           variant="ghost"
-          size="sm"
+          size="default"
           className="h-8 w-8 p-0"
         >
-          <BotMessageSquare />
+          <span className="sr-only">Close</span>✕
         </Button>
       </div>
 
