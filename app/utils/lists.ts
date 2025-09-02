@@ -115,7 +115,7 @@ export const sidebarConfigs = {
       { to: "/dashboard/committees", icon: "Building", label: "My Committee" },
       { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
       { to: "/dashboard/articles", icon: "FileText", label: "Articles" },
-      { to: "/dashboard/reports", icon: "FileText", label: "Reports" },
+      // { to: "/dashboard/reports", icon: "FileText", label: "Reports" },
     ],
   },
   3: {
@@ -126,8 +126,8 @@ export const sidebarConfigs = {
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
       { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
-      { to: "/dashboard/tasks", icon: "CheckSquare", label: "My Tasks" },
-      { to: "/dashboard/committee", icon: "Building", label: "My Committee" },
+      // { to: "/dashboard/tasks", icon: "CheckSquare", label: "My Tasks" },
+      // { to: "/dashboard/committee", icon: "Building", label: "My Committee" },
     ],
   },
   4: {
@@ -138,7 +138,7 @@ export const sidebarConfigs = {
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
       { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
-      { to: "/dashboard/events", icon: "Calendar", label: "Events" },
+      // { to: "/dashboard/events", icon: "Calendar", label: "Events" },
     ],
   },
   5: {
@@ -149,7 +149,7 @@ export const sidebarConfigs = {
       { to: "/dashboard", icon: "LayoutDashboard", label: "Dashboard" },
       { to: "/dashboard/profile", icon: "User", label: "My Profile" },
       { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
-      { to: "/dashboard/events", icon: "Calendar", label: "Events" },
+      // { to: "/dashboard/events", icon: "Calendar", label: "Events" },
     ],
   },
   default: {

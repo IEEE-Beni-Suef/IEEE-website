@@ -36,15 +36,15 @@ const Navbar = () => {
 
   const navItems = [
     { label: "Home", path: "/", icon: Home },
-    { label: "About", path: "/about", icon: Users },
-    { label: "Events", path: "/events", icon: Calendar },
+    // { label: "About", path: "/about", icon: Users },
+    // { label: "Events", path: "/events", icon: Calendar },
   ];
 
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Home", path: "/", icon: Home },
-    { label: "About", path: "/about", icon: Users },
-    { label: "Events", path: "/events", icon: Calendar },
+    // { label: "About", path: "/about", icon: Users },
+    // { label: "Events", path: "/events", icon: Calendar },
   ];
 
   const isActive = (path: string) => location.pathname === path;
