@@ -109,14 +109,22 @@ const CommitteesManagement = () => {
                       <span className="font-medium text-gray-900 dark:text-gray-100">
                         {committee.name}
                       </span>
-                      {committee.description && (
+                      {/* {committee.description && (
                         <span className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                           {committee.description}
                         </span>
-                      )}
+                      )} */}
                       <span className="text-sm text-gray-500 dark:text-gray-400">
                         Head ID: {committee.headId}
                       </span>
+
+                      {Array.isArray(committee.vicesId) &&
+                        committee.vicesId.length > 0 && (
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                            Vices IDs: {committee.vicesId.join(", ")}
+                          </span>
+                        )}
+
                       <span className="text-sm text-gray-500 dark:text-gray-400">
                         Members: {committee.memberCount}
                       </span>

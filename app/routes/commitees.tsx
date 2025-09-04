@@ -70,11 +70,10 @@ const Commitees = () => {
                                     )}
                                     
                                     {/* Show member count if available, else show members array length, else N/A */}
-                                    <p className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-100 opacity-75">
+                                    {/* <p className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-100 opacity-75">
                                         <Users className="w-4 h-4" />
                                         Members: {committee.memberCount}
-                                      
-                                    </p>
+                                    </p> */}
                                 </div>
                             </div>
                         ))

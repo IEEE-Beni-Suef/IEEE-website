@@ -17,6 +17,7 @@ import {
   Handshake,
   ArrowRight,
   Rocket,
+  ChartNoAxesCombined ,
   BookOpen,
   ChevronRight,
   ChevronLeft,
@@ -54,17 +55,25 @@ export default function Home() {
     { label: "Events Organized", value: "50+", icon: Calendar },
     { label: "Technical Workshops", value: "30+", icon: Wrench },
     { label: "Industry Partnerships", value: "15+", icon: Handshake },
+    { label: "Social Media Reach", value: "12,000+", icon: ChartNoAxesCombined },
+
   ];
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 3;
 
+  // Filter articles to show only those
+  // const filteredArticles = articles
+  //   ? articles.filter((article: Article) => typeof article.id === 'number' && article.id > 22)
+  //   : [];
+
   // Calculate pagination
-  const totalPages = articles
-    ? Math.ceil(articles.length / articlesPerPage)
-    : 0;
+  const totalPages = articles? Math.ceil(articles.length / articlesPerPage): 0;
+  // const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
   const startIndex = (currentPage - 1) * articlesPerPage;
   const endIndex = startIndex + articlesPerPage;
   const currentArticles = articles ? articles.slice(startIndex, endIndex) : [];
+  // const currentArticles = filteredArticles.slice(startIndex, endIndex);
+  
 
   const nextPage = () => {
     if (currentPage < totalPages) {
@@ -127,13 +136,13 @@ export default function Home() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
               <Link to="/Register">
-                <Button size="xl" variant="gradient" className="min-w-48">
+                <Button size="xl" variant="gradient" className="min-w-48 cursor-pointer">
                   <Rocket className="w-5 h-5" />
                   Join IEEE BNS
                 </Button>
               </Link>
               <Link to="/about">
-                <Button size="xl" variant="outline" className="min-w-48">
+                <Button size="xl" variant="outline" className="min-w-48 hover:shadow-lg cursor-pointer">
                   Learn More
                   <ArrowRight className="w-5 h-5" />
                 </Button>
@@ -193,7 +202,9 @@ export default function Home() {
                       variant="glass"
                       hover
                       glow
-                      className="p-6 text-center"
+                      className={`p-6 text-center ${
+                        index === statistics.length - 1 ? "col-span-2 mx-auto" : ""
+                      }`}
                     >
                       <div className="flex justify-center mb-2">
                         <IconComponent className="w-8 h-8 text-blue-600 dark:text-blue-400" />
