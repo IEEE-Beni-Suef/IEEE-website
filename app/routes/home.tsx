@@ -126,14 +126,18 @@ export default function Home() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
-              <Button size="xl" variant="gradient" className="min-w-48">
-                <Rocket className="w-5 h-5" />
-                Join IEEE BNS
-              </Button>
-              <Button size="xl" variant="outline" className="min-w-48">
-                Learn More
-                <ArrowRight className="w-5 h-5" />
-              </Button>
+              <Link to="/Register">
+                <Button size="xl" variant="gradient" className="min-w-48">
+                  <Rocket className="w-5 h-5" />
+                  Join IEEE BNS
+                </Button>
+              </Link>
+              <Link to="/about">
+                <Button size="xl" variant="outline" className="min-w-48">
+                  Learn More
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -393,12 +397,12 @@ export default function Home() {
                     Articles
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/contact" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Contact
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link to="/register" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
