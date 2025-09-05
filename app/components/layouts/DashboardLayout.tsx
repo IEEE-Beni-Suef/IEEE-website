@@ -2,6 +2,7 @@ import { Outlet } from "react-router";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Button } from "../ui/Button";
 
 interface DashboardLayoutProps {
   children?: ReactNode;
@@ -43,7 +44,7 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-            className=" lg:hidden fixed bottom-4 z-20 right-4 p-3 cursor-pointer rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            className=" w-14 h-14 lg:hidden fixed bottom-4 z-20 right-4 p-3 cursor-pointer rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
           >
             {isMobileSidebarOpen ? (
               <X className="w-6 h-6" />

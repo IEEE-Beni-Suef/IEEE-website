@@ -83,7 +83,7 @@ const SectionTitle = React.forwardRef<
 >(({ className = "", ...props }, ref) => (
   <h2
     ref={ref}
-    className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight ${className}`}
+    className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-gray-100 tracking-tight ${className}`}
     {...props}
   />
 ));

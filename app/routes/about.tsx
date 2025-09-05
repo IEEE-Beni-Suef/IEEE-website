@@ -45,7 +45,7 @@ const About = () => {
 
       {/* Timeline Section */}
       <Section variant="secondary" padding="xl">
-        <div className="max-w-7xl mx-auto mr-20">
+        <div className="max-w-7xl mx-auto">
           <SectionHeader>
             <SectionTitle>Our Journey</SectionTitle>
             <SectionSubtitle>
@@ -61,7 +61,7 @@ const About = () => {
             <div className="space-y-24 relative">
               {/* 2017 */}
               <div className="flex flex-col md:flex-row items-center">
-                <div className="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
+                <div className="flex-1 text-center md:text-right md:pr-12 mb-4 md:mb-0">
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">2017</h3>
                   <p className="text-gray-600 dark:text-gray-300">Branch Establishment</p>
                 </div>
@@ -80,7 +80,7 @@ const About = () => {
 
               {/* 2022 */}
               <div className="flex flex-col md:flex-row items-center">
-                <div className="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
+                <div className="flex-1 text-center md:text-right md:pr-12 mb-4 md:mb-0">
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">2022</h3>
                   <p className="text-gray-600 dark:text-gray-300">Space Committees Launch</p>
                 </div>
@@ -99,7 +99,7 @@ const About = () => {
 
               {/* 2025 */}
               <div className="flex flex-col md:flex-row items-center">
-                <div className="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
+                <div className="flex-1 text-center md:text-right md:pr-12 mb-4 md:mb-0">
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">2025</h3>
                   <p className="text-gray-600 dark:text-gray-300">Web Development Committees</p>
                 </div>
@@ -479,7 +479,7 @@ const About = () => {
 
       {/* Start Your Journey Section */}
       <Section variant="primary" padding="xl">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
             This is your chance to be part of something bigger.
           </h2>

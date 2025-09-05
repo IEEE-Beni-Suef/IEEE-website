@@ -132,7 +132,8 @@ export function Chatbot() {
   const [inputMessage, setInputMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<Chat_history_Array>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
+  const location = window.location.href;
+  console.log(location.includes("/dashboard") )
   const { mutate: sendMessage, isPending } = useChatbot();
   const { mutate: resetChat } = useResetChat();
 
@@ -214,10 +215,10 @@ export function Chatbot() {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className={`fixed ${location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"} right-4 z-50`}>
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+          className="rounded-full w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white"
         >
           <Bot />
         </Button>
@@ -226,7 +227,7 @@ export function Chatbot() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] md:w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col">
+    <div className={`fixed ${location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"} right-4 z-50 w-[calc(100vw-2rem)] md:w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col`}>
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center">
