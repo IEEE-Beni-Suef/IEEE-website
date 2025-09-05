@@ -30,8 +30,10 @@ import {
   getMeetingAttendanceApi,
   apiCreateMeeting,
   apiSubmitAttendance,
-  sendChatMessage
+  sendChatMessage,
+  resetChat
 } from "~/lib/api";
+import type { Chat_history_Array } from "~/types";
 
 export const useCommittees = () => {
   const { data, ...rest } = useQuery({
@@ -379,8 +381,19 @@ export const useSubmitAttendance = () => {
 export const useChatbot = () => {
   const { mutate, ...rest } = useMutation({
     mutationKey: ["chatbot"],
-    mutationFn: (message: string) => sendChatMessage(message),
+    mutationFn: (user_message: string, chatHistory: Chat_history_Array) => sendChatMessage(user_message, chatHistory),
   });
 
   return { mutate, ...rest };
 };
+
+export const useResetChat = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["resetChat"],
+    mutationFn: () => {
+      return resetChat();
+    },
+  });
+
+  return { mutate, ...rest };
+}

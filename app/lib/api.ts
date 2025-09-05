@@ -2,6 +2,7 @@ import axios from "axios";
 import apiClient from "~/config/apiClient";
 import type { loginSchema, registerSchema, createUserSchema } from "~/utils/scemas";
 import type z from "zod";
+import type { Chat_history_Array } from "~/types";
 
 export const registerApi = async (data: z.infer<typeof registerSchema>) => {
   try {
@@ -530,12 +531,13 @@ export const apiSubmitAttendance = async (data: SubmitAttendancePayload) => {
 };
 
 // Chatbot API
-export const sendChatMessage = async (message: string): Promise<string> => {
+export const sendChatMessage = async (user_message: string, chatHistory: Chat_history_Array): Promise<string> => {
   try {
     const { Client } = await import("@gradio/client");
     const client = await Client.connect("amrhassank/IEEE_AI_ChatBot");
-    const result = await client.predict("/predict", { 
-      message: message
+    const result = await client.predict("/chatbot_fn", { 
+      user_message: user_message,
+      chat_history: chatHistory
     });
     
     return (result.data as string[])[0] || "No response received";
@@ -544,3 +546,17 @@ export const sendChatMessage = async (message: string): Promise<string> => {
     throw new Error("Failed to send message to chatbot");
   }
 };
+
+export const resetChat = async () => {
+  try {
+    const { Client } = await import("@gradio/client");
+    const client = await Client.connect("amrhassank/IEEE_AI_ChatBot");
+    const result = await client.predict("/reset_chat", { 
+    });
+    
+    return result;
+  } catch (error) {
+    console.error("Reset chat API error:", error);
+    throw new Error("Failed to reset chat");
+  }
+}

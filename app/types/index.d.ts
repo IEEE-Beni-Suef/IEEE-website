@@ -110,3 +110,12 @@ export interface Subsection {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface chat_history {
+  role: string;
+  metadata: any;
+  content: string;
+  options: any;
+}
+
+export type Chat_history_Array = Array<chat_history>;
