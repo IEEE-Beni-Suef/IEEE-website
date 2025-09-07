@@ -9,6 +9,8 @@ import {
   X,
   Home,
   Users,
+  Boxes,
+  FileText,
   Calendar,
   LogOut,
   User,
@@ -17,6 +19,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import Logo from "./ui/Logo";
+import Commitees from "../routes/commitees";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,15 +39,19 @@ const Navbar = () => {
 
   const navItems = [
     { label: "Home", path: "/", icon: Home },
+    {label:"Commitees",path:"/#committees",icon: Boxes},
+    { label: "Events", path: "/events", icon: Calendar },
+    { label: "Articles", path: "/#articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
-    // { label: "Events", path: "/events", icon: Calendar },
   ];
 
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Home", path: "/", icon: Home },
+    {label:"Commitees",path:"/#committees",icon: Boxes},
+    { label: "Events", path: "/events", icon: Calendar },
+    { label: "Articles", path: "/#articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
-    // { label: "Events", path: "/events", icon: Calendar },
   ];
 
   const isActive = (path: string) => location.pathname === path;

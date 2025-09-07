@@ -118,11 +118,11 @@ export const AuthIllustration = ({
             >
               <stop
                 offset="0%"
-                style={{ stopColor: "#10B981", stopOpacity: 0.1 }}
+                style={{ stopColor: "#3B82F6", stopOpacity: 0.1 }}
               />
               <stop
                 offset="100%"
-                style={{ stopColor: "#059669", stopOpacity: 0.2 }}
+                style={{ stopColor: "#1D4ED8", stopOpacity: 0.2 }}
               />
             </linearGradient>
           </defs>
@@ -139,30 +139,30 @@ export const AuthIllustration = ({
             cy="120"
             rx="20"
             ry="25"
-            fill="#10B981"
+            fill="#3B82F6"
             opacity="0.8"
           />
-          <circle cx="150" cy="95" r="15" fill="#10B981" />
+          <circle cx="150" cy="95" r="15" fill="#3B82F6" />
 
           <ellipse
             cx="200"
             cy="130"
             rx="20"
             ry="25"
-            fill="#059669"
+            fill="#1D4ED8"
             opacity="0.8"
           />
-          <circle cx="200" cy="105" r="15" fill="#059669" />
+          <circle cx="200" cy="105" r="15" fill="#1D4ED8" />
 
           <ellipse
             cx="250"
             cy="125"
             rx="20"
             ry="25"
-            fill="#10B981"
+            fill="#3B82F6"
             opacity="0.8"
           />
-          <circle cx="250" cy="100" r="15" fill="#10B981" />
+          <circle cx="250" cy="100" r="15" fill="#3B82F6" />
 
           {/* Form/Document */}
           <rect
@@ -175,14 +175,14 @@ export const AuthIllustration = ({
             stroke="#E5E7EB"
             strokeWidth="2"
           />
-          <rect x="110" y="185" width="60" height="3" rx="1.5" fill="#10B981" />
+          <rect x="110" y="185" width="60" height="3" rx="1.5" fill="#3B82F6" />
           <rect x="110" y="195" width="80" height="3" rx="1.5" fill="#D1D5DB" />
           <rect x="110" y="205" width="70" height="3" rx="1.5" fill="#D1D5DB" />
           <rect x="110" y="220" width="90" height="3" rx="1.5" fill="#D1D5DB" />
           <rect x="110" y="230" width="60" height="3" rx="1.5" fill="#D1D5DB" />
 
           {/* Checkmark */}
-          <circle cx="270" cy="195" r="12" fill="#10B981" />
+          <circle cx="270" cy="195" r="12" fill="#3B82F6" />
           <path
             d="M265 195 L268 198 L275 190"
             stroke="white"
@@ -193,10 +193,10 @@ export const AuthIllustration = ({
           />
 
           {/* Decorative Elements */}
-          <circle cx="80" cy="60" r="12" fill="#10B981" opacity="0.3" />
-          <circle cx="330" cy="70" r="8" fill="#059669" opacity="0.4" />
-          <circle cx="60" cy="180" r="6" fill="#10B981" opacity="0.5" />
-          <circle cx="360" cy="200" r="10" fill="#059669" opacity="0.3" />
+          <circle cx="80" cy="60" r="12" fill="#3B82F6" opacity="0.3" />
+          <circle cx="330" cy="70" r="8" fill="#1D4ED8" opacity="0.4" />
+          <circle cx="60" cy="180" r="6" fill="#3B82F6" opacity="0.5" />
+          <circle cx="360" cy="200" r="10" fill="#1D4ED8" opacity="0.3" />
         </svg>
       </div>
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/10 dark:to-green-900/10 rounded-lg -z-10"></div>

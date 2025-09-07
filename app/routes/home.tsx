@@ -62,17 +62,17 @@ export default function Home() {
   const articlesPerPage = 3;
 
   // Filter articles to show only those
-  // const filteredArticles = articles
-  //   ? articles.filter((article: Article) => typeof article.id === 'number' && article.id > 22)
-  //   : [];
+  const filteredArticles = articles
+    ? articles.filter((article: Article) =>article.categoryName !== 'Events' && typeof article.id === 'number' && article.id > 22)
+    : [];
 
   // Calculate pagination
-  const totalPages = articles? Math.ceil(articles.length / articlesPerPage): 0;
-  // const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+  // const totalPages = articles? Math.ceil(articles.length / articlesPerPage): 0;
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
   const startIndex = (currentPage - 1) * articlesPerPage;
   const endIndex = startIndex + articlesPerPage;
-  const currentArticles = articles ? articles.slice(startIndex, endIndex) : [];
-  // const currentArticles = filteredArticles.slice(startIndex, endIndex);
+  // const currentArticles = articles ? articles.slice(startIndex, endIndex) : [];
+  const currentArticles = filteredArticles.slice(startIndex, endIndex);
   
 
   const nextPage = () => {
@@ -391,7 +391,7 @@ export default function Home() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/events" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link to="#articles" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Events
                   </Link>
@@ -426,12 +426,12 @@ export default function Home() {
             {/* Contact Info */}
             <div>
               <h3 className="text-lg font-semibold mb-6 text-gray-800 dark:text-gray-300 flex items-center">
-                <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
                 Contact Info
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3 group">
-                  <MapPin className="w-5 h-5 text-green-400 mt-1 flex-shrink-0 group-hover:text-green-500 dark:group-hover:text-green-300 transition-colors" />
+                  <MapPin className="w-5 h-5 text-purple-400 mt-1 flex-shrink-0 group-hover:text-purple-500 dark:group-hover:text-green-300 transition-colors" />
                   <div>
                     <span className="text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">Beni Suef University</span>
                     <br />
@@ -439,7 +439,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 group">
-                  <Mail className="w-5 h-5 text-green-400 flex-shrink-0 group-hover:text-green-500 dark:group-hover:text-green-300 transition-colors" />
+                  <Mail className="w-5 h-5 text-purple-400 flex-shrink-0 group-hover:text-purple-500 dark:group-hover:text-green-300 transition-colors" />
                   <a
                     href="mailto:info@ieeebns.org"
                     className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"

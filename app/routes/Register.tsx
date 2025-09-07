@@ -332,20 +332,20 @@ const Register = () => {
             {/* Benefits Section */}
             <div className="mt-8 space-y-4">
               <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mr-3">
-                  <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3">
+                  <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
                 <span>Access to exclusive technical workshops</span>
               </div>
               <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mr-3">
-                  <GraduationCap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3">
+                  <GraduationCap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
                 <span>Professional development opportunities</span>
               </div>
               <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mr-3">
-                  <Phone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3">
+                  <Phone className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
                 <span>Networking with industry professionals</span>
               </div>
