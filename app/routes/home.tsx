@@ -63,7 +63,7 @@ export default function Home() {
 
   // Filter articles to show only those
   const filteredArticles = articles
-    ? articles.filter((article: Article) =>article.categoryName !== 'Events' && typeof article.id === 'number' && article.id > 22)
+    ? articles.filter((article: Article) =>article.categoryName !== 'Events')
     : [];
 
   // Calculate pagination
