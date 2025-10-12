@@ -37,8 +37,8 @@ const Login = () => {
   const { mutate: Login } = useMutation({
     mutationFn: (data: LoginFormData) => loginApi(data),
     onSuccess: (data) => {
-      // data expected: { token, userId }
-      saveAuth(data.token, data.user.id);
+      // data expected: { accessToken, refreshToken, userId }
+      saveAuth(data.accessToken, data.refreshToken, data.user.id);
       navigate("/");
     },
     onError: (error: Error) => {

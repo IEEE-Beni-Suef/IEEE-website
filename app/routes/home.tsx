@@ -30,6 +30,7 @@ import {
 import { useState } from "react";
 import Commitees from "../routes/commitees";
 import Logo from "~/components/ui/Logo";
+import { property } from "zod";
 
 export function meta({}: MetaArgs) {
   return [
@@ -38,6 +39,32 @@ export function meta({}: MetaArgs) {
       name: "description",
       content:
         "Join IEEE BNS - Connecting students with technology, innovation, and professional development opportunities in electrical engineering and related fields.",
+    },
+    {
+      property: "og:title",
+      content: "IEEE BNS - Beni Suef University Student Branch",
+    },
+    {
+      property: "og:description",
+      content:
+        "Join IEEE BNS - Connecting students with technology, innovation, and professional development opportunities in electrical engineering and related fields.",
+    },
+    {
+      property: "og:image",
+      content: "https://ieee-mangment.vercel.app/og-image.jpg",
+    },
+    {
+      name: "twitter:title",
+      content: "IEEE BNS - Beni Suef University Student Branch",
+    },
+    {
+      name: "twitter:description",
+      content:
+        "Join IEEE BNS - Connecting students with technology, innovation, and professional development opportunities in electrical engineering and related fields.",
+    },
+    {
+      name: "twitter:image",
+      content: "https://ieee-mangment.vercel.app/og-image.jpg",
     },
   ];
 }

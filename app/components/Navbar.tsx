@@ -30,11 +30,13 @@ const Navbar = () => {
   const { isAuthenticated, user, isLoading } = useAuth();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (typeof window !== "undefined") {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 20);
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
   }, []);
 
   const navItems = [
@@ -48,7 +50,7 @@ const Navbar = () => {
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Home", path: "/", icon: Home },
-    {label:"Commitees",path:"/#committees",icon: Boxes},
+    { label:"Commitees",path:"/#committees",icon: Boxes},
     { label: "Events", path: "/events", icon: Calendar },
     { label: "Articles", path: "/#articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
@@ -72,10 +74,10 @@ const Navbar = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto ">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-24">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
-              <figure className="h-16 p-2">
+              <figure className="h-20 p-3">
                 <Logo />
               </figure>
             </Link>

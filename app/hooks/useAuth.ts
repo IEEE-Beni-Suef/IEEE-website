@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getUser } from "~/lib/api";
 
 // Cookie constants
-const AUTH_COOKIE = "auth_token";
+const ACCESS_COOKIE = "access_token";
+const REFRESH_COOKIE = "refresh_token";
 const USER_ID_COOKIE = "user_id";
 
 // Event system for cross-component auth updates
@@ -12,32 +13,46 @@ const notifyAuthChange = () => authListeners.forEach((fn) => fn());
 
 // Cookie utilities
 const setCookie = (name: string, value: string, days = 15) => {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+  if (typeof document !== "undefined") {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+  }
 };
 
-const getCookie = (name: string) =>
-  document.cookie.match(new RegExp(`${name}=([^;]+)`))?.[1] || "";
+export const getCookie = (name: string) => {
+  if (typeof document !== "undefined") {
+    return document.cookie.match(new RegExp(`${name}=([^;]+)`))?.[1] || "";
+  }
+  return "";
+};
 
 // Auth storage operations
 const getAuthFromCookies = () => {
-  const token = getCookie(AUTH_COOKIE);
+  const accessToken = getCookie(ACCESS_COOKIE);
+  const refreshToken = getCookie(REFRESH_COOKIE);
   const userId = getCookie(USER_ID_COOKIE);
   return {
-    token,
+    accessToken,
+    refreshToken,
     userId: userId ? Number(userId) : null,
   };
 };
 
-export const saveAuth = (token: string, userId: number) => {
-  setCookie(AUTH_COOKIE, token);
+export const saveAuth = (
+  accessToken: string,
+  refreshToken: string,
+  userId: number
+) => {
+  setCookie(ACCESS_COOKIE, accessToken);
+  setCookie(REFRESH_COOKIE, refreshToken);
   setCookie(USER_ID_COOKIE, String(userId));
   notifyAuthChange();
 };
 
 export const clearAuth = () => {
-  setCookie(AUTH_COOKIE, "", -1);
+  setCookie(ACCESS_COOKIE, "", -1);
   setCookie(USER_ID_COOKIE, "", -1);
+  setCookie(REFRESH_COOKIE, "", -1);
   notifyAuthChange();
 };
 
@@ -57,7 +72,7 @@ export const useAuth = () => {
   const userQuery = useQuery({
     queryKey: ["user", auth.userId],
     queryFn: () => getUser(auth.userId!),
-    enabled: !!(auth.token && auth.userId),
+    enabled: !!(auth.accessToken && auth.userId),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -65,6 +80,6 @@ export const useAuth = () => {
     ...userQuery,
     ...auth,
     user: userQuery.data,
-    isAuthenticated: !!(auth.token && auth.userId),
+    isAuthenticated: !!(auth.accessToken && auth.userId),
   };
 };

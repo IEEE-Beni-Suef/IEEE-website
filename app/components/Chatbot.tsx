@@ -132,8 +132,7 @@ export function Chatbot() {
   const [inputMessage, setInputMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<Chat_history_Array>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const location = window.location.href;
-  console.log(location.includes("/dashboard") )
+  const location = typeof window !== "undefined" ? window.location.href : "";
   const { mutate: sendMessage, isPending } = useChatbot();
   const { mutate: resetChat } = useResetChat();
 

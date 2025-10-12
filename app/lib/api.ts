@@ -1,6 +1,10 @@
 import axios from "axios";
 import apiClient from "~/config/apiClient";
-import type { loginSchema, registerSchema, createUserSchema } from "~/utils/scemas";
+import type {
+  loginSchema,
+  registerSchema,
+  createUserSchema,
+} from "~/utils/scemas";
 import type z from "zod";
 import type { Chat_history_Array } from "~/types";
 
@@ -19,10 +23,38 @@ export const registerApi = async (data: z.infer<typeof registerSchema>) => {
 export const loginApi = async (data: z.infer<typeof loginSchema>) => {
   try {
     const response = await apiClient.post("/Account/Login", data);
-    return response.data as { token: string; user: { id: number } };
+    return response.data as {
+      accessToken: string;
+      refreshToken: string;
+      user: { id: number };
+    };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data.message || "Login failed");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const refreshTokenApi = async (token: string) => {
+  try {
+    // Use a separate axios instance for refresh token to avoid interceptor loops
+    const refreshClient = axios.create({
+      baseURL: import.meta.env.VITE_API_URL,
+      withCredentials: true,
+      timeout: 10000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const response = await refreshClient.post("/Account/refresh", token);
+    return response.data as { accessToken: string; refreshToken: string };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to refresh token"
+      );
     }
     throw new Error("An unexpected error occurred");
   }
@@ -531,15 +563,18 @@ export const apiSubmitAttendance = async (data: SubmitAttendancePayload) => {
 };
 
 // Chatbot API
-export const sendChatMessage = async (user_message: string, chatHistory: Chat_history_Array): Promise<string> => {
+export const sendChatMessage = async (
+  user_message: string,
+  chatHistory: Chat_history_Array
+): Promise<string> => {
   try {
     const { Client } = await import("@gradio/client");
     const client = await Client.connect("amrhassank/IEEE_AI_ChatBot");
-    const result = await client.predict("/chatbot_fn", { 
+    const result = await client.predict("/chatbot_fn", {
       user_message: user_message,
-      chat_history: chatHistory
+      chat_history: chatHistory,
     });
-    
+
     return (result.data as string[])[0] || "No response received";
   } catch (error) {
     console.error("Chatbot API error:", error);
@@ -551,12 +586,11 @@ export const resetChat = async () => {
   try {
     const { Client } = await import("@gradio/client");
     const client = await Client.connect("amrhassank/IEEE_AI_ChatBot");
-    const result = await client.predict("/reset_chat", { 
-    });
-    
+    const result = await client.predict("/reset_chat", {});
+
     return result;
   } catch (error) {
     console.error("Reset chat API error:", error);
     throw new Error("Failed to reset chat");
   }
-}
+};

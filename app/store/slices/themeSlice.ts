@@ -18,7 +18,7 @@ const getThemeFromStorage = (): boolean => {
 
 // Apply theme to HTML element
 const applyThemeToHTML = (isDark: boolean) => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
     const htmlElement = document.documentElement;
     if (isDark) {
       htmlElement.classList.add("dark");

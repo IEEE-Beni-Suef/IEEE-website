@@ -16,7 +16,10 @@ import { InactiveBanner } from "./components/InactiveBanner";
 import { Chatbot } from "./components/Chatbot";
 import { store } from "./store/store";
 import { initializeTheme } from "./store/slices/themeSlice";
+import { useNavigationInit } from "./hooks/useNavigationInit";
+import "./index.css";
 import "./app.css";
+
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "~/config/queryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -40,6 +43,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="google-site-verification"
+          content="bjWRueaSb0NUx7YL47Lpg31YWHEfO5o4LyV3mZlyfOg"
+        />
         <Meta />
         <Links />
       </head>
@@ -53,6 +60,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  // Initialize navigation service
+  useNavigationInit();
+
   useEffect(() => {
     store.dispatch(initializeTheme());
   }, []);
