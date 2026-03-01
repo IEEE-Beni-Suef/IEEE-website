@@ -17,7 +17,7 @@ import { useCategoryManagement } from "~/hooks/useCategoryManagement";
 import { useSubsectionManagement } from "~/hooks/useSubsectionManagement";
 import type { Category } from "~/types/index";
 
-// Import your API hooks (these should already exist)
+// Import API hooks (these should already exist)
 import {
   useAllArticles,
   useAllCategories,
