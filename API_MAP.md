@@ -57,4 +57,4 @@
 
 - Missing Environment Variables: Ensure `VITE_API_URL` is set in `.env` (it is used across `apiClient.ts` as `import.meta.env.VITE_API_URL`).
 - Chatbot uses `@gradio/client` targeting `amrhassank/IEEE_AI_ChatBot`. Ensure backend handles this properly.
-- All errors are broadly mapped to `error.response?.data.message || "Failed to..."` which is fine but loses specific field validation errors on the client.
+- All errors are broadly mapped to `error.response?.data.message || "Failed to..."` which is fine but loses specific field validation errors on the client

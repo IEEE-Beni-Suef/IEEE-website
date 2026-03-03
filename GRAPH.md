@@ -29,6 +29,7 @@ flowchart TD
         APIFunctions --> APIClient
     end
 
+
     subgraph External ["External Services"]
         BackendAPI["Base API Backend\n(VITE_API_URL)"]
         GradioAI["Gradio Chatbot App\n(amrhassank/IEEE_AI_ChatBot)"]

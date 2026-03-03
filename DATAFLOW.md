@@ -44,7 +44,7 @@ Extracted from `app/utils/scemas.ts`, `app/lib/api.ts`, and component typings:
 
 ### Flow 4: Categories Management
 
-- **Trigger:** Submitting "Create/Edit Category" in `app/components/CategoryModal.tsx`.
+- **Trigger:** Submitting "Create/Edit Category" in `app/components/CategoryModal.tsx`
 - **Components involved:** `CategoryModal.tsx` rendered typically inside `dashboard.articles.tsx` (or similar).
 - **Hooks involved:** Local State `useState`, Zod parsing `categorySchema.parse(formData)`. Parent passes `onSubmit` which typically calls `useCreateCategory().mutate()`.
 - **Store/Cache usage:** `onSuccess` from the mutation calls `queryClient.invalidateQueries({ queryKey: ["categories"] })` to force refetch.
@@ -62,7 +62,7 @@ Extracted from `app/utils/scemas.ts`, `app/lib/api.ts`, and component typings:
 ### Flow 6: Navigation-driven Flow & Refresh Interceptor
 
 - **Trigger:** 401 Unauthorized API error intercept in `app/config/apiClient.ts`.
-- **Components involved:** `app/root.tsx` -> `useNavigationInit()`.
+- **Components involved:** `app/root.tsx` -> `useNavigationInit()`
 - **Hooks involved:** `useNavigationInit()` mounts `navigationService.setNavigate()`.
 - **Logic:** `apiClient.interceptors.response` detects 401. Queues subsequent calls into `failedQueue`. Triggers `refreshTokenApi(refreshToken)`.
 - **API calls:** POST `/Account/refresh`.

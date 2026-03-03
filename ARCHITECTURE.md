@@ -51,4 +51,4 @@ According to `docs/permission-decision-trees.md` and `docs/user-roles-diagram.md
 | **Normal Member** (`4`) | Profile view, public routes              | View own assignments, view profile.                            |
 | **Vice Head** (`5`)     | Assigned Committees                      | Similar to Head member, subset of committee actions.           |
 
-**Permissions Warning:** Permission constraints rest heavily on the backend returning 401/403s on unauthorized operations, as `ProtectedRoute` hides UI elements, but raw APIs are accessible if a token is valid.
+**Permissions Warning:** Permission constraints rest heavily on the backend returning 401/403s on unauthorized operations as `ProtectedRoute` hides UI elements, but raw APIs are accessible if a token is valid
