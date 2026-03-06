@@ -4,9 +4,30 @@ import type {
   loginSchema,
   registerSchema,
   createUserSchema,
+  sendEmailSchema,
 } from "~/utils/scemas";
 import type z from "zod";
 import type { Chat_history_Array } from "~/types";
+
+
+//! That is repeated in all methods
+
+//? export const someApi = async (...) => {
+//?   try {
+//?     const response = await apiClient.METHOD("/endpoint", data?);
+//?     return response.data;
+//?   } catch (error) {
+//?     if (axios.isAxiosError(error)) {
+//?       throw new Error(error.response?.data.message || "Fallback message");
+//?     }
+//?     throw new Error("An unexpected error occurred");
+//?   }
+//? };
+
+
+
+
+
 
 export const registerApi = async (data: z.infer<typeof registerSchema>) => {
   try {
@@ -592,5 +613,18 @@ export const resetChat = async () => {
   } catch (error) {
     console.error("Reset chat API error:", error);
     throw new Error("Failed to reset chat");
+  }
+};
+
+// Email API
+export const sendEmailApi = async (data: z.infer<typeof sendEmailSchema>) => {
+  try {
+    const response = await apiClient.post("/Email/send", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to send email");
+    }
+    throw new Error("An unexpected error occurred");
   }
 };

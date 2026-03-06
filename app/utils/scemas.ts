@@ -81,3 +81,15 @@ export const createMeetingSchema = z.object({
   headId: z.number().min(1, { message: "Head ID is required" }),
   users: z.array(meetingUserSchema).min(1, { message: "At least one user is required" }),
 });
+
+
+
+//? send email schema for dashboard email page
+
+export const sendEmailSchema = z.object({
+  subject: z.string().min(1, { message: "Subject is required" }),
+  body: z.string().min(1, { message: "Body is required" }),
+  recipientIds: z.array(z.number()).min(1, "You must select at least one recipient"),
+})
+
+

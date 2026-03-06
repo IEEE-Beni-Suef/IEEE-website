@@ -119,3 +119,9 @@ export interface chat_history {
 }
 
 export type Chat_history_Array = Array<chat_history>;
+
+export interface SendEmailPayload {
+  subject: string;
+  body: string;
+  to: number[];
+}

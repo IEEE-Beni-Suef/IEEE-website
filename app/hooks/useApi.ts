@@ -31,7 +31,8 @@ import {
   apiCreateMeeting,
   apiSubmitAttendance,
   sendChatMessage,
-  resetChat
+  resetChat,
+  sendEmailApi,
 } from "~/lib/api";
 import type { Chat_history_Array } from "~/types";
 
@@ -381,7 +382,13 @@ export const useSubmitAttendance = () => {
 export const useChatbot = () => {
   const { mutate, ...rest } = useMutation({
     mutationKey: ["chatbot"],
-    mutationFn: (user_message: string, chatHistory: Chat_history_Array) => sendChatMessage(user_message, chatHistory),
+    mutationFn: ({
+      user_message,
+      chatHistory,
+    }: {
+      user_message: string;
+      chatHistory: Chat_history_Array;
+    }) => sendChatMessage(user_message, chatHistory),
   });
 
   return { mutate, ...rest };
@@ -397,3 +404,16 @@ export const useResetChat = () => {
 
   return { mutate, ...rest };
 }
+
+
+export const useSendEmail = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["send"],
+    mutationFn: (emailData: any) => sendEmailApi(emailData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["send"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
