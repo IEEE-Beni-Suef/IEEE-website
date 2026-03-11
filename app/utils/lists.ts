@@ -102,6 +102,7 @@ export const sidebarConfigs = {
       { to: "/dashboard/committees", icon: "Boxes", label: "Committees" },
       { to: "/dashboard/meetings", icon: "Calendar", label: "Meetings" },
       { to: "/dashboard/articles", icon: "FileText", label: "Articles" },
+      { to: "/dashboard/emails", icon: "Mail", label: "Emails" },
       { to: "/dashboard/settings", icon: "Split", label: "Branch" },
     ],
   },

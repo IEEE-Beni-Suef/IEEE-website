@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Modal } from "./Modal";
 import { FormInput, FormSelect, FormMultiSelect } from "./form";
 import { Button } from "./ui/Button";
-import { createUserSchema } from "~/utils/scemas";
+import { createUserSchema } from "~/utils/schemas";
 import { useCommittees } from "~/hooks/useApi";
 import {
   User,

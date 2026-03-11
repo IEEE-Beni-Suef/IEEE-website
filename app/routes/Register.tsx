@@ -37,7 +37,7 @@ import {
   roleOptions,
   yearOptions,
 } from "~/utils/lists";
-import { registerSchema } from "~/utils/scemas";
+import { registerSchema } from "~/utils/schemas";
 import { useMutation } from "@tanstack/react-query";
 import { useCommittees } from "~/hooks/useApi";
 import type { Committee } from "~/types";
@@ -53,7 +53,8 @@ export function meta({}: MetaArgs) {
   ];
 }
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+type RegisterFormData = z.input<typeof registerSchema>;
+type RegisterFormOutput = z.infer<typeof registerSchema>;
 
 const steps = [
   {
@@ -80,7 +81,7 @@ const Register = () => {
     watch,
     trigger,
     formState: { errors, isValid },
-  } = useForm<RegisterFormData>({
+  } = useForm<RegisterFormData, any, RegisterFormOutput>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       CommitteeIds: [],
@@ -90,7 +91,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate: Register } = useMutation({
-    mutationFn: (data: RegisterFormData) => registerApi(data),
+    mutationFn: (data: RegisterFormOutput) => registerApi(data),
     onSuccess: () => {
       toast.success("Registration successful! Please log in.");
       navigate("/login");
@@ -100,13 +101,9 @@ const Register = () => {
     },
   });
 
-  const onSubmit = (data: RegisterFormData) => {
-    // Ensure CommitteeIds is always an array
-    const submitData = {
-      ...data,
-      CommitteeIds: data.CommitteeIds || [],
-    };
-    Register(submitData);
+  const onSubmit = (data: any) => {
+    // The zodResolver internally transforms strings to numbers before calling onSubmit
+    Register(data as RegisterFormOutput);
   };
 
   const nextStep = async () => {

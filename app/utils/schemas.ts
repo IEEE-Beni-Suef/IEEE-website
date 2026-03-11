@@ -21,6 +21,8 @@ export const registerSchema = z.object({
   }),
 });
 
+
+
 export const createUserSchema = registerSchema.extend({
   isActive: z.boolean(),
   CommitteeIds: z.array(z.string().transform((val) => Number(val)))
@@ -46,10 +48,9 @@ export const articleSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Article description is required" }),
-  keywords: z
-    .array(z.string())
-    .min(1, { message: "At least one keyword is required" }),
-  photo: z.string().min(1, { message: "Article photo is required" }),
+  keywords: z.string().min(1, { message: "At least one keyword is required" }),
+  photo: z.any(),
+  Video: z.any().optional(),
   categoryId: z.number().min(1, { message: "Category is required" }),
 });
 

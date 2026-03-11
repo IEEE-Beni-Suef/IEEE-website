@@ -1,6 +1,6 @@
 import { ProtectedRoute } from "../../components/ProtectedRoute";
 import { getRoleName, getFullName, getInitials } from "~/utils/utile";
-import { ActiveUserByIdApi, deleteUserByIdApi } from "~/lib/api";
+import { activateUserByIdApi, deleteUserByIdApi } from "~/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { facultyOptions, governorateOptions } from "~/utils/lists";
@@ -81,7 +81,7 @@ export default function UsersManagement() {
   const handleActivate = async (id: number) => {
     try {
       setActionLoadingId(id);
-      await ActiveUserByIdApi(id);
+      await activateUserByIdApi(id);
       await queryClient.invalidateQueries({ queryKey: ["users"] });
     } catch (e) {
       alert((e as Error).message);

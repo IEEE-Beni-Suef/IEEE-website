@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAllMeetings, useCreateMeeting, useSubmitAttendance, useGetMeetingAttendance, useAllUsers, useCommittees } from "~/hooks/useApi";
-import { createMeetingSchema, submitAttendanceSchema } from "~/utils/scemas";
+import { createMeetingSchema, submitAttendanceSchema } from "~/utils/schemas";
 import { Calendar, Plus, Users, CheckCircle, Edit, Trash2, Eye } from "lucide-react";
 import { FormInput } from "~/components/form";
 

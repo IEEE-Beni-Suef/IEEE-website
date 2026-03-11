@@ -10,7 +10,7 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "~/utils/scemas";
+import { loginSchema } from "~/utils/schemas";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "~/lib/api";
 import { saveAuth } from "~/hooks/useAuth";

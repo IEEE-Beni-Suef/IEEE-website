@@ -11,7 +11,7 @@ import {
   FormTextarea,
 } from "./form";
 import { Button } from "./ui/Button";
-import { committeeSchema } from "~/utils/scemas";
+import { committeeSchema } from "~/utils/schemas";
 import { useAllUsers } from "~/hooks/useApi";
 import { Users, UserCheck, Building2, FileText, Image } from "lucide-react";
 
