@@ -41,3 +41,8 @@ export const getInitials = (user: any): string => {
   }
   return names[0]?.charAt(0).toUpperCase() || "U";
 };
+
+export const txtSlicer = (text: string, maxLength: number = 50) => {
+  if (text.length >= maxLength) return `${text.slice(0, maxLength)}...`;
+  else return text;
+};

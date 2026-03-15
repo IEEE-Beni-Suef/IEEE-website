@@ -119,3 +119,10 @@ export interface chat_history {
 }
 
 export type Chat_history_Array = Array<chat_history>;
+
+export interface ISponserCard {
+  id: number;
+  img: string;
+  title: string;
+  description: string;
+}
