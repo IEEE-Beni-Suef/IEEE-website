@@ -22,7 +22,7 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || "/api",
   withCredentials: true,
   timeout: 10000,
   headers: {

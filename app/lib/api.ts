@@ -65,7 +65,7 @@ export const refreshTokenApi = async (token: string) => {
   try {
     // Use a separate axios instance for refresh token to avoid interceptor loops
     const refreshClient = axios.create({
-      baseURL: import.meta.env.VITE_API_URL,
+      baseURL: import.meta.env.VITE_API_URL || "/api",
       withCredentials: true,
       timeout: 10000,
       headers: {
