@@ -1,6 +1,7 @@
 import { sponsers } from "~/utils/lists";
 import SponserCard from "./SponcerCard";
 import { BookOpen } from "lucide-react";
+import AddSponserForm from "./AddSponserForm";
 
 const renderSponsersCards = sponsers.map((sponser) => (
   <SponserCard
@@ -40,6 +41,7 @@ const SponsersSection = () => {
           <p className="text-gray-600 dark:text-gray-400">
             No sponsers available at the moment.
           </p>
+          <AddSponserForm />
         </div>
       )}
     </div>
