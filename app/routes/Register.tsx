@@ -37,7 +37,7 @@ import {
   roleOptions,
   yearOptions,
 } from "~/utils/lists";
-import { registerSchema } from "~/utils/scemas";
+import { registerSchema } from "~/utils/schemas";
 import { useMutation } from "@tanstack/react-query";
 import { useCommittees } from "~/hooks/useApi";
 import type { Committee } from "~/types";

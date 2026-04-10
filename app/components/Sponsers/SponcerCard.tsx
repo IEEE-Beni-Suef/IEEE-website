@@ -8,7 +8,7 @@ interface IProps {
 
 const SponserCard = ({ description, img, title }: IProps) => {
   return (
-    <div className="m-auto  md:w-fit lg:w-sm rounded-lg h-80 flex flex-col pb-5 bt-0.5 cursor-pointer hover:bg-gray-100 hover:-translate-y-2 transform transition duration-300">
+    <div className="m-auto w-md md:w-fit bg-white  rounded-lg h-80 flex flex-col pb-5 bt-0.5 cursor-pointer hover:-translate-y-2 transform transition duration-300">
       <div className="h-65 rounded-lg truncate">
         <img className="w-full h-full " src={img} alt="" />
       </div>

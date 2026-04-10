@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { FormInput, FormTextarea } from "../form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addSponserSchema } from "~/utils/scemas";
+import { addSponserSchema } from "~/utils/schemas";
 import type z from "zod";
 
 interface IProps {}

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Modal } from "./Modal";
 import { FormInput, FormSelect, FormMultiSelect } from "./form";
 import { Button } from "./ui/Button";
-import { createUserSchema } from "~/utils/scemas";
+import { createUserSchema } from "~/utils/schemas";
 import { useCommittees } from "~/hooks/useApi";
 import {
   User,
@@ -46,13 +46,15 @@ export const UsersModal: FC<UserModalProps> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { data: committees = [] } = useCommittees();
-  
 
-  const committeeOptions = React.useMemo(() => 
-    committees.map((committee: Committee) => ({
-      value: committee.id.toString(),
-      label: committee.name,
-    })), [committees]);
+  const committeeOptions = React.useMemo(
+    () =>
+      committees.map((committee: Committee) => ({
+        value: committee.id.toString(),
+        label: committee.name,
+      })),
+    [committees],
+  );
 
   const {
     register,
@@ -66,7 +68,7 @@ export const UsersModal: FC<UserModalProps> = ({
     defaultValues: {
       CommitteeIds: [] as string[],
       isActive: true,
-      roleId: "3" as const
+      roleId: "3" as const,
     },
   });
 
@@ -77,7 +79,7 @@ export const UsersModal: FC<UserModalProps> = ({
         // Convert numbers to strings for the form if needed
         const formUser = {
           ...user,
-          CommitteeIds: user.CommitteeIds?.map(id => id.toString()) || [],
+          CommitteeIds: user.CommitteeIds?.map((id) => id.toString()) || [],
         };
         reset(formUser);
       } else {
@@ -103,11 +105,11 @@ export const UsersModal: FC<UserModalProps> = ({
   const handleFormSubmit = async (data: UserFormData) => {
     try {
       console.log("Form data before submission:", data);
-      
+
       // The schema will handle the conversion of CommitteeIds to numbers
       const submitData = {
         ...data,
-        CommitteeIds: data.CommitteeIds || []
+        CommitteeIds: data.CommitteeIds || [],
       };
 
       console.log("Transformed data:", submitData);

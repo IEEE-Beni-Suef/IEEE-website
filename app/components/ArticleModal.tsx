@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Modal } from "./Modal";
 import { Button } from "./ui/Button";
-import { articleSchema } from "~/utils/scemas";
+import { articleSchema } from "~/utils/schemas";
 import type { z } from "zod";
 import type { Category } from "~/types/index";
 
