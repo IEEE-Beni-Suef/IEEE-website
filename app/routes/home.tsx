@@ -17,7 +17,7 @@ import {
   Handshake,
   ArrowRight,
   Rocket,
-  ChartNoAxesCombined ,
+  ChartNoAxesCombined,
   BookOpen,
   ChevronRight,
   ChevronLeft,
@@ -31,6 +31,7 @@ import { useState } from "react";
 import Commitees from "../routes/commitees";
 import Logo from "~/components/ui/Logo";
 import { property } from "zod";
+import SponsersSection from "~/components/Sponsers/SponserSection";
 
 export function meta({}: MetaArgs) {
   return [
@@ -82,15 +83,18 @@ export default function Home() {
     { label: "Events Organized", value: "50+", icon: Calendar },
     { label: "Technical Workshops", value: "30+", icon: Wrench },
     { label: "Industry Partnerships", value: "15+", icon: Handshake },
-    { label: "Social Media Reach", value: "12,000+", icon: ChartNoAxesCombined },
-
+    {
+      label: "Social Media Reach",
+      value: "12,000+",
+      icon: ChartNoAxesCombined,
+    },
   ];
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 3;
 
   // Filter articles to show only those
   const filteredArticles = articles
-    ? articles.filter((article: Article) =>article.categoryName !== 'Events')
+    ? articles.filter((article: Article) => article.categoryName !== "Events")
     : [];
 
   // Calculate pagination
@@ -100,7 +104,6 @@ export default function Home() {
   const endIndex = startIndex + articlesPerPage;
   // const currentArticles = articles ? articles.slice(startIndex, endIndex) : [];
   const currentArticles = filteredArticles.slice(startIndex, endIndex);
-  
 
   const nextPage = () => {
     if (currentPage < totalPages) {
@@ -115,13 +118,14 @@ export default function Home() {
   };
 
   const getVisiblePages = (currentPage: number, totalPages: number) => {
-    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (totalPages <= 5)
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
     const pages: (number | string)[] = [];
-    if (currentPage > 3) pages.push(1, '...');
+    if (currentPage > 3) pages.push(1, "...");
     const start = Math.max(1, currentPage - 1);
     const end = Math.min(totalPages, currentPage + 1);
     for (let i = start; i <= end; i++) pages.push(i);
-    if (currentPage < totalPages - 2) pages.push('...', totalPages);
+    if (currentPage < totalPages - 2) pages.push("...", totalPages);
     return pages;
   };
 
@@ -133,7 +137,7 @@ export default function Home() {
           <div className="space-y-8">
             {/* IEEE Logo and Navigation */}
             <div className="flex flex-col items-center space-y-4 mb-8">
-                <figure className="h-24 p-2">
+              <figure className="h-24 p-2">
                 <Logo />
               </figure>
               <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -163,13 +167,21 @@ export default function Home() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link to="/Register">
-                <Button size="xl" variant="gradient" className="min-w-48 cursor-pointer">
+                <Button
+                  size="xl"
+                  variant="gradient"
+                  className="min-w-48 cursor-pointer"
+                >
                   <Rocket className="w-5 h-5" />
                   Join IEEE BNS
                 </Button>
               </Link>
               <Link to="/about">
-                <Button size="xl" variant="outline" className="min-w-48 hover:shadow-lg cursor-pointer">
+                <Button
+                  size="xl"
+                  variant="outline"
+                  className="min-w-48 hover:shadow-lg cursor-pointer"
+                >
                   Learn More
                   <ArrowRight className="w-5 h-5" />
                 </Button>
@@ -230,7 +242,9 @@ export default function Home() {
                       hover
                       glow
                       className={`p-6 text-center ${
-                        index === statistics.length - 1 ? "col-span-2 mx-auto" : ""
+                        index === statistics.length - 1
+                          ? "col-span-2 mx-auto"
+                          : ""
                       }`}
                     >
                       <div className="flex justify-center mb-2">
@@ -303,8 +317,12 @@ export default function Home() {
 
                   <div className="flex items-center space-x-2">
                     {getVisiblePages(currentPage, totalPages).map((page) => {
-                      if (typeof page === 'string') {
-                        return <span key={page} className="px-2 text-gray-500">...</span>;
+                      if (typeof page === "string") {
+                        return (
+                          <span key={page} className="px-2 text-gray-500">
+                            ...
+                          </span>
+                        );
                       }
                       return (
                         <button
@@ -346,6 +364,9 @@ export default function Home() {
         </div>
       </Section>
 
+      {/* Sponsers Section */}
+
+      <SponsersSection />
 
       <footer className="relative bg-white dark:bg-gray-900 text-gray-600 dark:text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -369,32 +390,34 @@ export default function Home() {
                 <Logo />
               </div>
               <p className="text-gray-800 dark:text-gray-300  mb-6 max-w-md leading-relaxed">
-                Empowering students through technology, fostering innovation, and building a community of future engineering leaders at Beni Suef University.
+                Empowering students through technology, fostering innovation,
+                and building a community of future engineering leaders at Beni
+                Suef University.
               </p>
-              
+
               {/* Social Media Links */}
               <div className="flex flex-wrap gap-3">
-                <a 
-                  href="https://www.facebook.com/ieee.bns" 
-                  target="_blank" 
+                <a
+                  href="https://www.facebook.com/ieee.bns"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-300 hover:text-white dark:bg-gray-800  hover:bg-blue-600  rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
                 </a>
-                <a 
-                  href="https://www.linkedin.com/company/ieee-benisuef-student-branch" 
-                  target="_blank" 
+                <a
+                  href="https://www.linkedin.com/company/ieee-benisuef-student-branch"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-300 hover:text-white dark:bg-gray-800 hover:bg-blue-500 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
                   aria-label="LinkedIn"
                 >
                   <Linkedin className="w-5 h-5" />
                 </a>
-                <a 
-                  href="https://github.com/orgs/IEEE-Beni-Suef" 
-                  target="_blank" 
+                <a
+                  href="https://github.com/orgs/IEEE-Beni-Suef"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-300 hover:text-white dark:bg-gray-800 hover:bg-black rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
                   aria-label="GitHub"
@@ -412,25 +435,37 @@ export default function Home() {
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link
+                    to="/about"
+                    className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group"
+                  >
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link to="#articles" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link
+                    to="#articles"
+                    className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group"
+                  >
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Events
                   </Link>
                 </li>
                 <li>
-                  <a href="#committees" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <a
+                    href="#committees"
+                    className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group"
+                  >
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Committees
                   </a>
                 </li>
                 <li>
-                  <a href="#articles" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <a
+                    href="#articles"
+                    className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group"
+                  >
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Articles
                   </a>
@@ -442,7 +477,10 @@ export default function Home() {
                   </Link>
                 </li> */}
                 <li>
-                  <Link to="/register" className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                  <Link
+                    to="/register"
+                    className="text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center group"
+                  >
                     <span className="w-1 h-1 bg-gray-500 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
                     Join IEEE
                   </Link>
@@ -460,9 +498,13 @@ export default function Home() {
                 <div className="flex items-start space-x-3 group">
                   <MapPin className="w-5 h-5 text-purple-400 mt-1 flex-shrink-0 group-hover:text-purple-500 dark:group-hover:text-green-300 transition-colors" />
                   <div>
-                    <span className="text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">Beni Suef University</span>
+                    <span className="text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">
+                      Beni Suef University
+                    </span>
                     <br />
-                    <span className="text-gray-400 text-sm">Beni Suef, Egypt</span>
+                    <span className="text-gray-400 text-sm">
+                      Beni Suef, Egypt
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 group">

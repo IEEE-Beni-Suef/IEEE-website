@@ -21,11 +21,9 @@ export const registerSchema = z.object({
   }),
 });
 
-
-
 export const createUserSchema = registerSchema.extend({
   isActive: z.boolean(),
-  CommitteeIds: z.array(z.string().transform((val) => Number(val)))
+  CommitteeIds: z.array(z.string().transform((val) => Number(val))),
 });
 
 export const loginSchema = z.object({
@@ -54,7 +52,6 @@ export const articleSchema = z.object({
   categoryId: z.number().min(1, { message: "Category is required" }),
 });
 
-
 export const attendanceItemSchema = z.object({
   userId: z.string().min(1, { message: "User ID is required" }),
   isAttend: z.boolean(),
@@ -63,14 +60,19 @@ export const attendanceItemSchema = z.object({
 
 export const submitAttendanceSchema = z.object({
   meetingId: z.string().min(1, { message: "Meeting ID is required" }),
-  usersAttendents: z.array(attendanceItemSchema).min(1, { message: "At least one attendee is required" }),
+  usersAttendents: z
+    .array(attendanceItemSchema)
+    .min(1, { message: "At least one attendee is required" }),
 });
 
 // New meeting schemas
 export const meetingUserSchema = z.object({
   userId: z.number().min(1, { message: "User ID is required" }),
   attended: z.boolean(),
-  mark: z.number().min(0, { message: "Mark must be 0 or greater" }).max(10, { message: "Mark cannot exceed 10" }),
+  mark: z
+    .number()
+    .min(0, { message: "Mark must be 0 or greater" })
+    .max(10, { message: "Mark cannot exceed 10" }),
 });
 
 export const createMeetingSchema = z.object({
@@ -80,17 +82,36 @@ export const createMeetingSchema = z.object({
   recap: z.string().min(1, { message: "Recap is required" }),
   committeeId: z.number().min(1, { message: "Committee ID is required" }),
   headId: z.number().min(1, { message: "Head ID is required" }),
-  users: z.array(meetingUserSchema).min(1, { message: "At least one user is required" }),
+  users: z
+    .array(meetingUserSchema)
+    .min(1, { message: "At least one user is required" }),
 });
-
-
 
 //? send email schema for dashboard email page
 
 export const sendEmailSchema = z.object({
   subject: z.string().min(1, { message: "Subject is required" }),
   body: z.string().min(1, { message: "Body is required" }),
-  recipientIds: z.array(z.number()).min(1, "You must select at least one recipient"),
-})
+  recipientIds: z
+    .array(z.number())
+    .min(1, "You must select at least one recipient"),
+});
 
+// Sponsers Validation==============================
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export const addSponserSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+  image: z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_FILE_SIZE, {
+      message: "Max image size is 5MB",
+    })
+    .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
+      message: "Only .jpg, .png, and .webp formats are supported",
+    }),
+});
+// Sponsers Validation==============================

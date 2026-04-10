@@ -1,3 +1,5 @@
+import type { ISponserCard } from "~/types";
+
 // List might come form the backend
 export const yearOptions = [
   { value: "First", label: "First Year" },
@@ -162,3 +164,55 @@ export const sidebarConfigs = {
     ],
   },
 };
+
+export const sponsers: ISponserCard[] = [
+  {
+    id: 1,
+    img: "https://scontent.faly2-2.fna.fbcdn.net/v/t39.30808-1/454639294_343780712134741_6213289949303508721_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=2QS-iJYOiV4Q7kNvwHzPgoi&_nc_oc=AdlWOSYaFf0ATL9E_ey9w5mq6q9cTqqC9SkVzcKrWONx9OdmpHJFAOnsJUz-FLmVcus&_nc_zt=24&_nc_ht=scontent.faly2-2.fna&_nc_gid=k2sLXW1WlBtGaq1m3wIIoA&_nc_ss=8&oh=00_Afzm_yt-s6LcuP9K1e6Ulzq0_kEdfrFu1tsf8miQ6LCekw&oe=69BBE29F",
+    title: "Creativa Hub Beni-Suef",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, fugiat?",
+  },
+  {
+    id: 2,
+    img: "https://scontent.faly2-2.fna.fbcdn.net/v/t39.30808-1/454639294_343780712134741_6213289949303508721_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=2QS-iJYOiV4Q7kNvwHzPgoi&_nc_oc=AdlWOSYaFf0ATL9E_ey9w5mq6q9cTqqC9SkVzcKrWONx9OdmpHJFAOnsJUz-FLmVcus&_nc_zt=24&_nc_ht=scontent.faly2-2.fna&_nc_gid=k2sLXW1WlBtGaq1m3wIIoA&_nc_ss=8&oh=00_Afzm_yt-s6LcuP9K1e6Ulzq0_kEdfrFu1tsf8miQ6LCekw&oe=69BBE29F",
+    title: "Creativa Hub Beni-Suef",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, fugiat?",
+  },
+  {
+    id: 3,
+    img: "https://scontent.faly2-2.fna.fbcdn.net/v/t39.30808-1/454639294_343780712134741_6213289949303508721_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=2QS-iJYOiV4Q7kNvwHzPgoi&_nc_oc=AdlWOSYaFf0ATL9E_ey9w5mq6q9cTqqC9SkVzcKrWONx9OdmpHJFAOnsJUz-FLmVcus&_nc_zt=24&_nc_ht=scontent.faly2-2.fna&_nc_gid=k2sLXW1WlBtGaq1m3wIIoA&_nc_ss=8&oh=00_Afzm_yt-s6LcuP9K1e6Ulzq0_kEdfrFu1tsf8miQ6LCekw&oe=69BBE29F",
+    title: "Creativa Hub Beni-Suef",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi ipsa consectetur ex? Cupiditate eligendi incidunt obcaecati recusandae laudantium reprehenderit ducimus veniam harum, culpa tempora dolorem voluptatem aperiam porro reiciendis ipsum placeat totam nisi soluta. Dignissimos nam rerum fugit odit, recusandae fugiat placeat, hic non cumque nostrum accusantium quibusdam mollitia, doloremque magnam cupiditate omnis. Facilis provident explicabo magnam unde perferendis? Unde voluptas placeat autem doloremque vel nemo velit voluptatem nesciunt ea minima aperiam hic laudantium in nostrum aspernatur accusamus quidem perferendis, sint fugit! Sequi fugit dignissimos saepe nemo expedita corrupti quam blanditiis nihil aperiam soluta libero repellat error culpa consequatur facere reiciendis dicta voluptatibus cumque, provident aut numquam minus. Ex harum itaque quibusdam recusandae maxime, rem ipsa fugiat velit error odit tempore, optio eius. Rerum doloremque amet nobis et aliquam qui aperiam perferendis ipsa quasi at aspernatur recusandae laborum quos, nihil, iusto velit asperiores debitis. Velit excepturi hic debitis quos?",
+  },
+  {
+    id: 4,
+    img: "https://scontent.faly2-2.fna.fbcdn.net/v/t39.30808-1/454639294_343780712134741_6213289949303508721_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=2QS-iJYOiV4Q7kNvwHzPgoi&_nc_oc=AdlWOSYaFf0ATL9E_ey9w5mq6q9cTqqC9SkVzcKrWONx9OdmpHJFAOnsJUz-FLmVcus&_nc_zt=24&_nc_ht=scontent.faly2-2.fna&_nc_gid=k2sLXW1WlBtGaq1m3wIIoA&_nc_ss=8&oh=00_Afzm_yt-s6LcuP9K1e6Ulzq0_kEdfrFu1tsf8miQ6LCekw&oe=69BBE29F",
+    title: "Creativa Hub Beni-Suef",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, vitae!",
+  },
+  {
+    id: 5,
+    img: "https://scontent.faly2-2.fna.fbcdn.net/v/t39.30808-1/454639294_343780712134741_6213289949303508721_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=2QS-iJYOiV4Q7kNvwHzPgoi&_nc_oc=AdlWOSYaFf0ATL9E_ey9w5mq6q9cTqqC9SkVzcKrWONx9OdmpHJFAOnsJUz-FLmVcus&_nc_zt=24&_nc_ht=scontent.faly2-2.fna&_nc_gid=k2sLXW1WlBtGaq1m3wIIoA&_nc_ss=8&oh=00_Afzm_yt-s6LcuP9K1e6Ulzq0_kEdfrFu1tsf8miQ6LCekw&oe=69BBE29F",
+    title: "Creativa Hub Beni-Suef",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi ipsa consectetur ex? Cupiditate eligendi incidunt obcaecati recusandae laudantium reprehenderit ducimus veniam harum, culpa tempora dolorem voluptatem aperiam porro reiciendis ipsum placeat totam nisi soluta. Dignissimos nam rerum fugit odit, recusandae fugiat placeat, hic non cumque nostrum accusantium quibusdam mollitia, doloremque magnam cupiditate omnis. Facilis provident explicabo magnam unde perferendis? Unde voluptas placeat autem doloremque vel nemo velit voluptatem nesciunt ea minima aperiam hic laudantium in nostrum aspernatur accusamus quidem perferendis, sint fugit! Sequi fugit dignissimos saepe nemo expedita corrupti quam blanditiis nihil aperiam soluta libero repellat error culpa consequatur facere reiciendis dicta voluptatibus cumque, provident aut numquam minus. Ex harum itaque quibusdam recusandae maxime, rem ipsa fugiat velit error odit tempore, optio eius. Rerum doloremque amet nobis et aliquam qui aperiam perferendis ipsa quasi at aspernatur recusandae laborum quos, nihil, iusto velit asperiores debitis. Velit excepturi hic debitis quos?",
+  },
+  {
+    id: 6,
+    img: "https://scontent.faly2-2.fna.fbcdn.net/v/t39.30808-1/454639294_343780712134741_6213289949303508721_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=2QS-iJYOiV4Q7kNvwHzPgoi&_nc_oc=AdlWOSYaFf0ATL9E_ey9w5mq6q9cTqqC9SkVzcKrWONx9OdmpHJFAOnsJUz-FLmVcus&_nc_zt=24&_nc_ht=scontent.faly2-2.fna&_nc_gid=k2sLXW1WlBtGaq1m3wIIoA&_nc_ss=8&oh=00_Afzm_yt-s6LcuP9K1e6Ulzq0_kEdfrFu1tsf8miQ6LCekw&oe=69BBE29F",
+    title: "Creativa Hub Beni-Suef",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, vitae!",
+  },
+  {
+    id: 7,
+    img: "https://scontent.faly2-2.fna.fbcdn.net/v/t39.30808-1/454639294_343780712134741_6213289949303508721_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=2QS-iJYOiV4Q7kNvwHzPgoi&_nc_oc=AdlWOSYaFf0ATL9E_ey9w5mq6q9cTqqC9SkVzcKrWONx9OdmpHJFAOnsJUz-FLmVcus&_nc_zt=24&_nc_ht=scontent.faly2-2.fna&_nc_gid=k2sLXW1WlBtGaq1m3wIIoA&_nc_ss=8&oh=00_Afzm_yt-s6LcuP9K1e6Ulzq0_kEdfrFu1tsf8miQ6LCekw&oe=69BBE29F",
+    title: "Creativa Hub Beni-Suef",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, vitae!",
+  },
+];
