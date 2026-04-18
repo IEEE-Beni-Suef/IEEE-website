@@ -7,6 +7,7 @@ import {
   CheckSquare,
   Building,
   Calendar,
+  CalendarDays,
   FileText,
   User2,
   LogOut,
@@ -32,6 +33,7 @@ const getIconComponent = (iconName: string) => {
     CheckSquare: <CheckSquare />,
     Building: <Building />,
     Calendar: <Calendar />,
+    CalendarDays: <CalendarDays />,
     FileText: <FileText />,
     Mail: <Mail />,
   };
