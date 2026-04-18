@@ -12,6 +12,18 @@ import type {
 } from "~/utils/schemas";
 import type z from "zod";
 import type { Chat_history_Array, Committee, User, Article, Category, Subsection, Meeting, MeetingAttendance } from "~/types";
+import type {
+  ApiCategory,
+  ApiEvent,
+  CreateCategoryPayload,
+  RenameCategoryPayload,
+  UpdateCategoryDescPayload,
+  CreateEventPayload,
+  RenameEventPayload,
+  UpdateEventKeywordsPayload,
+  UpdateEventDatesPayload,
+  ApiResponse,
+} from "~/types/api.types";
 
 
 //! That is repeated in all methods
@@ -65,7 +77,7 @@ export const refreshTokenApi = async (token: string) => {
   try {
     // Use a separate axios instance for refresh token to avoid interceptor loops
     const refreshClient = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || "https://ieee.runasp.net/api",
+      baseURL:  "https://ieee.runasp.net/api",
       withCredentials: true,
       timeout: 10000,
       headers: {
@@ -612,4 +624,74 @@ export const sendEmailApi = async <T = any>(data: z.infer<typeof sendEmailSchema
     }
     throw new Error("An unexpected error occurred");
   }
+};
+
+
+// ============================================================
+// Categories API  (GUID-based, separate from legacy /Category)
+// ============================================================
+
+const CAT = "/categories";
+
+export const categoriesApi = {
+  /** Fetch all categories */
+  getAll: (): Promise<ApiCategory[]> =>
+    apiClient.get<ApiResponse<ApiCategory[]>>(CAT).then((r) => r.data.data ?? []),
+
+  /** Fetch a single category by GUID */
+  getById: (id: string): Promise<ApiCategory | undefined> =>
+    apiClient.get<ApiResponse<ApiCategory>>(`${CAT}/${id}`).then((r) => r.data.data),
+
+  /** Create a new category */
+  create: (payload: CreateCategoryPayload): Promise<ApiCategory | undefined> =>
+    apiClient.post<ApiResponse<ApiCategory>>(CAT, payload).then((r) => r.data.data),
+
+  /** Rename a category */
+  rename: (id: string, payload: RenameCategoryPayload): Promise<ApiCategory | undefined> =>
+    apiClient.put<ApiResponse<ApiCategory>>(`${CAT}/${id}/rename`, payload).then((r) => r.data.data),
+
+  /** Update a category's description */
+  updateDescription: (id: string, payload: UpdateCategoryDescPayload): Promise<ApiCategory | undefined> =>
+    apiClient.put<ApiResponse<ApiCategory>>(`${CAT}/${id}/description`, payload).then((r) => r.data.data),
+
+  /** Delete a category */
+  delete: (id: string): Promise<void> =>
+    apiClient.delete(`${CAT}/${id}`).then(() => undefined),
+};
+
+
+// ============================================================
+// Events API
+// ============================================================
+
+const EV = "/events";
+
+export const eventsApi = {
+  /** Fetch all events */
+  getAll: (): Promise<ApiEvent[]> =>
+    apiClient.get<ApiResponse<ApiEvent[]>>(EV).then((r) => r.data.data ?? []),
+
+  /** Fetch a single event by GUID */
+  getById: (id: string): Promise<ApiEvent | undefined> =>
+    apiClient.get<ApiResponse<ApiEvent>>(`${EV}/${id}`).then((r) => r.data.data),
+
+  /** Create a new event */
+  create: (payload: CreateEventPayload): Promise<ApiEvent | undefined> =>
+    apiClient.post<ApiResponse<ApiEvent>>(EV, payload).then((r) => r.data.data),
+
+  /** Rename an event */
+  rename: (id: string, payload: RenameEventPayload): Promise<ApiEvent | undefined> =>
+    apiClient.put<ApiResponse<ApiEvent>>(`${EV}/${id}/rename`, payload).then((r) => r.data.data),
+
+  /** Update an event's keywords */
+  updateKeywords: (id: string, payload: UpdateEventKeywordsPayload): Promise<ApiEvent | undefined> =>
+    apiClient.put<ApiResponse<ApiEvent>>(`${EV}/${id}/keywords`, payload).then((r) => r.data.data),
+
+  /** Update an event's dates / coming-soon flag */
+  updateDates: (id: string, payload: UpdateEventDatesPayload): Promise<ApiEvent | undefined> =>
+    apiClient.put<ApiResponse<ApiEvent>>(`${EV}/${id}/dates`, payload).then((r) => r.data.data),
+
+  /** Delete an event */
+  delete: (id: string): Promise<void> =>
+    apiClient.delete(`${EV}/${id}`).then(() => undefined),
 };
