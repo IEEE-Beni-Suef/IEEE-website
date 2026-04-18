@@ -125,3 +125,9 @@ export interface SendEmailPayload {
   body: string;
   to: number[];
 }
+export interface ISponserCard {
+  id: number;
+  img: string;
+  title: string;
+  description: string;
+}
