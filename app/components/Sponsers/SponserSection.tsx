@@ -17,7 +17,8 @@ const error = false;
 
 const SponsersSection = () => {
   return (
-    <div className="container mt-5 mx-auto px-5">
+    <div className="w-screen my-5 mx-auto px-5">
+      <h1 className="text-4xl font-bold mb-5 text-center">Our Sponsers</h1>
       {isLoading ? (
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -32,7 +33,7 @@ const SponsersSection = () => {
           </p>
         </div>
       ) : sponsers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-5 gap-y-10 p-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10 p-5">
           {renderSponsersCards}
         </div>
       ) : (
