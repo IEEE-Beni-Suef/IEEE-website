@@ -33,8 +33,23 @@ import {
   sendChatMessage,
   resetChat,
   sendEmailApi,
+  getAllSponsorsApi,
+  createSponsorApi,
+  updateSponsorApi,
+  deleteSponsorApi,
 } from "~/lib/api";
-import type { Chat_history_Array, Committee, User, Article, Category, Subsection, Meeting, MeetingAttendance } from "~/types";
+
+import type {
+  Chat_history_Array,
+  Committee,
+  User,
+  Article,
+  Category,
+  Subsection,
+  Meeting,
+  MeetingAttendance,
+  ISponsorCard,
+} from "~/types";
 
 export const useCommittees = () => {
   const { data, ...rest } = useQuery<Committee[]>({
@@ -403,8 +418,7 @@ export const useResetChat = () => {
   });
 
   return { mutate, ...rest };
-}
-
+};
 
 export const useSendEmail = () => {
   const { mutate, ...rest } = useMutation({
@@ -412,6 +426,55 @@ export const useSendEmail = () => {
     mutationFn: (emailData: any) => sendEmailApi(emailData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["send"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+// Sponsor s hooks
+
+export const useAllSponsors = () => {
+  const { data, ...rest } = useQuery<ISponsorCard[]>({
+    queryKey: ["sponsor s"],
+    queryFn: getAllSponsorsApi,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+export const useCreateSponsor = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["createSponsor "],
+    mutationFn: (data: any) => createSponsorApi(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useUpdateSponsor = (id: number) => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["updateSponsor ", id],
+    mutationFn: (data: any) => updateSponsorApi(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
+    },
+  });
+
+  return { mutate, ...rest };
+};
+
+export const useDeleteSponsor = () => {
+  const { mutate, ...rest } = useMutation({
+    mutationKey: ["deleteSponsor "],
+    mutationFn: (id: number) => deleteSponsorApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
     },
   });
 
