@@ -8,6 +8,7 @@ import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { ArticleDisplay } from "../components/ArticleDisplay";
 import { useAllArticles, useCommittees } from "../hooks/useApi";
+
 import { Link, type MetaArgs } from "react-router";
 import type { Article, Committee } from "../types";
 import {
@@ -35,6 +36,13 @@ import SponsersSection from "~/components/Sponsors/SponserSection";
 
 import toast from "react-hot-toast";
 import Sponsers from "./sponsors";
+
+
+
+
+
+
+
 
 export function meta({}: MetaArgs) {
   return [
@@ -371,6 +379,8 @@ export default function Home() {
 
       <Sponsers />
 
+
+
       <footer className="relative bg-white dark:bg-gray-900 text-gray-600 dark:text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           {[...Array(100)].map((_, i) => (
@@ -499,7 +509,7 @@ export default function Home() {
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3 group">
-                  <MapPin className="w-5 h-5 text-purple-400 mt-1 flex-shrink-0 group-hover:text-purple-500 dark:group-hover:text-green-300 transition-colors" />
+                  <MapPin className="w-5 h-5 text-purple-400 mt-1 shrink-0 group-hover:text-purple-500 dark:group-hover:text-green-300 transition-colors" />
                   <div>
                     <span className="text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">
                       Beni Suef University
@@ -511,7 +521,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 group">
-                  <Mail className="w-5 h-5 text-purple-400 flex-shrink-0 group-hover:text-purple-500 dark:group-hover:text-green-300 transition-colors" />
+                  <Mail className="w-5 h-5 text-purple-400 shrink-0 group-hover:text-purple-500 dark:group-hover:text-green-300 transition-colors" />
                   <a
                     href="mailto:info@ieeebns.org"
                     className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"

@@ -1,3 +1,4 @@
+
 import type { ISponserCard } from "~/types";
 
 // List might come form the backend

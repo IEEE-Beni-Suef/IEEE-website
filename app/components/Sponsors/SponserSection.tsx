@@ -12,6 +12,7 @@ const sponsors: ISponsorCard[] = [
     id: 2,
     img: "/Creativa.jpg",
     title: "Creativa-Hub Beni-Suef",
+
     description: "Diamond Partner",
   },
   {
