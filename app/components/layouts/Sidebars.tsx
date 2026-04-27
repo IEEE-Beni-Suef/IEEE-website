@@ -7,12 +7,14 @@ import {
   CheckSquare,
   Building,
   Calendar,
+  CalendarDays,
   FileText,
   User2,
   LogOut,
   Settings,
   ChevronDown,
   ChevronUp,
+  Mail,
 } from "lucide-react";
 import { sidebarConfigs } from "../../utils/lists";
 import { SidebarItem } from "./SidebarItem";
@@ -31,7 +33,9 @@ const getIconComponent = (iconName: string) => {
     CheckSquare: <CheckSquare />,
     Building: <Building />,
     Calendar: <Calendar />,
+    CalendarDays: <CalendarDays />,
     FileText: <FileText />,
+    Mail: <Mail />,
   };
   return iconMap[iconName] || <LayoutDashboard />;
 };
@@ -116,8 +120,8 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
               </div>
               <div className="flex-1 min-w-0 text-left">
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                  {user?.fName && user?.mName
-                    ? `${user.fName} ${user.mName}`
+                  {user?.firstName && user?.lastName
+                    ? `${user.firstName} ${user.lastName}`
                     : "User"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">

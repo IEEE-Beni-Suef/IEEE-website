@@ -100,7 +100,7 @@ const CommitteesManagement = () => {
             )}
             {!isLoading && !isError && (
               <ul className="space-y-4">
-                {data.map((committee: any) => (
+                {data?.map((committee: any) => (
                   <li
                     key={committee.id}
                     className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
