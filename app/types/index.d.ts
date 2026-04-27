@@ -131,3 +131,10 @@ export interface ISponsorCard {
   title: string;
   description: string;
 }
+
+export interface ICommittee {
+  id:number,
+  img:string,
+  title:string,
+  description:string
+}

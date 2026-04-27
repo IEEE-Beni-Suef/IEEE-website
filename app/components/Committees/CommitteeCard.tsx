@@ -9,7 +9,7 @@ const CommitteeCard = ({ committee }: IProps) => {
   const { title, description, img } = committee;
   return (
     <div className="h-133 w-xs flex flex-col justify-evenly bg-[#FEFEFF] rounded-2xl px-4 border border-[#CCB5E3] ">
-      <div className="w-full h-64 bg-amber-900 rounded-2xl truncate">
+      <div className="w-full h-64 rounded-2xl truncate">
         <img className="w-full h-full" src={img} alt="" />
       </div>
       <h2 className="font-semibold text-xl text-[#000640] capitalize">

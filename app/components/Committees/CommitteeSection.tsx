@@ -16,7 +16,7 @@ const CommitteesSection = () => {
         setCommmitteList(newCommmitteList);
       };
   return (
-    <div className="w-screen md:px-10 my-25 ">
+    <div className="w-screen md:px-10 my-25 " id="committees">
       <div className=" flex flex-col items-center justify-center space-y-5">
         {/* HEADER========================================= */}
         <div className="w-36.75 h-8.25 flex justify-center items-center bg-[#CCB5E3] text-[#5A10A5] rounded-[20px] text-[11px] font-semibold">

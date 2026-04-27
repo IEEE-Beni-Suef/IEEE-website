@@ -7,14 +7,7 @@ import {
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { ArticleDisplay } from "../components/ArticleDisplay";
-import {
-  useAllArticles,
-  useAllSponsors,
-  useCommittees,
-  useCreateSponsor,
-  useDeleteSponsor,
-  useUpdateSponsor,
-} from "../hooks/useApi";
+import { useAllArticles, useCommittees } from "../hooks/useApi";
 import { Link, type MetaArgs } from "react-router";
 import type { Article, Committee } from "../types";
 import {
@@ -41,12 +34,7 @@ import { property } from "zod";
 import SponsersSection from "~/components/Sponsors/SponserSection";
 
 import toast from "react-hot-toast";
-
-
-
-
-
-
+import Sponsers from "./sponsors";
 
 export function meta({}: MetaArgs) {
   return [
@@ -381,8 +369,7 @@ export default function Home() {
 
       {/* Sponsers Section */}
 
-      <SponsersSection />
-
+      <Sponsers />
 
       <footer className="relative bg-white dark:bg-gray-900 text-gray-600 dark:text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">

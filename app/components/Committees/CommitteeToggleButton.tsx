@@ -34,9 +34,8 @@ const CommitteeToggleButton = ({ commmitteList, handleChange }: IProps) => {
             textTransform: "none",
           },
 
-          "& .Mui-selected": {
-            backgroundColor: "white !important",
-            borderRadius: "12px",
+          "& .MuiToggleButton-root.Mui-selected": {
+            backgroundColor: "white",
             color: "#5A10A5",
           },
         }}
