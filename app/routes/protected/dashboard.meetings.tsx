@@ -2,24 +2,9 @@ import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import {
-  useAllMeetings,
-  useCreateMeeting,
-  useSubmitAttendance,
-  useGetMeetingAttendance,
-  useAllUsers,
-  useCommittees,
-} from "~/hooks/useApi";
+import { useAllMeetings, useCreateMeeting, useSubmitAttendance, useGetMeetingAttendance, useAllUsers, useCommittees } from "~/hooks/useApi";
 import { createMeetingSchema, submitAttendanceSchema } from "~/utils/schemas";
-import {
-  Calendar,
-  Plus,
-  Users,
-  CheckCircle,
-  Edit,
-  Trash2,
-  Eye,
-} from "lucide-react";
+import { Calendar, Plus, Users, CheckCircle, Edit, Trash2, Eye } from "lucide-react";
 import { FormInput } from "~/components/form";
 
 type CreateMeetingFormData = z.infer<typeof createMeetingSchema>;
@@ -28,19 +13,13 @@ type SubmitAttendanceFormData = z.infer<typeof submitAttendanceSchema>;
 export default function DashboardMeetings() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
-  const [selectedMeetingId, setSelectedMeetingId] = useState<number | null>(
-    null,
-  );
-  const [selectedCommitteeId, setSelectedCommitteeId] = useState<number | null>(
-    null,
-  );
+  const [selectedMeetingId, setSelectedMeetingId] = useState<number | null>(null);
+  const [selectedCommitteeId, setSelectedCommitteeId] = useState<number | null>(null);
 
   const { data: meetings, isLoading: meetingsLoading } = useAllMeetings();
   const { data: users } = useAllUsers();
   const { data: committees } = useCommittees();
-  const { data: attendanceData } = useGetMeetingAttendance(
-    selectedMeetingId || 0,
-  );
+  const { data: attendanceData } = useGetMeetingAttendance(selectedMeetingId || 0);
 
   const createMeetingForm = useForm<CreateMeetingFormData>({
     resolver: zodResolver(createMeetingSchema),
@@ -63,20 +42,12 @@ export default function DashboardMeetings() {
     },
   });
 
-  const {
-    fields: meetingUsers,
-    append: appendMeetingUser,
-    remove: removeMeetingUser,
-  } = useFieldArray({
+  const { fields: meetingUsers, append: appendMeetingUser, remove: removeMeetingUser } = useFieldArray({
     control: createMeetingForm.control,
     name: "users",
   });
 
-  const {
-    fields: attendanceUsers,
-    append: appendAttendanceUser,
-    remove: removeAttendanceUser,
-  } = useFieldArray({
+  const { fields: attendanceUsers, append: appendAttendanceUser, remove: removeAttendanceUser } = useFieldArray({
     control: attendanceForm.control,
     name: "usersAttendents",
   });
@@ -85,10 +56,9 @@ export default function DashboardMeetings() {
   const submitAttendanceMutation = useSubmitAttendance();
 
   // Filter users by committee
-  const committeeUsers =
-    users?.filter((user) =>
-      user.committeeIds?.includes(selectedCommitteeId || 0),
-    ) || [];
+  const committeeUsers = users?.filter(user => 
+    user.committeeIds?.includes(selectedCommitteeId || 0)
+  ) || [];
 
   const onCreateMeeting = (data: CreateMeetingFormData) => {
     createMeetingMutation.mutate(data, {
@@ -132,9 +102,7 @@ export default function DashboardMeetings() {
     setSelectedCommitteeId(committeeId);
     createMeetingForm.setValue("committeeId", committeeId);
     // Reset users when committee changes
-    createMeetingForm.setValue("users", [
-      { userId: 0, attended: false, mark: 0 },
-    ]);
+    createMeetingForm.setValue("users", [{ userId: 0, attended: false, mark: 0 }]);
   };
 
   return (
@@ -142,12 +110,8 @@ export default function DashboardMeetings() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Meetings
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage IEEE meetings and attendance
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Meetings</h1>
+          <p className="text-gray-600 dark:text-gray-400">Manage IEEE meetings and attendance</p>
         </div>
         <button
           onClick={openCreateModal}
@@ -161,16 +125,12 @@ export default function DashboardMeetings() {
       {/* Meetings List */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            All Meetings
-          </h2>
-
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">All Meetings</h2>
+          
           {meetingsLoading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Loading meetings...
-              </p>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">Loading meetings...</p>
             </div>
           ) : meetings && meetings.length > 0 ? (
             <div className="grid gap-4">
@@ -212,9 +172,7 @@ export default function DashboardMeetings() {
           ) : (
             <div className="text-center py-8">
               <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-gray-400">
-                No meetings found
-              </p>
+              <p className="text-gray-600 dark:text-gray-400">No meetings found</p>
               <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
                 Create your first meeting to get started
               </p>
@@ -229,9 +187,7 @@ export default function DashboardMeetings() {
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Create New Meeting
-                </h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Meeting</h2>
                 <button
                   onClick={() => setIsCreateModalOpen(false)}
                   className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -240,10 +196,7 @@ export default function DashboardMeetings() {
                 </button>
               </div>
 
-              <form
-                onSubmit={createMeetingForm.handleSubmit(onCreateMeeting)}
-                className="space-y-4"
-              >
+              <form onSubmit={createMeetingForm.handleSubmit(onCreateMeeting)} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <FormInput
                     id="title"
@@ -283,12 +236,8 @@ export default function DashboardMeetings() {
                       Committee
                     </label>
                     <select
-                      {...createMeetingForm.register("committeeId", {
-                        valueAsNumber: true,
-                      })}
-                      onChange={(e) =>
-                        handleCommitteeChange(Number(e.target.value))
-                      }
+                      {...createMeetingForm.register("committeeId", { valueAsNumber: true })}
+                      onChange={(e) => handleCommitteeChange(Number(e.target.value))}
                       className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     >
                       <option value={0}>Select Committee</option>
@@ -306,9 +255,7 @@ export default function DashboardMeetings() {
                     </label>
                     <input
                       type="number"
-                      {...createMeetingForm.register("headId", {
-                        valueAsNumber: true,
-                      })}
+                      {...createMeetingForm.register("headId", { valueAsNumber: true })}
                       className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       placeholder="Enter head ID"
                     />
@@ -323,13 +270,7 @@ export default function DashboardMeetings() {
                     </label>
                     <button
                       type="button"
-                      onClick={() =>
-                        appendMeetingUser({
-                          userId: 0,
-                          attended: false,
-                          mark: 0,
-                        })
-                      }
+                      onClick={() => appendMeetingUser({ userId: 0, attended: false, mark: 0 })}
                       className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40"
                     >
                       <Plus className="w-4 h-4" />
@@ -338,19 +279,13 @@ export default function DashboardMeetings() {
                   </div>
 
                   {meetingUsers.map((field, index) => (
-                    <div
-                      key={field.id}
-                      className="grid grid-cols-3 gap-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg"
-                    >
+                    <div key={field.id} className="grid grid-cols-3 gap-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           User
                         </label>
                         <select
-                          {...createMeetingForm.register(
-                            `users.${index}.userId` as const,
-                            { valueAsNumber: true },
-                          )}
+                          {...createMeetingForm.register(`users.${index}.userId` as const, { valueAsNumber: true })}
                           className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         >
                           <option value={0}>Select User</option>
@@ -368,9 +303,7 @@ export default function DashboardMeetings() {
                         </label>
                         <input
                           type="checkbox"
-                          {...createMeetingForm.register(
-                            `users.${index}.attended` as const,
-                          )}
+                          {...createMeetingForm.register(`users.${index}.attended` as const)}
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                         />
                       </div>
@@ -383,10 +316,7 @@ export default function DashboardMeetings() {
                           type="number"
                           min="0"
                           max="10"
-                          {...createMeetingForm.register(
-                            `users.${index}.mark` as const,
-                            { valueAsNumber: true },
-                          )}
+                          {...createMeetingForm.register(`users.${index}.mark` as const, { valueAsNumber: true })}
                           className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           placeholder="0-10"
                         />
@@ -412,9 +342,7 @@ export default function DashboardMeetings() {
                     disabled={createMeetingMutation.isPending}
                     className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
                   >
-                    {createMeetingMutation.isPending
-                      ? "Creating..."
-                      : "Create Meeting"}
+                    {createMeetingMutation.isPending ? "Creating..." : "Create Meeting"}
                   </button>
                   <button
                     type="button"
@@ -436,9 +364,7 @@ export default function DashboardMeetings() {
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Meeting Attendance
-                </h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Meeting Attendance</h2>
                 <button
                   onClick={() => setIsAttendanceModalOpen(false)}
                   className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -447,10 +373,7 @@ export default function DashboardMeetings() {
                 </button>
               </div>
 
-              <form
-                onSubmit={attendanceForm.handleSubmit(onSubmitAttendance)}
-                className="space-y-6"
-              >
+              <form onSubmit={attendanceForm.handleSubmit(onSubmitAttendance)} className="space-y-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -458,13 +381,7 @@ export default function DashboardMeetings() {
                     </label>
                     <button
                       type="button"
-                      onClick={() =>
-                        appendAttendanceUser({
-                          userId: "",
-                          isAttend: true,
-                          score: "",
-                        })
-                      }
+                      onClick={() => appendAttendanceUser({ userId: "", isAttend: true, score: "" })}
                       className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40"
                     >
                       <Plus className="w-4 h-4" />
@@ -473,19 +390,14 @@ export default function DashboardMeetings() {
                   </div>
 
                   {attendanceUsers.map((field, index) => (
-                    <div
-                      key={field.id}
-                      className="grid grid-cols-4 gap-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg"
-                    >
+                    <div key={field.id} className="grid grid-cols-4 gap-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           User ID
                         </label>
                         <input
                           type="number"
-                          {...attendanceForm.register(
-                            `usersAttendents.${index}.userId` as const,
-                          )}
+                          {...attendanceForm.register(`usersAttendents.${index}.userId` as const)}
                           className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           placeholder="Enter user ID"
                         />
@@ -497,9 +409,7 @@ export default function DashboardMeetings() {
                         </label>
                         <input
                           type="checkbox"
-                          {...attendanceForm.register(
-                            `usersAttendents.${index}.isAttend` as const,
-                          )}
+                          {...attendanceForm.register(`usersAttendents.${index}.isAttend` as const)}
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                         />
                       </div>
@@ -512,9 +422,7 @@ export default function DashboardMeetings() {
                           type="number"
                           min="0"
                           max="10"
-                          {...attendanceForm.register(
-                            `usersAttendents.${index}.score` as const,
-                          )}
+                          {...attendanceForm.register(`usersAttendents.${index}.score` as const)}
                           className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           placeholder="0-10"
                         />
@@ -540,9 +448,7 @@ export default function DashboardMeetings() {
                     disabled={submitAttendanceMutation.isPending}
                     className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
                   >
-                    {submitAttendanceMutation.isPending
-                      ? "Submitting..."
-                      : "Submit Attendance"}
+                    {submitAttendanceMutation.isPending ? "Submitting..." : "Submit Attendance"}
                   </button>
                   <button
                     type="button"

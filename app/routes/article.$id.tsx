@@ -84,7 +84,7 @@ export default function ArticleView() {
         <header className="mb-8 sm:mb-12">
           <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
             <span className="inline-block px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-md">
-              {article.category.name}
+              {article.categoryName}
             </span>
           </div>
 
@@ -160,7 +160,7 @@ export default function ArticleView() {
                   </div>
                 )}
 
-                {index < article.subsections.length - 1 && (
+                {article.subsections && index < article.subsections.length - 1 && (
                   <hr className="my-8 sm:my-12 border-gray-200 dark:border-gray-700" />
                 )}
               </section>

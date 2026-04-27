@@ -46,10 +46,9 @@ export const articleSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Article description is required" }),
-  keywords: z
-    .array(z.string())
-    .min(1, { message: "At least one keyword is required" }),
-  photo: z.string().min(1, { message: "Article photo is required" }),
+  keywords: z.string().min(1, { message: "At least one keyword is required" }),
+  photo: z.any(),
+  Video: z.any().optional(),
   categoryId: z.number().min(1, { message: "Category is required" }),
 });
 
@@ -88,6 +87,16 @@ export const createMeetingSchema = z.object({
     .min(1, { message: "At least one user is required" }),
 });
 
+//? send email schema for dashboard email page
+
+export const sendEmailSchema = z.object({
+  subject: z.string().min(1, { message: "Subject is required" }),
+  body: z.string().min(1, { message: "Body is required" }),
+  recipientIds: z
+    .array(z.number())
+    .min(1, "You must select at least one recipient"),
+});
+
 // Sponsers Validation==============================
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -106,3 +115,108 @@ export const addSponserSchema = z.object({
     }),
 });
 // Sponsers Validation==============================
+
+// ============================================================
+// Category Schemas
+// ============================================================
+
+export const createCategorySchema = z.object({
+  name: z
+    .string()
+    .min(1, "Category name is required")
+    .min(3, "Category name must be at least 3 characters")
+    .max(100, "Category name must not exceed 100 characters"),
+  description: z
+    .string()
+    .max(500, "Description must not exceed 500 characters")
+    .nullable()
+    .optional(),
+});
+export type CreateCategoryFormData = z.infer<typeof createCategorySchema>;
+
+export const renameCategorySchema = z.object({
+  newName: z
+    .string()
+    .min(1, "New name is required")
+    .min(3, "Category name must be at least 3 characters")
+    .max(100, "Category name must not exceed 100 characters"),
+});
+export type RenameCategoryFormData = z.infer<typeof renameCategorySchema>;
+
+export const updateCategoryDescSchema = z.object({
+  newDescription: z
+    .string()
+    .max(500, "Description must not exceed 500 characters")
+    .nullable()
+    .optional(),
+});
+export type UpdateCategoryDescFormData = z.infer<typeof updateCategoryDescSchema>;
+
+// ============================================================
+// Event Schemas
+// ============================================================
+
+const dateStringOrNull = z
+  .string()
+  .datetime({ message: "Must be a valid ISO date" })
+  .nullable()
+  .or(z.literal(""));
+
+export const createEventSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "Event name is required")
+      .min(3, "Event name must be at least 3 characters")
+      .max(150, "Event name must not exceed 150 characters"),
+    keyWords: z
+      .array(z.string().min(1, "Keyword cannot be empty").max(50, "Keyword too long"))
+      .min(1, "At least one keyword is required")
+      .max(10, "Maximum 10 keywords allowed"),
+    startDate: dateStringOrNull,
+    endDate: dateStringOrNull,
+    isCommingSoon: z.boolean(),
+    categoryId: z.string().uuid("Invalid category ID"),
+  })
+  .refine(
+    (d) => d.isCommingSoon || (!!d.startDate && !!d.endDate),
+    { message: "Start & end dates are required when event is not coming soon", path: ["startDate"] }
+  )
+  .refine(
+    (d) => !(d.startDate && d.endDate) || new Date(d.startDate!) < new Date(d.endDate!),
+    { message: "Start date must be before end date", path: ["endDate"] }
+  );
+export type CreateEventFormData = z.infer<typeof createEventSchema>;
+
+export const renameEventSchema = z.object({
+  newName: z
+    .string()
+    .min(1, "Event name is required")
+    .min(3, "Event name must be at least 3 characters")
+    .max(150, "Event name must not exceed 150 characters"),
+});
+export type RenameEventFormData = z.infer<typeof renameEventSchema>;
+
+export const updateEventKeywordsSchema = z.object({
+  keyWords: z
+    .array(z.string().min(1, "Keyword cannot be empty").max(50, "Keyword too long"))
+    .min(1, "At least one keyword is required")
+    .max(10, "Maximum 10 keywords allowed"),
+});
+export type UpdateEventKeywordsFormData = z.infer<typeof updateEventKeywordsSchema>;
+
+export const updateEventDatesSchema = z
+  .object({
+    startDate: dateStringOrNull,
+    endDate: dateStringOrNull,
+    isCommingSoon: z.boolean(),
+  })
+  .refine(
+    (d) => d.isCommingSoon || (!!d.startDate && !!d.endDate),
+    { message: "Start & end dates are required when event is not coming soon", path: ["startDate"] }
+  )
+  .refine(
+    (d) => !(d.startDate && d.endDate) || new Date(d.startDate!) < new Date(d.endDate!),
+    { message: "Start date must be before end date", path: ["endDate"] }
+  );
+export type UpdateEventDatesFormData = z.infer<typeof updateEventDatesSchema>;

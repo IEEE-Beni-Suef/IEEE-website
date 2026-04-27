@@ -120,16 +120,14 @@ export interface chat_history {
 
 export type Chat_history_Array = Array<chat_history>;
 
-export interface ISponserCard {
+export interface SendEmailPayload {
+  subject: string;
+  body: string;
+  to: number[];
+}
+export interface ISponsorCard {
   id: number;
   img: string;
   title: string;
   description: string;
-}
-
-export interface ICommittee {
-  id:number,
-  img:string,
-  title:string,
-  description:string
 }

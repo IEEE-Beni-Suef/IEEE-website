@@ -26,11 +26,11 @@ export default function Profile() {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({
-    fName: user?.fName || "",
-    mName: user?.mName || "",
-    lName: user?.lName || "",
+    fName: user?.firstName || "",
+    mName: user?.middleName || "",
+    lName: user?.lastName || "",
     email: user?.email || "",
-    phoneNumber: user?.phoneNumber || "",
+    phoneNumber: user?.phone || "",
     goverment: user?.goverment || "",
     faculty: user?.faculty || "",
     year: user?.year || "",
@@ -42,11 +42,11 @@ export default function Profile() {
   useEffect(() => {
     if (user) {
       setEditedUser({
-        fName: user.fName || "",
-        mName: user.mName || "",
-        lName: user.lName || "",
+        fName: user.firstName || "",
+        mName: user.middleName || "",
+        lName: user.lastName || "",
         email: user.email || "",
-        phoneNumber: user.phoneNumber || "",
+        phoneNumber: user.phone || "",
         goverment: user.goverment || "",
         faculty: user.faculty || "",
         year: user.year || "",
@@ -58,11 +58,11 @@ export default function Profile() {
   const handleEditToggle = () => {
     if (isEditing) {
       setEditedUser({
-        fName: user?.fName || "",
-        mName: user?.mName || "",
-        lName: user?.lName || "",
+        fName: user?.firstName || "",
+        mName: user?.middleName || "",
+        lName: user?.lastName || "",
         email: user?.email || "",
-        phoneNumber: user?.phoneNumber || "",
+        phoneNumber: user?.phone || "",
         goverment: user?.goverment || "",
         faculty: user?.faculty || "",
         year: user?.year || "",
