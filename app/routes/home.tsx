@@ -37,13 +37,6 @@ import SponsersSection from "~/components/Sponsors/SponserSection";
 import toast from "react-hot-toast";
 import Sponsers from "./sponsors";
 
-
-
-
-
-
-
-
 export function meta({}: MetaArgs) {
   return [
     { title: "IEEE BNS - Beni Suef University Student Branch" },
@@ -82,6 +75,7 @@ export function meta({}: MetaArgs) {
 }
 
 export default function Home() {
+
   const { data: articles, isLoading, error } = useAllArticles();
   const {
     data: committees,
@@ -142,6 +136,7 @@ export default function Home() {
 
   return (
     <>
+      
       {/* Hero Section */}
       <Section padding="default">
         <div className="max-w-7xl mx-auto  text-center">
@@ -378,8 +373,6 @@ export default function Home() {
       {/* Sponsers Section */}
 
       <Sponsers />
-
-
 
       <footer className="relative bg-white dark:bg-gray-900 text-gray-600 dark:text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">

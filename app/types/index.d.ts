@@ -127,7 +127,6 @@ export interface ISponserCard {
   description: string;
 }
 
-
 export interface User {
   id: number;
   firstName: string;
@@ -263,9 +262,14 @@ export interface ISponsorCard {
 }
 
 export interface ICommittee {
-  id:number,
-  img:string,
-  title:string,
-  description:string
+  id: number;
+  img: string;
+  title: string;
+  description: string;
 }
 
+export interface IAiBox {
+  id: number;
+  text: string;
+  icon: ReactNode;
+}

@@ -62,11 +62,7 @@ const SponsorsSection = () => {
     <>
       {sponsors && sponsors.length > 0 ? (
         <div
-          className={`${
-            sponsors.length > 3
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-              : "flex flex-wrap justify-center items-center"
-          } gap-x-5 gap-y-5 p-5`}
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-5 gap-y-5 p-5`}
         >
           {sponsors.map((sponsor: ISponsorCard) => (
             <SponsorCard

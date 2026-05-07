@@ -13,6 +13,7 @@ interface ChatMessage {
   timestamp: Date;
 }
 import type { Chat_history_Array } from "~/types";
+import ChatBotCard from "./ChatBot/ChatBotCard";
 
 const MarkdownMessage = ({
   content,
@@ -225,10 +226,11 @@ export function Chatbot() {
     );
   }
 
-  return (
-    <div className={`fixed ${location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"} right-4 z-50 w-[calc(100vw-2rem)] md:w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col`}>
+  return <ChatBotCard setIsOpen={setIsOpen}/>
+  // return (
+    // <div className={`fixed ${location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"} right-4 z-50 w-[calc(100vw-2rem)] md:w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
+      {/* <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center">
           <h3 className="font-semibold text-gray-900 dark:text-white ml-2 flex items-center gap-2">
             <BotMessageSquare />
@@ -257,10 +259,10 @@ export function Chatbot() {
             <CircleX size={20} />
           </Button>
         </div>
-      </div>
+      </div> */}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
+      {/* <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
         {messages.length === 0 && (
           <div className="text-center text-gray-500 dark:text-gray-400 text-sm">
             Ask me anything about IEEE or the management system!
@@ -302,10 +304,10 @@ export function Chatbot() {
         )}
 
         <div ref={messagesEndRef} />
-      </div>
+      </div> */}
 
       {/* Input */}
-      <div className="p-3 border-t flex  border-gray-200 dark:border-gray-700">
+      {/* <div className="p-3 border-t flex  border-gray-200 dark:border-gray-700">
         <div className="flex flex-1 space-x-2">
           <textarea
             value={inputMessage}
@@ -325,7 +327,7 @@ export function Chatbot() {
             <Send size={20} />
           </Button>
         </div>
-      </div>
-    </div>
-  );
+      </div> */}
+    // </div>
+  // );
 }
