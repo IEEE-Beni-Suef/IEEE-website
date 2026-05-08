@@ -97,17 +97,17 @@ export default function UsersManagement() {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-gray-900">
                 Users Management
               </h1>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              <p className="mt-2 text-sm text-gray-600">
                 Manage and oversee all IEEE members and their details
               </p>
             </div>
             <div className="mt-4 sm:mt-0">
               <button 
                 onClick={handleCreateClick}
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900 transition-colors duration-200"
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
               >
                 <svg
                   className="w-4 h-4 mr-2"
@@ -138,12 +138,12 @@ export default function UsersManagement() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                    className="w-4 h-4 text-blue-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -158,22 +158,22 @@ export default function UsersManagement() {
                 </div>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-gray-600">
                   Total Users
                 </p>
-                <p className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <p className="text-2xl font-semibold text-gray-900">
                   {data?.length || 0}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-4 h-4 text-green-600 dark:text-green-400"
+                    className="w-4 h-4 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -188,22 +188,22 @@ export default function UsersManagement() {
                 </div>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-gray-600">
                   Active Users
                 </p>
-                <p className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <p className="text-2xl font-semibold text-gray-900">
                   {data?.filter((u: any) => u.isActive).length || 0}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-4 h-4 text-yellow-600 dark:text-yellow-400"
+                    className="w-4 h-4 text-yellow-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -218,22 +218,22 @@ export default function UsersManagement() {
                 </div>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-gray-600">
                   Pending
                 </p>
-                <p className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <p className="text-2xl font-semibold text-gray-900">
                   {data?.filter((u: any) => !u.isActive).length || 0}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-4 h-4 text-purple-600 dark:text-purple-400"
+                    className="w-4 h-4 text-purple-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -248,10 +248,10 @@ export default function UsersManagement() {
                 </div>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-gray-600">
                   Committees
                 </p>
-                <p className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <p className="text-2xl font-semibold text-gray-900">
                   {new Set(
                     data
                       ?.flatMap((u: any) => u.committeesId || [])
@@ -264,10 +264,10 @@ export default function UsersManagement() {
         </div>
 
         {/* Main Content */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-gray-900">
                 All Users
               </h2>
               <div className="mt-4 sm:mt-0 flex space-x-3">
@@ -275,7 +275,7 @@ export default function UsersManagement() {
                   <input
                     type="text"
                     placeholder="Search users..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
                     <svg
@@ -293,7 +293,7 @@ export default function UsersManagement() {
                     </svg>
                   </div>
                 </div>
-                <select className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                <select className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                   <option>All Statuses</option>
                   <option>Active</option>
                   <option>Inactive</option>
@@ -305,7 +305,7 @@ export default function UsersManagement() {
           <div className="overflow-x-auto">
             {isLoading && (
               <div className="flex items-center justify-center py-12">
-                <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                <div className="flex items-center space-x-2 text-gray-600">
                   <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
                   <span>Loading users...</span>
                 </div>
@@ -325,7 +325,7 @@ export default function UsersManagement() {
                       />
                     </svg>
                   </div>
-                  <p className="text-red-600 dark:text-red-400 font-medium">
+                  <p className="text-red-600 font-medium">
                     {(error as Error)?.message || "Failed to load users"}
                   </p>
                 </div>
@@ -333,30 +333,30 @@ export default function UsersManagement() {
             )}
 
             {!isLoading && !isError && (
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-900">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Contact
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Academic Info
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Role & Committee
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {(data || []).map((user: any) => {
                     const email = user.email || user.eamil; // handle possible typo from backend
                     const fullName = getFullName(user);
@@ -365,7 +365,7 @@ export default function UsersManagement() {
                     return (
                       <tr
                         key={user.id}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150"
+                        className="hover:bg-gray-50 transition-colors duration-150"
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -377,10 +377,10 @@ export default function UsersManagement() {
                               </div>
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              <div className="text-sm font-medium text-gray-900">
                                 {fullName}
                               </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                              <div className="text-sm text-gray-500">
                                 ID: {user.id}
                               </div>
                             </div>
@@ -388,41 +388,41 @@ export default function UsersManagement() {
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900 dark:text-white">
+                          <div className="text-sm text-gray-900">
                             {email}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="text-sm text-gray-500">
                             {user.phoneNumber}
                           </div>
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900 dark:text-white">
+                          <div className="text-sm text-gray-900">
                             {getFacultyName(user.faculty || "")}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="text-sm text-gray-500">
                             {user.year || "Unknown"} •{" "}
                             {getGovernorateName(user.goverment || "")}
                           </div>
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          <div className="text-sm font-medium text-gray-900">
                             {getRoleName(user.roleId)}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="text-sm text-gray-500">
                             {getCommitteeNames(user.committeesId)}
                           </div>
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap">
                           {user.isActive ? (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                               <div className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5"></div>
                               Active
                             </span>
                           ) : (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                               <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-1.5"></div>
                               Inactive
                             </span>
@@ -435,7 +435,7 @@ export default function UsersManagement() {
                               setSelectedUser(user);
                               setShowDetails(true);
                             }}
-                            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-xs leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-150"
+                            className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150"
                           >
                             <svg
                               className="w-3 h-3 mr-1"
@@ -463,7 +463,7 @@ export default function UsersManagement() {
                             <button
                               onClick={() => handleActivate(user.id)}
                               disabled={actionLoadingId === user.id}
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
                             >
                               {actionLoadingId === user.id ? (
                                 <div className="w-3 h-3 mr-1 border border-white border-t-transparent rounded-full animate-spin"></div>
@@ -489,7 +489,7 @@ export default function UsersManagement() {
                           <button
                             onClick={() => handleDelete(user.id)}
                             disabled={actionLoadingId === user.id}
-                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
                           >
                             {actionLoadingId === user.id ? (
                               <div className="w-3 h-3 mr-1 border border-white border-t-transparent rounded-full animate-spin"></div>
@@ -517,7 +517,7 @@ export default function UsersManagement() {
                   {data?.length === 0 && (
                     <tr>
                       <td colSpan={6} className="px-6 py-12 text-center">
-                        <div className="text-gray-500 dark:text-gray-400">
+                        <div className="text-gray-500">
                           <svg
                             className="w-12 h-12 mx-auto mb-4"
                             fill="none"
@@ -548,14 +548,14 @@ export default function UsersManagement() {
                 {/* User Details Modal */}
         {showDetails && selectedUser && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">
                   User Details
                 </h3>
                 <button
                   onClick={() => setShowDetails(false)}
-                  className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                  className="text-gray-400 hover:text-gray-500"
                 >
                   <span className="sr-only">Close</span>
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -565,30 +565,30 @@ export default function UsersManagement() {
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                  <h5 className="text-sm font-medium text-gray-900 mb-3">
                     Personal Information
                   </h5>
                   <div className="space-y-2 text-sm">
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         First Name:
                       </span>{" "}
                       {selectedUser.fName || "N/A"}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Middle Name:
                       </span>{" "}
                       {selectedUser.mName || "N/A"}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Last Name:
                       </span>{" "}
                       {selectedUser.lName || "N/A"}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Gender:
                       </span>{" "}
                       {selectedUser.sex || "N/A"}
@@ -597,24 +597,24 @@ export default function UsersManagement() {
                 </div>
 
                 <div>
-                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                  <h5 className="text-sm font-medium text-gray-900 mb-3">
                     Contact Information
                   </h5>
                   <div className="space-y-2 text-sm">
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Email:
                       </span>{" "}
                       {selectedUser.email || "N/A"}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Phone:
                       </span>{" "}
                       {selectedUser.phoneNumber || "N/A"}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Governorate:
                       </span>{" "}
                       {getGovernorateName(selectedUser.goverment || "")}
@@ -623,18 +623,18 @@ export default function UsersManagement() {
                 </div>
 
                 <div>
-                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                  <h5 className="text-sm font-medium text-gray-900 mb-3">
                     Academic Information
                   </h5>
                   <div className="space-y-2 text-sm">
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Faculty:
                       </span>{" "}
                       {getFacultyName(selectedUser.faculty || "")}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Year:
                       </span>{" "}
                       {selectedUser.year || "N/A"}
@@ -643,32 +643,32 @@ export default function UsersManagement() {
                 </div>
 
                 <div>
-                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                  <h5 className="text-sm font-medium text-gray-900 mb-3">
                     IEEE Information
                   </h5>
                   <div className="space-y-2 text-sm">
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Role:
                       </span>{" "}
                       {getRoleName(selectedUser.roleId)}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600 dark:text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Committees:
                       </span>{" "}
                       {getCommitteeNames(selectedUser.committeesId)}
                     </p>
                     <div className="flex items-center">
-                      <span className="font-medium text-gray-600 dark:text-gray-400 mr-2">
+                      <span className="font-medium text-gray-600 mr-2">
                         Status:
                       </span>
                       {selectedUser.isActive ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Active
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                           Inactive
                         </span>
                       )}

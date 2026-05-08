@@ -33,10 +33,6 @@ import {
   sendChatMessage,
   resetChat,
   sendEmailApi,
-  getAllSponsorsApi,
-  createSponsorApi,
-  updateSponsorApi,
-  deleteSponsorApi,
 } from "~/lib/api";
 
 import type {

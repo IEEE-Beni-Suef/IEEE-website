@@ -74,13 +74,13 @@ const SponsorsSection = () => {
       {isLoading ? (
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto" />
-          <p className="text-gray-600 dark:text-gray-400 mt-4">
+          <p className="text-gray-600 mt-4">
             Loading Sponsors...
           </p>
         </div>
       ) : isError ? (
         <div className="text-center py-12">
-          <p className="text-red-600 dark:text-red-400">
+          <p className="text-red-600">
             Failed to load sponsor s. Please try again later.
             
           </p>
@@ -104,7 +104,7 @@ const SponsorsSection = () => {
       ) : (
         <div className="text-center py-12">
           <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             No sponsor s available at the moment.
           </p>
         </div>

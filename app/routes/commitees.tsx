@@ -24,13 +24,13 @@ const Commitees = () => {
     }
 
     return (
-        <Section id="committees" padding="xl" className="bg-white dark:bg-gray-900">
+        <Section id="committees" padding="xl" className="bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
              Our Committees
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Discover the various committees within our organization, each
               dedicated to specific areas of interest and expertise.
             </p>
@@ -42,8 +42,8 @@ const Commitees = () => {
                         (committees as Committee[]).map((committee) => (
                             <div
                                 key={committee.id}
-                                className="relative flex flex-col text-gray-900 dark:text-white bg-white dark:bg-gray-800 shadow-md bg-clip-border rounded-xl 
-                                           border border-gray-300/80 dark:border-gray-700 transform transition-all duration-300 hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 group"
+                                className="relative flex flex-col text-gray-900 bg-white shadow-md bg-clip-border rounded-xl 
+                                           border border-gray-300/80 transform transition-all duration-300 hover:shadow-lg hover:bg-gray-50 group"
                             >
                                 <div className="relative mx-4 mt-4 overflow-hidden text-gray-900 bg-white bg-clip-border rounded-xl">
                                     <img
@@ -57,20 +57,20 @@ const Commitees = () => {
                                 </div>
                                 <div className="p-4">
                                     <div className="flex items-center justify-between mb-2">
-                                        <p className="block font-sans text-base antialiased font-medium leading-relaxed text-gray-900 dark:text-gray-100">
+                                        <p className="block font-sans text-base antialiased font-medium leading-relaxed text-gray-900">
                                             {committee.name}
                                         </p>
                                     </div>
 
                                     {/* Committee description */}
                                     {committee.description && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-3">
+                                        <p className="text-sm text-gray-600 mb-3 line-clamp-3">
                                             {committee.description}
                                         </p>
                                     )}
                                     
                                     {/* Show member count if available, else show members array length, else N/A */}
-                                    {/* <p className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-100 opacity-75">
+                                    {/* <p className="flex items-center gap-1 text-sm text-gray-700 opacity-75">
                                         <Users className="w-4 h-4" />
                                         Members: {committee.memberCount}
                                     </p> */}

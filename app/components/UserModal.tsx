@@ -250,7 +250,7 @@ export const UserModal: FC<UserModalProps> = ({
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="text-gray-400 hover:text-gray-600"
             >
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -264,7 +264,7 @@ export const UserModal: FC<UserModalProps> = ({
         <div className="flex items-center space-x-2">
           <label
             htmlFor="isActive"
-            className="text-m font-medium text-gray-700 dark:text-gray-200"
+            className="text-m font-medium text-gray-700"
           >
             Active User
           </label>
@@ -272,7 +272,7 @@ export const UserModal: FC<UserModalProps> = ({
             type="checkbox"
             id="isActive"
             {...register("isActive")}
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-400"
+            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
           />
         </div>
 

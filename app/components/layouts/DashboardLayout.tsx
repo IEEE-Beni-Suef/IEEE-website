@@ -13,7 +13,7 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-gray-900 pt-16">
+    <div className="h-screen bg-gray-50 pt-16">
       {/* Mobile Sidebar Overlay */}
       {isMobileSidebarOpen && (
         <div
@@ -34,7 +34,7 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
             isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="h-full p-6 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+          <div className="h-full p-6 bg-gray-50 border-r border-gray-200">
             {sidebar}
           </div>
         </aside>
@@ -44,7 +44,7 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-            className=" w-14 h-14 lg:hidden fixed bottom-4 z-20 right-4 p-3 cursor-pointer rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            className=" w-14 h-14 lg:hidden fixed bottom-4 z-20 right-4 p-3 cursor-pointer rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-200"
           >
             {isMobileSidebarOpen ? (
               <X className="w-6 h-6" />
@@ -55,7 +55,7 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
 
           <div className="flex-1 overflow-y-auto">
             <div className="h-full p-3 lg:p-6">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-full overflow-y-auto">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 h-full overflow-y-auto">
                 <div className="p-3 lg:p-6">{children || <Outlet />}</div>
               </div>
             </div>

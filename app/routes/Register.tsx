@@ -277,7 +277,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -305,10 +305,10 @@ const Register = () => {
         {/* Mobile header with illustration */}
         <div className="lg:hidden text-center mb-8">
           <AuthIllustration type="register" className="max-w-xs mx-auto mb-6" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
             Join IEEE BNS
           </h1>
-          <p className="text-base text-gray-600 dark:text-gray-400">
+          <p className="text-base text-gray-600">
             Create your account and become part of our community
           </p>
         </div>
@@ -317,10 +317,10 @@ const Register = () => {
           {/* Illustration Side - Desktop Only */}
           <div className="hidden lg:block lg:sticky lg:top-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 Join IEEE BNS Community
               </h1>
-              <p className="text-base text-gray-600 dark:text-gray-400">
+              <p className="text-base text-gray-600">
                 Connect with fellow innovators and advance your technical career
               </p>
             </div>
@@ -328,21 +328,21 @@ const Register = () => {
 
             {/* Benefits Section */}
             <div className="mt-8 space-y-4">
-              <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3">
-                  <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center text-sm text-gray-700">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <Users className="w-4 h-4 text-blue-600" />
                 </div>
                 <span>Access to exclusive technical workshops</span>
               </div>
-              <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3">
-                  <GraduationCap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center text-sm text-gray-700">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <GraduationCap className="w-4 h-4 text-blue-600" />
                 </div>
                 <span>Professional development opportunities</span>
               </div>
-              <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3">
-                  <Phone className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center text-sm text-gray-700">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <Phone className="w-4 h-4 text-blue-600" />
                 </div>
                 <span>Networking with industry professionals</span>
               </div>
@@ -396,10 +396,10 @@ const Register = () => {
                 <div className="my-4">
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+                      <div className="w-full border-t border-gray-200"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">
+                      <span className="px-2 bg-white text-gray-500">
                         Already have an account?
                       </span>
                     </div>

@@ -83,10 +83,10 @@ export function UpdateDatesModal({
               }}
               className="sr-only peer"
             />
-            <div className="w-10 h-6 bg-gray-300 dark:bg-gray-600 rounded-full peer-checked:bg-blue-600 transition-colors" />
+            <div className="w-10 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors" />
             <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4" />
           </div>
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span className="text-sm font-medium text-gray-700">
             Coming Soon (no dates needed)
           </span>
         </label>
@@ -95,7 +95,7 @@ export function UpdateDatesModal({
         {!isCommingSoon && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">
                 Start Date <span className="text-red-500">*</span>
               </label>
               <input
@@ -103,13 +103,13 @@ export function UpdateDatesModal({
                 type="datetime-local"
                 value={startDate}
                 onChange={(e) => { setStartDate(e.target.value); setErrors((p) => ({ ...p, startDate: "" })); }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.startDate && <p className="text-xs text-red-500">{errors.startDate}</p>}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">
                 End Date <span className="text-red-500">*</span>
               </label>
               <input
@@ -118,7 +118,7 @@ export function UpdateDatesModal({
                 value={endDate}
                 min={startDate}
                 onChange={(e) => { setEndDate(e.target.value); setErrors((p) => ({ ...p, endDate: "" })); }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.endDate && <p className="text-xs text-red-500">{errors.endDate}</p>}
             </div>

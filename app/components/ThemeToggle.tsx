@@ -14,7 +14,7 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={handleThemeToggle}
-      className="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 group overflow-hidden"
+      className="relative p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-300 group overflow-hidden"
       aria-label="Toggle theme"
     >
       <div className="relative z-10 w-6 h-6 flex items-center justify-center">
@@ -37,7 +37,7 @@ const ThemeToggle = () => {
       </div>
 
       {/* Animated background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 dark:from-blue-600 dark:to-purple-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-lg"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-lg"></div>
     </button>
   );
 };

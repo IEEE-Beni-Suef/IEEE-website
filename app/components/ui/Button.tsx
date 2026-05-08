@@ -4,13 +4,13 @@ const buttonVariants = {
   primary:
     "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:from-blue-700 hover:to-blue-800 hover:shadow-xl",
   secondary:
-    "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700",
+    "bg-gray-100 text-gray-900 hover:bg-gray-200",
   accent:
     "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg hover:from-orange-600 hover:to-red-600 hover:shadow-xl",
   outline:
-    "border-2 border-blue-600 dark:border-blue-400 bg-transparent text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20",
-  ghost: "hover:bg-gray-100 dark:hover:bg-gray-800",
-  link: "text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline",
+    "border-2 border-blue-600 bg-transparent text-blue-600 hover:bg-blue-50",
+  ghost: "hover:bg-gray-100",
+  link: "text-blue-600 underline-offset-4 hover:underline",
   gradient:
     "bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white shadow-lg hover:shadow-xl hover:shadow-blue-500/25",
   danger:
@@ -50,7 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseClasses =
-       "flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-gray-900 dark:text-gray-100 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative overflow-hidden group font-poppins";
+       "flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-gray-900 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative overflow-hidden group font-poppins";
 
     return (
       <button

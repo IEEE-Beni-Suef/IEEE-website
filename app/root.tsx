@@ -7,7 +7,6 @@ import {
   ScrollRestoration,
 } from "react-router";
 import { Provider } from "react-redux";
-import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import type { Route } from "./+types/root";
@@ -15,7 +14,6 @@ import Navbar from "./components/Navbar";
 import { InactiveBanner } from "./components/InactiveBanner";
 import { Chatbot } from "./components/Chatbot";
 import { store } from "./store/store";
-import { initializeTheme } from "./store/slices/themeSlice";
 import { useNavigationInit } from "./hooks/useNavigationInit";
 import "./index.css";
 import "./app.css";
@@ -23,6 +21,8 @@ import "./app.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "~/config/queryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { IntroProvider } from "./context/IntroContext";
+
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -63,18 +63,16 @@ export default function App() {
   // Initialize navigation service
   useNavigationInit();
 
-  useEffect(() => {
-    store.dispatch(initializeTheme());
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <Provider store={store}>
-        <Navbar />
-        <InactiveBanner />
-        <Outlet />
-        <Chatbot />
+        <IntroProvider>
+          <Navbar />
+          <InactiveBanner />
+          <Outlet />
+          <Chatbot />
+        </IntroProvider>
         <Toaster
           position="top-right"
           toastOptions={{

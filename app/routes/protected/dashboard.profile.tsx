@@ -108,7 +108,7 @@ export default function Profile() {
 
       return (
         <div className="space-y-2">
-          <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="flex items-center text-sm font-medium text-gray-700">
             <Icon className="w-4 h-4 mr-2 text-gray-500" />
             {label}
           </label>
@@ -117,7 +117,7 @@ export default function Profile() {
               <select
                 value={value}
                 onChange={(e) => handleInputChange(field, e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Select {label}</option>
                 {options.map((option) => (
@@ -131,11 +131,11 @@ export default function Profile() {
                 type={type}
                 value={value}
                 onChange={(e) => handleInputChange(field, e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             )
           ) : (
-            <p className="px-3 py-2 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <p className="px-3 py-2 text-gray-900 bg-gray-50 rounded-lg">
               {type === "select" && options.length > 0
                 ? options.find((opt) => opt.value === displayValue)?.label ||
                   displayValue ||
@@ -154,10 +154,10 @@ export default function Profile() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          <h1 className="text-2xl font-semibold text-gray-900">
             My Profile
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-500">
             Manage your personal information
           </p>
         </div>
@@ -194,17 +194,17 @@ export default function Profile() {
       </div>
 
       {updateUserMutation.isSuccess && !isEditing && (
-        <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mr-3" />
-          <p className="text-green-700 dark:text-green-300">
+        <div className="flex items-center p-4 bg-green-50 border border-green-200 rounded-lg">
+          <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
+          <p className="text-green-700">
             Profile updated successfully!
           </p>
         </div>
       )}
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-medium text-gray-900">
             Personal Information
           </h2>
         </div>
@@ -285,16 +285,16 @@ export default function Profile() {
 
             {/* Read-only fields */}
             <div className="space-y-2">
-              <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="flex items-center text-sm font-medium text-gray-700">
                 <CheckCircle className="w-4 h-4 mr-2 text-gray-500" />
                 Account Status
               </label>
-              <div className="px-3 py-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+              <div className="px-3 py-2 bg-gray-50 rounded-lg">
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     user?.isActive
-                      ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                      : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
                   }`}
                 >
                   {user?.isActive ? "Active" : "Inactive"}
@@ -303,11 +303,11 @@ export default function Profile() {
             </div>
 
             <div className="space-y-2">
-              <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="flex items-center text-sm font-medium text-gray-700">
                 <Users className="w-4 h-4 mr-2 text-gray-500" />
                 Role
               </label>
-              <p className="px-3 py-2 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+              <p className="px-3 py-2 text-gray-900 bg-gray-50 rounded-lg">
                 {getRoleName(user?.roleId)}
               </p>
             </div>

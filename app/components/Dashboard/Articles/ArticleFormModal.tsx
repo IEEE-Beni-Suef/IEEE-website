@@ -132,14 +132,14 @@ export function ArticleFormModal({
         />
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Description
           </label>
           <textarea
             {...register("description")}
             placeholder="Enter article description"
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />
           {errors.description && (
             <p className="text-sm text-red-600">{errors.description.message}</p>
@@ -159,17 +159,17 @@ export function ArticleFormModal({
         />
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Photo
           </label>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
           {selectedFile && (
-            <p className="text-sm text-green-600 dark:text-green-400">
+            <p className="text-sm text-green-600">
               Selected: {selectedFile.name}
             </p>
           )}
@@ -185,7 +185,7 @@ export function ArticleFormModal({
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Keywords
           </label>
           <div className="flex gap-2">
@@ -195,7 +195,7 @@ export function ArticleFormModal({
               onChange={(e) => setKeywordInput(e.target.value)}
               onKeyPress={handleKeywordKeyPress}
               placeholder="Add keyword and press Enter"
-              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <Button type="button" variant="secondary" onClick={addKeyword}>
               <Plus className="w-4 h-4" />
@@ -207,13 +207,13 @@ export function ArticleFormModal({
               {keywords.map((keyword, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
                 >
                   {keyword}
                   <button
                     type="button"
                     onClick={() => removeKeyword(keyword)}
-                    className="ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
+                    className="ml-2 text-blue-600 hover:text-blue-800"
                   >
                     <X className="w-3 h-3" />
                   </button>
