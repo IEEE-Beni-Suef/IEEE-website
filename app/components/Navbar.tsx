@@ -91,7 +91,7 @@ const Navbar = () => {
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                     isActive(item.path)
                       ? "text-white bg-[var(--color-primary-normal)]"
-                      : "text-white hover:bg-[var(--color-primary-normal)]"
+                      : "text-black hover:bg-[var(--color-primary-normal)]"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
