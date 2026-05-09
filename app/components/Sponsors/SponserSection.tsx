@@ -8,9 +8,6 @@ const SponsorsSection = () => {
 
   return (
     <div className="pt-9 container my-5 mx-auto px-40 relative">
-      <div className="flex items-center justify-center mb-10 text-center">
-        <h1 className="text-4xl font-bold text-center">Sponsors & Partners</h1>
-      </div>
 
       {isLoading ? (
         <div className="text-center py-12">

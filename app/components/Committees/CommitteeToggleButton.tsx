@@ -20,24 +20,34 @@ const CommitteeToggleButton = ({ commmitteList, handleChange }: IProps) => {
         onChange={handleChange}
         aria-label="Platform"
         sx={{
-          backgroundColor: "#E7EAEF",
-          p: 1,
+          backgroundColor: "#F1F5F9",
+          p: "6px",
           display: "flex",
           justifyContent: "space-evenly",
           alignItems: "center",
-          borderRadius: "16px",
+          borderRadius: "12px",
 
           "& .MuiToggleButton-root": {
             border: 0,
-            borderRadius: "12px",
+            borderRadius: "8px",
             flex: 1,
             textTransform: "none",
+            color: "#475569",
+            fontWeight: 600,
+            fontSize: "14px",
+            py: "10px",
+            transition: "all 0.2s ease-in-out",
           },
 
           "& .MuiToggleButton-root.Mui-selected": {
             backgroundColor: "white",
             color: "#5A10A5",
+            fontWeight: "bold",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
           },
+          "& .MuiToggleButton-root.Mui-selected:hover": {
+            backgroundColor: "white",
+          }
         }}
       >
         <ToggleButton value="technicalcommittees">

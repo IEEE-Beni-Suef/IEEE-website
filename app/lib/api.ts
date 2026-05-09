@@ -666,7 +666,7 @@ export const sendEmailApi = async <T = any>(
 // Categories API  (GUID-based, separate from legacy /Category)
 // ============================================================
 
-const CAT = "/categories";
+const CAT = "/EventCategories";
 
 export const categoriesApi = {
   /** Fetch all categories */
