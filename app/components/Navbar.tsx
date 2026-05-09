@@ -27,7 +27,10 @@ const Navbar = () => {
   const { isAuthenticated, user, isLoading } = useAuth();
   const { introReady } = useIntro();
 
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    setIsMounted(true);
     if (typeof window !== "undefined") {
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 20);
@@ -44,7 +47,7 @@ const Navbar = () => {
     { label: "Events", path: "/events", icon: Calendar },
     { label: "Articles", path: "/articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
-    { label: "Contact Us", path: "/contact", icon: Users },   // 👈 added
+    { label: "Contact Us", path: "/contact", icon: Users },
   ];
 
   const authNavItems = [
@@ -54,8 +57,10 @@ const Navbar = () => {
     { label: "Events", path: "/events", icon: Calendar },
     { label: "Articles", path: "/articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
-    { label: "Contact Us", path: "/contact", icon: Users },   // 👈 added
+    { label: "Contact Us", path: "/contact", icon: Users },
   ];
+
+  const currentNavItems = isMounted && isAuthenticated ? authNavItems : navItems;
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -82,7 +87,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {(isAuthenticated ? authNavItems : navItems).map((item) => {
+            {currentNavItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Link
@@ -140,7 +145,7 @@ const Navbar = () => {
       >
         <div className="px-4 py-3 bg-white border-t border-gray-200">
           <div className="space-y-2">
-            {(isAuthenticated ? authNavItems : navItems).map((item) => {
+            {currentNavItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Link

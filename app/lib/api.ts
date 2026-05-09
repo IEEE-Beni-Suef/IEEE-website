@@ -20,6 +20,7 @@ import type {
   Subsection,
   Meeting,
   MeetingAttendance,
+  ISponsorCard,
 } from "~/types";
 import type {
   ApiCategory,
@@ -759,5 +760,71 @@ export const eventsApi = {
   /** Delete an event */
   delete: (id: string): Promise<void> =>
     apiClient.delete(`${EV}/${id}`).then(() => undefined),
+};
+
+// ============================================================
+// Sponsors API
+// ============================================================
+
+export const getAllSponsorsApi = async (): Promise<ISponsorCard[]> => {
+  try {
+    const response = await apiClient.get("/Sponsors");
+    return response.data as ISponsorCard[];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to get Sponsors");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const getSponsorByIdApi = async (id: number): Promise<ISponsorCard> => {
+  try {
+    const response = await apiClient.get(`/Sponsors/${id}`);
+    return response.data as ISponsorCard;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to get Sponsor");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const createSponsorApi = async <T = any>(data: any): Promise<T> => {
+  try {
+    const config = data instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+    const response = await apiClient.post("/Sponsors", data, config);
+    return response.data as T;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to create Sponsor");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateSponsorApi = async <T = any>(id: number, data: any): Promise<T> => {
+  try {
+    const config = data instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+    const response = await apiClient.put(`/Sponsors/${id}`, data, config);
+    return response.data as T;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to update Sponsor");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteSponsorApi = async <T = any>(id: number): Promise<T> => {
+  try {
+    const response = await apiClient.delete(`/Sponsors/${id}`);
+    return response.data as T;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Failed to delete Sponsor");
+    }
+    throw new Error("An unexpected error occurred");
+  }
 };
 

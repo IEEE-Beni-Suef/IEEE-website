@@ -21,5 +21,6 @@ export default [
     route("meetings", "routes/protected/dashboard.meetings.tsx"),
     route("emails", "routes/protected/dashboard.emails.tsx"),
     route("events", "routes/protected/dashboard.events.tsx"),
+    route("sponsors", "routes/protected/dashboard.sponsors.tsx"),
   ]),
 ] satisfies RouteConfig;

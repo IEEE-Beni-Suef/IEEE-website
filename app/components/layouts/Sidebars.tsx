@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
   Mail,
+  Award,
 } from "lucide-react";
 import { sidebarConfigs } from "../../utils/lists";
 import { SidebarItem } from "./SidebarItem";
@@ -36,6 +37,7 @@ const getIconComponent = (iconName: string) => {
     CalendarDays: <CalendarDays />,
     FileText: <FileText />,
     Mail: <Mail />,
+    Award: <Award />,
   };
   return iconMap[iconName] || <LayoutDashboard />;
 };

@@ -1,73 +1,14 @@
 import { BookOpen } from "lucide-react";
 import type { ISponsorCard } from "~/types";
 import SponsorCard from "./SponsorCard";
-const sponsors: ISponsorCard[] = [
-  {
-    id: 1,
-    img: "/Creativa.jpg",
-    title: "Tech",
-    description:
-      "Diamond Partner",
-  },
-  {
-    id: 2,
-    img: "/Creativa.jpg",
-    title: "Creativa-Hub Beni-Suef",
-    description:
-      "Diamond Partner",
-  },
-  {
-    id: 3,
-    img: "/Creativa.jpg",
-    title: "Tech",
-    description:
-      "Diamond Partner",
-  },
-  {
-    id: 4,
-    img: "/Creativa.jpg",
-    title: "Tech",
-    description:
-      "Diamond Partner",
-  },
-  {
-    id: 5,
-    img: "/Creativa.jpg",
-    title: "Tech",
-    description:
-      "Diamond Partner",
-  },
-  {
-    id: 6,
-    img: "/Creativa.jpg",
-    title: "Tech",
-    description:
-      "Diamond Partner",
-  },
-  {
-    id: 7,
-    img: "/Creativa.jpg",
-    title: "Tech",
-    description:
-      "Diamond Partner",
-  },
-  {
-    id: 8,
-    img: "/Creativa.jpg",
-    title: "Tech",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem odit ex aperiam? Ipsa, quisquam repudiandae! Tempora voluptatum ea nemo! Impedit?",
-  },
-  
-];  
+import { useAllSponsors } from "~/hooks/useApi";
 
 const SponsorsSection = () => {
-  const isLoading = false; 
-  const isError = false;
+  const { data: sponsors, isLoading, isError } = useAllSponsors();
 
   return (
-    <div className="pt-9 container my-5 mx-auto px-40 ">
-      <div className="flex items-center justify-center mb-20 text-center">
+    <div className="pt-9 container my-5 mx-auto px-40 relative">
+      <div className="flex items-center justify-center mb-10 text-center">
         <h1 className="text-4xl font-bold text-center">Sponsors & Partners</h1>
       </div>
 
@@ -81,8 +22,7 @@ const SponsorsSection = () => {
       ) : isError ? (
         <div className="text-center py-12">
           <p className="text-red-600">
-            Failed to load sponsor s. Please try again later.
-            
+            Failed to load sponsors. Please try again later.
           </p>
         </div>
       ) : sponsors && sponsors.length > 0 ? (
@@ -105,7 +45,7 @@ const SponsorsSection = () => {
         <div className="text-center py-12">
           <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600">
-            No sponsor s available at the moment.
+            No sponsors available at the moment.
           </p>
         </div>
       )}

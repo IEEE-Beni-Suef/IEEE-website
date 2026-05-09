@@ -33,7 +33,10 @@ import {
   sendChatMessage,
   resetChat,
   sendEmailApi,
-
+  getAllSponsorsApi,
+  createSponsorApi,
+  updateSponsorApi,
+  deleteSponsorApi,
 } from "~/lib/api";
 
 import type {
@@ -443,7 +446,7 @@ export const useAllSponsors = () => {
 };
 
 export const useCreateSponsor = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createSponsor "],
     mutationFn: (data: any) => createSponsorApi(data),
     onSuccess: () => {
@@ -451,23 +454,23 @@ export const useCreateSponsor = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
-export const useUpdateSponsor = (id: number) => {
-  const { mutate, ...rest } = useMutation({
-    mutationKey: ["updateSponsor ", id],
-    mutationFn: (data: any) => updateSponsorApi(id, data),
+export const useUpdateSponsor = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["updateSponsor"],
+    mutationFn: ({ id, data }: { id: number; data: any }) => updateSponsorApi(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useDeleteSponsor = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["deleteSponsor "],
     mutationFn: (id: number) => deleteSponsorApi(id),
     onSuccess: () => {
@@ -475,5 +478,5 @@ export const useDeleteSponsor = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
