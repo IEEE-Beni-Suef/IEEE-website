@@ -7,14 +7,8 @@ import {
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { ArticleDisplay } from "../components/ArticleDisplay";
-import {
-  useAllArticles,
-  useAllSponsors,
-  useCommittees,
-  useCreateSponsor,
-  useDeleteSponsor,
-  useUpdateSponsor,
-} from "../hooks/useApi";
+import { useAllArticles, useCommittees } from "../hooks/useApi";
+
 import { Link, type MetaArgs } from "react-router";
 import type { Article, Committee } from "../types";
 import {
@@ -47,6 +41,9 @@ import Events from "../components/home/Events";
 import About from "../components/home/About";
 import Footer from "../components/home/Footer";
 import HighBoardSection from "../components/home/HighBoardSection";
+
+import Sponsers from "./sponsors";
+
 
 export function meta({}: MetaArgs) {
   return [
@@ -86,6 +83,7 @@ export function meta({}: MetaArgs) {
 }
 
 export default function Home() {
+
   const { data: articles, isLoading, error } = useAllArticles();
   const {
     data: committees,
@@ -233,8 +231,7 @@ export default function Home() {
 
       {/* Sponsers Section */}
 
-      <SponsersSection />
-
+      <Sponsers />
 
       <Footer />
     </>

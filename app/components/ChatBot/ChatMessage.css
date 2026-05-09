@@ -1,0 +1,23 @@
+.text-div-bot::before {
+  content: "";
+  position: absolute;
+  left: 0; /* pulls it outside the bubble */
+  bottom: -10px; /* aligns to the top corner */
+  width: 0;
+  height: 0;
+  border-top: 18px solid #eceffd; /* same color as bubble */
+  border-right: 20px solid transparent;
+  border-radius: 2px;
+}
+
+.text-div-me::before {
+  content: "";
+  position: absolute;
+  right: 0; /* pulls it outside the bubble */
+  bottom: -13px; /* aligns to the top corner */
+  width: 0;
+  height: 0;
+  border-top: 20px solid #4460EF;
+  border-left: 20px solid transparent;
+  border-radius: 2px;
+}
