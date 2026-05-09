@@ -6,8 +6,25 @@ import {
   Phone, 
   Linkedin, 
   Facebook, 
-  Instagram 
+  Instagram,
+  Youtube
 } from 'lucide-react';
+
+const TikTok = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
 
 
 import IEEE from "../../assets/IEEE.png"
@@ -38,9 +55,11 @@ const RESOURCES: LinkItem[] = [
 ];
 
 const SOCIAL_LINKS: SocialItem[] = [
-  { label: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
-  { label: 'Facebook', href: 'https://facebook.com', icon: Facebook },
-  { label: 'Instagram', href: 'https://instagram.com', icon: Instagram },
+  { label: 'Facebook', href: 'https://www.facebook.com/ieee.bns', icon: Facebook },
+  { label: 'Instagram', href: 'https://www.instagram.com/ieee_bsusb', icon: Instagram },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/ieee-benisuef-student-branch/', icon: Linkedin },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@ieeebsusb', icon: TikTok },
+  { label: 'YouTube', href: 'https://youtube.com/@ieeebsusb', icon: Youtube },
 ];
 
 export const Footer: React.FC = () => {
