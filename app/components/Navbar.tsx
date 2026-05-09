@@ -42,7 +42,7 @@ const Navbar = () => {
     { label: "Home", path: "/", icon: Home },
     { label: "Committees", path: "/#committees", icon: Boxes },
     { label: "Events", path: "/events", icon: Calendar },
-    { label: "Articles", path: "/#articles", icon: FileText },
+    { label: "Articles", path: "/articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
     { label: "Contact Us", path: "/contact", icon: Users },   // 👈 added
   ];
@@ -52,7 +52,7 @@ const Navbar = () => {
     { label: "Home", path: "/", icon: Home },
     { label: "Committees", path: "/#committees", icon: Boxes },
     { label: "Events", path: "/events", icon: Calendar },
-    { label: "Articles", path: "/#articles", icon: FileText },
+    { label: "Articles", path: "/articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
     { label: "Contact Us", path: "/contact", icon: Users },   // 👈 added
   ];

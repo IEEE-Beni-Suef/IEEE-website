@@ -43,13 +43,10 @@ import SponsersSection from "~/components/Sponsors/SponserSection";
 import toast from "react-hot-toast";
 
 import HeroSection from "../components/home/HeroSection";
-import Events from "../components/home/Events"
-import About from "../components/home/About"
-import Footer from "../components/home/Footer"
-
-
-
-
+import Events from "../components/home/Events";
+import About from "../components/home/About";
+import Footer from "../components/home/Footer";
+import HighBoardSection from "../components/home/HighBoardSection";
 
 export function meta({}: MetaArgs) {
   return [
@@ -230,102 +227,9 @@ export default function Home() {
 
       {/* Committees Section */}
       <Commitees />
+      <HighBoardSection />
 
-      <Section id="articles" padding="xl" className="bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Latest News & Articles
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Stay updated with the latest developments, events, and insights
-              from our IEEE BNS community.
-            </p>
-          </div>
-
-          {isLoading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="text-gray-600 mt-4">
-                Loading articles...
-              </p>
-            </div>
-          ) : error ? (
-            <div className="text-center py-12">
-              <p className="text-red-600">
-                Failed to load articles. Please try again later.
-              </p>
-            </div>
-          ) : currentArticles.length > 0 ? (
-            <>
-              <div className="grid md:grid-cols-3 gap-8 mb-8">
-                {currentArticles.map((article: Article) => (
-                  <ArticleDisplay key={article.id} article={article} />
-                ))}
-              </div>
-
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center space-x-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={prevPage}
-                    disabled={currentPage === 1}
-                    className="flex items-center"
-                  >
-                    <ChevronLeft className="w-4 h-4 mr-0  md:mr-2" />
-                    <span className="hidden md:inline">Previous</span>
-                  </Button>
-
-                  <div className="flex items-center space-x-2">
-                    {getVisiblePages(currentPage, totalPages).map((page) => {
-                      if (typeof page === "string") {
-                        return (
-                          <span key={page} className="px-2 text-gray-500">
-                            ...
-                          </span>
-                        );
-                      }
-                      return (
-                        <button
-                          key={page}
-                          onClick={() => setCurrentPage(page)}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                            currentPage === page
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={nextPage}
-                    disabled={currentPage === totalPages}
-                    className="flex items-center"
-                  >
-                    <span className="hidden md:inline">Next</span>
-                    <ChevronRight className="w-4 h-4 ml-0 md:ml-2" />
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="text-center py-12">
-              <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">
-                No articles available at the moment.
-              </p>
-            </div>
-          )}
-        </div>
-      </Section>
+      
 
       {/* Sponsers Section */}
 
