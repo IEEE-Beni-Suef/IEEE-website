@@ -2,7 +2,7 @@ import type { MetaArgs } from "react-router";
 import { Link } from "react-router";
 import { Clock } from "lucide-react";
 import { Section } from "~/components/ui/Section";
-import { useAllArticles } from "~/hooks/useApi";
+import { useAllArticles, useAllEvents } from "~/hooks/useApi";
 import type { Article } from "~/types";
 
 export function meta({}: MetaArgs) {
@@ -121,15 +121,38 @@ function TimelineItem({ event }: { event: Article }) {
 }
 
 export default function EventsTimeline() {
-  const { data: articles, isLoading, error } = useAllArticles();
+  const { data: articles, isLoading: articlesLoading, error: articlesError } = useAllArticles();
+  const { data: apiEvents, isLoading: eventsLoading, error: eventsError } = useAllEvents();
 
-  // Filter articles for Events
-  const eventsData = articles
-    ? articles.filter(article => article.categoryName === "Events")
+  const isLoading = articlesLoading || eventsLoading;
+  const error = articlesError || eventsError;
+
+  // 1. Articles filtered by categoryName = "Events"
+  const articleEvents: Article[] = articles
+    ? articles.filter((a) => a.categoryName === "Events")
     : [];
 
+  // 2. Map ApiEvent → Article shape so TimelineItem works for both
+  const mappedApiEvents: Article[] = apiEvents
+    ? apiEvents.map((e: any) => ({
+        id: undefined,
+        title: e.name,
+        description: "",
+        keywords: e.keyWords ?? [],
+        photo: "",
+        categoryName: e.categoryName ?? "Event",   // direct field, not nested
+        createdAt: e.startDate ?? e.createdAt,
+        updatedAt: e.lastUpdatedAt ?? e.updatedAt,
+      }))
+    : [];
+
+  // 3. Merge: articleEvents first, then apiEvents (no duplicates by title)
+  const articleTitles = new Set(articleEvents.map((a) => a.title));
+  const uniqueApiEvents = mappedApiEvents.filter((e) => !articleTitles.has(e.title));
+  const allEvents: Article[] = [...articleEvents, ...uniqueApiEvents];
+
   // ترتيب الأحداث تنازلياً (الأحدث أولاً)
-  const sortedEvents = [...eventsData].sort((a, b) => {
+  const sortedEvents = [...allEvents].sort((a, b) => {
     const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
     const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
     return dateB - dateA;

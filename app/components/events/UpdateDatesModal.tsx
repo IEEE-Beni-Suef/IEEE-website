@@ -50,8 +50,8 @@ export function UpdateDatesModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const payload = {
-      startDate: isCommingSoon ? null : toIso(startDate),
-      endDate:   isCommingSoon ? null : toIso(endDate),
+      startDate: isCommingSoon ? new Date().toISOString() : toIso(startDate),
+      endDate:   isCommingSoon ? new Date(Date.now() + 3600000).toISOString() : toIso(endDate),
       isCommingSoon,
     };
 

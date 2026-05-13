@@ -78,8 +78,8 @@ export function CreateEventModal({
     const payload: CreateEventFormData = {
       ...form,
       keyWords: finalKeywords,
-      startDate: form.isCommingSoon ? null : toIso(form.startDate as string),
-      endDate:   form.isCommingSoon ? null : toIso(form.endDate as string),
+      startDate: form.isCommingSoon ? new Date().toISOString() : toIso(form.startDate as string),
+      endDate:   form.isCommingSoon ? new Date(Date.now() + 3600000).toISOString() : toIso(form.endDate as string),
     };
 
     const result = createEventSchema.safeParse(payload);

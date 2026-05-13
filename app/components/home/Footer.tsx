@@ -10,6 +10,9 @@ import {
   Youtube
 } from 'lucide-react';
 
+import { Link } from 'react-router';
+
+
 const TikTok = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
   <svg
     width={size}
@@ -77,10 +80,9 @@ export const Footer: React.FC = () => {
               <h3 className='text-white text-xl font-semibold border-2 border-white border-5 border-r-0 border-b-0 border-t-0 pl-3'>IEEE Beni Suef Student Branch</h3>
             </div>
 
-            <button className="flex items-center gap-2 bg-[#6121B6] hover:bg-[#501A96] text-white px-15 py-3 rounded-full font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-[#150A2E]">
-              Join Our Branch
-              <ArrowRight size={18} />
-            </button>
+            <Link to="/login" className="flex items-center gap-2  bg-[#6121B6] hover:bg-[#501A96] text-white px-15 py-3 rounded-full font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-[#150A2E]">
+              Join Our Branch <ArrowRight size={18} />
+            </Link>
           </div>
 
           {/* Column 2: Quick Links */}
@@ -117,21 +119,20 @@ export const Footer: React.FC = () => {
             <ul className="space-y-5">
               <li className="flex items-start gap-3">
                 <Mail className="text-[#6121B6] mt-1 flex-shrink-0" size={20} />
-                <a href="mailto:contact@ieee-sb.org" className="hover:text-white transition-colors">
-                  contact@ieee-sb.org
+                <a href="mailto:ieee.bsu@bsu.edu.eg" className="hover:text-white transition-colors">
+                  ieee.bsu@bsu.edu.eg
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="text-[#6121B6] mt-1 flex-shrink-0" size={20} />
                 <span>
-                  University Campus, Engineering Block A,<br />
-                  Room 402
+                  Beni-Suef University, Faculty of Engineering, Beni-Suef, Egypt
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="text-[#6121B6] mt-1 flex-shrink-0" size={20} />
                 <a href="tel:+15550001234" className="hover:text-white transition-colors">
-                  +1 (555) 000-1234
+                  +20 123 456 789
                 </a>
               </li>
             </ul>

@@ -1,10 +1,10 @@
 import { ProtectedRoute } from "../../components/ProtectedRoute";
 import { getRoleName, getFullName, getInitials } from "~/utils/utile";
-import { activateUserByIdApi, deleteUserByIdApi } from "~/lib/api";
+import { deleteUserByIdApi } from "~/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { facultyOptions, governorateOptions } from "~/utils/lists";
-import { useAllUsers, useCreateUser, useUpdateUser } from "~/hooks/useApi";
+import { useAllUsers, useCreateUser, useUpdateUser, useSetUserActivation } from "~/hooks/useApi";
 import { UsersModal } from "~/components/UsersModal";
 
 export default function UsersManagement() {
@@ -17,6 +17,7 @@ export default function UsersManagement() {
   const [editingUser, setEditingUser] = useState<any>(null);
   const { mutate: createUser} = useCreateUser();
   const { mutate: updateUser } = useUpdateUser(editingUser?.id || 0);
+  const { mutateAsync: setActivation } = useSetUserActivation();
 
   const handleCreateClick = () => {
     setEditingUser(null);
@@ -78,11 +79,10 @@ export default function UsersManagement() {
     }
   };
 
-  const handleActivate = async (id: number) => {
+  const handleSetActivation = async (id: number, isActive: boolean) => {
     try {
       setActionLoadingId(id);
-      await activateUserByIdApi(id);
-      await queryClient.invalidateQueries({ queryKey: ["users"] });
+      await setActivation({ id, isActive });
     } catch (e) {
       alert((e as Error).message);
     } finally {
@@ -459,30 +459,35 @@ export default function UsersManagement() {
                             View
                           </button>
 
-                          {!user.isActive && (
+                          {!user.isActive ? (
                             <button
-                              onClick={() => handleActivate(user.id)}
+                              onClick={() => handleSetActivation(user.id, true)}
                               disabled={actionLoadingId === user.id}
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
                             >
                               {actionLoadingId === user.id ? (
                                 <div className="w-3 h-3 mr-1 border border-white border-t-transparent rounded-full animate-spin"></div>
                               ) : (
-                                <svg
-                                  className="w-3 h-3 mr-1"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                  />
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                               )}
                               Activate
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleSetActivation(user.id, false)}
+                              disabled={actionLoadingId === user.id}
+                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+                            >
+                              {actionLoadingId === user.id ? (
+                                <div className="w-3 h-3 mr-1 border border-white border-t-transparent rounded-full animate-spin"></div>
+                              ) : (
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                </svg>
+                              )}
+                              Deactivate
                             </button>
                           )}
 

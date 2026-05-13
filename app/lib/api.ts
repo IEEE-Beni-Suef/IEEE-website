@@ -270,6 +270,27 @@ export const activateUserByIdApi = async <T = any>(id: number): Promise<T> => {
   }
 };
 
+// Supports both activate (true) and deactivate (false)
+export const setUserActivationApi = async <T = any>(
+  id: number,
+  isActive: boolean,
+): Promise<T> => {
+  try {
+    const response = await apiClient.put(
+      `/Admin/SetUserActivation/${id}?isActive=${isActive}`,
+    );
+    return response.data as T;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message ||
+          `Failed to ${isActive ? "activate" : "deactivate"} user`,
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const updateUserById = async <T = any>(
   id: number,
   data: z.infer<typeof createUserSchema>,
@@ -672,8 +693,8 @@ export const categoriesApi = {
   /** Fetch all categories */
   getAll: (): Promise<ApiCategory[]> =>
     apiClient
-      .get<ApiResponse<ApiCategory[]>>(CAT)
-      .then((r) => r.data.data ?? []),
+      .get<ApiCategory[]>(CAT)
+      .then((r) => r.data ?? []),
 
   /** Fetch a single category by GUID */
   getById: (id: string): Promise<ApiCategory | undefined> =>
@@ -719,7 +740,7 @@ const EV = "/events";
 export const eventsApi = {
   /** Fetch all events */
   getAll: (): Promise<ApiEvent[]> =>
-    apiClient.get<ApiResponse<ApiEvent[]>>(EV).then((r) => r.data.data ?? []),
+    apiClient.get<ApiEvent[]>(EV).then((r) => r.data ?? []),
 
   /** Fetch a single event by GUID */
   getById: (id: string): Promise<ApiEvent | undefined> =>

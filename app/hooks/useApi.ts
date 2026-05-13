@@ -2,6 +2,7 @@ import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "~/config/queryClient";
 import {
   activateUserByIdApi,
+  setUserActivationApi,
   createCommitteeApi,
   deleteCommitteeApi,
   deleteUserByIdApi,
@@ -37,6 +38,7 @@ import {
   createSponsorApi,
   updateSponsorApi,
   deleteSponsorApi,
+  eventsApi,
 } from "~/lib/api";
 
 import type {
@@ -50,6 +52,7 @@ import type {
   MeetingAttendance,
   ISponsorCard,
 } from "~/types";
+import type { ApiEvent } from "~/types/api.types";
 
 export const useCommittees = () => {
   const { data, ...rest } = useQuery<Committee[]>({
@@ -86,9 +89,26 @@ export const useActiveUser = (id: number) => {
   const { mutate, ...rest } = useMutation({
     mutationKey: ["activeUser", id],
     mutationFn: () => activateUserByIdApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
   });
 
   return { mutate, ...rest };
+};
+
+// Flexible: supports both activate (true) and deactivate (false)
+export const useSetUserActivation = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["setUserActivation"],
+    mutationFn: ({ id, isActive }: { id: number; isActive: boolean }) =>
+      setUserActivationApi(id, isActive),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
+  return { mutate, mutateAsync, ...rest };
 };
 // Assuming you have an API endpoint to activate a user
 
@@ -436,7 +456,7 @@ export const useSendEmail = () => {
 
 export const useAllSponsors = () => {
   const { data, ...rest } = useQuery<ISponsorCard[]>({
-    queryKey: ["sponsor s"],
+    queryKey: ["sponsors"],
     queryFn: getAllSponsorsApi,
     staleTime: 5 * 60 * 1000,
     retry: 1,
@@ -450,7 +470,7 @@ export const useCreateSponsor = () => {
     mutationKey: ["createSponsor "],
     mutationFn: (data: any) => createSponsorApi(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
+      queryClient.invalidateQueries({ queryKey: ["sponsors"] });
     },
   });
 
@@ -479,4 +499,16 @@ export const useDeleteSponsor = () => {
   });
 
   return { mutate, mutateAsync, ...rest };
+};
+
+// Events hook — fetches from /api/Events (dedicated endpoint)
+export const useAllEvents = () => {
+  const { data, ...rest } = useQuery<ApiEvent[]>({
+    queryKey: ["events"],
+    queryFn: () => eventsApi.getAll(),
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  return { data, ...rest };
 };
