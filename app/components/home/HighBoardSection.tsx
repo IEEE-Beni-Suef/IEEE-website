@@ -1,12 +1,12 @@
 
 import React from 'react';
 
-import chairman from "../../assets/images/highBoard/chairman.png"
-import viceChairman from "../../assets/images/highBoard/viceChairman.png"
-import viceChairwoman from "../../assets/images/highBoard/viceChairwoman.png"
-import webmaster from "../../assets/images/highBoard/webmaster.png"
-import treasure from "../../assets/images/highBoard/treasure.png"
-import secretary from "../../assets/images/highBoard/secretary.png"
+import chairman from "../../assets/images/highBoard/chairman.jpeg"
+import viceChairman from "../../assets/images/highBoard/viceChairman.jpg"
+import viceChairwoman from "../../assets/images/highBoard/viceChairwoman.jpg"
+import webmaster from "../../assets/images/highBoard/webmaster.jpg"
+import treasure from "../../assets/images/highBoard/treasure.jpg"
+import secretary from "../../assets/images/highBoard/secretary.jpg"
 
 export interface SocialLinks {
   linkedin?: string;
@@ -56,7 +56,7 @@ export const boardData: BoardMember[] = [
     name: 'SULTAN AMED',
     role: 'TREASURE',
     imageUrl: treasure,
-    socials: { linkedin: '#', email: 'mailto:#' }
+    socials: { linkedin: '', email: 'mailto:#' }
   },
   {
     id: '6',
