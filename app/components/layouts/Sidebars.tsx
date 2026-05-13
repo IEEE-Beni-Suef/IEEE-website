@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
   Mail,
+  Award,
 } from "lucide-react";
 import { sidebarConfigs } from "../../utils/lists";
 import { SidebarItem } from "./SidebarItem";
@@ -36,6 +37,7 @@ const getIconComponent = (iconName: string) => {
     CalendarDays: <CalendarDays />,
     FileText: <FileText />,
     Mail: <Mail />,
+    Award: <Award />,
   };
   return iconMap[iconName] || <LayoutDashboard />;
 };
@@ -62,7 +64,7 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
     <div className="h-full flex flex-col justify-between">
       <div>
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 ">
+          <h2 className="text-lg font-semibold text-slate-900 ">
             {config.title}
           </h2>
           <p className="text-sm text-gray-500">{config.description}</p>
@@ -79,31 +81,31 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
         </nav>
       </div>
       <div className="space-y-2">
-        <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           {/* Profile Actions - Collapsible */}
           <div
             className={`transition-all duration-300 ease-in-out ${
               isProfileExpanded ? "max-h-32 opacity-100" : "max-h-0 opacity-0"
             } overflow-hidden`}
           >
-            <div className="px-3 pb-3 space-y-1 border-b border-gray-200 dark:border-gray-700">
+            <div className="px-3 pb-3 space-y-1 border-b border-gray-200">
               <Link
                 to="/dashboard/profile"
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200 mt-2"
+                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200 mt-2"
               >
                 <User className="w-4 h-4" />
                 <span>Profile</span>
               </Link>
               <Link
                 to="/dashboard/settings"
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
               >
                 <Settings className="w-4 h-4" />
                 <span>Settings</span>
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 cursor-pointer"
+                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Sign Out</span>
@@ -112,19 +114,19 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
           </div>
           <button
             onClick={() => setIsProfileExpanded(!isProfileExpanded)}
-            className="w-full p-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200  cursor-pointer"
+            className="w-full p-3 flex items-center justify-between hover:bg-gray-50 transition-colors duration-200  cursor-pointer"
           >
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                <User2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <User2 className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1 min-w-0 text-left">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                <p className="text-sm font-medium text-gray-900 truncate">
                   {user?.firstName && user?.lastName
                     ? `${user.firstName} ${user.lastName}`
                     : "User"}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                <p className="text-xs text-gray-500 truncate">
                   {user?.email}
                 </p>
               </div>

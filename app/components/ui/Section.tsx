@@ -2,10 +2,10 @@ import React from "react";
 
 const sectionVariants = {
   default: "bg-transparent",
-  primary: "bg-gray-50 dark:bg-gray-900/50",
-  secondary: "bg-white dark:bg-gray-900",
+  primary: "bg-gray-50",
+  secondary: "bg-white",
   gradient:
-    "bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950/20 text-gray-900 dark:text-gray-100",
+    "bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900",
   feature: "bg-gradient-to-r from-blue-600 to-purple-700 text-white",
 };
 
@@ -83,7 +83,7 @@ const SectionTitle = React.forwardRef<
 >(({ className = "", ...props }, ref) => (
   <h2
     ref={ref}
-    className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-gray-100 tracking-tight ${className}`}
+    className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 tracking-tight ${className}`}
     {...props}
   />
 ));
@@ -95,7 +95,7 @@ const SectionSubtitle = React.forwardRef<
 >(({ className = "", ...props }, ref) => (
   <p
     ref={ref}
-    className={`text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto ${className}`}
+    className={`text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto ${className}`}
     {...props}
   />
 ));

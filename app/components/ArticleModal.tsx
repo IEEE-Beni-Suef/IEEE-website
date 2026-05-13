@@ -142,7 +142,7 @@ export function ArticleModal({
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Title <span className="text-red-500">*</span>
           </label>
           <input
@@ -150,17 +150,17 @@ export function ArticleModal({
             value={formData.title}
             onChange={(e) => handleInputChange("title", e.target.value)}
             placeholder="Enter article title"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           {errors.title && (
-            <p className="text-sm text-red-600 dark:text-red-400">
+            <p className="text-sm text-red-600">
               {errors.title}
             </p>
           )}
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Description <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -168,34 +168,34 @@ export function ArticleModal({
             onChange={(e) => handleInputChange("description", e.target.value)}
             placeholder="Enter article description"
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />
           {errors.description && (
-            <p className="text-sm text-red-600 dark:text-red-400">
+            <p className="text-sm text-red-600">
               {errors.description}
             </p>
           )}
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Photo <span className="text-red-500">*</span>
           </label>
 
           {/* File Upload Option */}
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+              <label className="block text-xs font-medium text-gray-600 mb-1">
                 Upload Image File
               </label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
               {selectedFile && (
-                <p className="text-sm text-green-600 dark:text-green-400 mt-1">
+                <p className="text-sm text-green-600 mt-1">
                   Selected: {selectedFile.name}
                 </p>
               )}
@@ -205,21 +205,21 @@ export function ArticleModal({
           </div>
 
           {errors.photo && (
-            <p className="text-sm text-red-600 dark:text-red-400">
+            <p className="text-sm text-red-600">
               {errors.photo}
             </p>
           )}
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Category <span className="text-red-500">*</span>
           </label>
           <select
             value={formData.categoryId}
             onChange={(e) => handleInputChange("categoryId", e.target.value)}
             disabled={categoriesLoading}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <option value="">
               {categoriesLoading ? "Loading categories..." : "Select category"}
@@ -232,14 +232,14 @@ export function ArticleModal({
               ))}
           </select>
           {errors.categoryId && (
-            <p className="text-sm text-red-600 dark:text-red-400">
+            <p className="text-sm text-red-600">
               {errors.categoryId}
             </p>
           )}
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Keywords <span className="text-red-500">*</span>
           </label>
           <div className="flex gap-2">
@@ -249,7 +249,7 @@ export function ArticleModal({
               onChange={(e) => setKeywordInput(e.target.value)}
               onKeyPress={handleKeywordKeyPress}
               placeholder="Add keyword and press Enter"
-              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <Button type="button" variant="secondary" onClick={addKeyword}>
               Add
@@ -261,13 +261,13 @@ export function ArticleModal({
               {formData.keywords.map((keyword, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
                 >
                   {keyword}
                   <button
                     type="button"
                     onClick={() => removeKeyword(keyword)}
-                    className="ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
+                    className="ml-2 text-blue-600 hover:text-blue-800"
                   >
                     ×
                   </button>
@@ -277,7 +277,7 @@ export function ArticleModal({
           )}
 
           {errors.keywords && (
-            <p className="text-sm text-red-600 dark:text-red-400">
+            <p className="text-sm text-red-600">
               {errors.keywords}
             </p>
           )}

@@ -6,4 +6,9 @@
 /build/
 
 .env
-/.env
+
+# Build output
+/.next/
+/out/
+/dist/
+/.vite/

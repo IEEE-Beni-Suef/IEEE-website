@@ -45,7 +45,7 @@ export const FormFileInput: FC<FormFileInputProps> = ({
     <div className="space-y-2">
       <label
         htmlFor={id}
-        className="text-sm font-medium text-gray-700 dark:text-gray-300"
+        className="text-sm font-medium text-gray-700"
       >
         {label}
       </label>
@@ -62,7 +62,7 @@ export const FormFileInput: FC<FormFileInputProps> = ({
         />
         <label
           htmlFor={id}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all duration-200 cursor-pointer flex items-center ${className}`}
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-500 hover:bg-gray-100 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all duration-200 cursor-pointer flex items-center ${className}`}
         >
           {watchedFile ? watchedFile.name : placeholder}
         </label>

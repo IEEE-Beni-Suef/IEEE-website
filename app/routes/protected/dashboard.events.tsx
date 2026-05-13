@@ -161,10 +161,10 @@ const EventsManagement = () => {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-gray-900">
                 Events Management
               </h1>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              <p className="mt-2 text-sm text-gray-600">
                 Manage IEEE BNS events and their categories
               </p>
             </div>
@@ -184,15 +184,15 @@ const EventsManagement = () => {
           </div>
 
           {/* Tabs */}
-          <div className="mt-6 flex gap-1 border-b border-gray-200 dark:border-gray-700">
+          <div className="mt-6 flex gap-1 border-b border-gray-200">
             {(["events", "categories"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 text-sm font-medium capitalize rounded-t-lg transition-colors cursor-pointer ${
                   activeTab === tab
-                    ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400"
-                    : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                    ? "border-b-2 border-blue-600 text-blue-600"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 {tab}
@@ -209,11 +209,11 @@ const EventsManagement = () => {
             { label: "Coming Soon", value: events.filter((e) => e.isCommingSoon).length, icon: <CalendarDays className="w-5 h-5 text-amber-500" /> },
             { label: "Scheduled",   value: events.filter((e) => !e.isCommingSoon && e.startDate).length, icon: <CalendarDays className="w-5 h-5 text-green-500" /> },
           ].map((stat) => (
-            <div key={stat.label} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 flex items-center gap-3">
-              <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">{stat.icon}</div>
+            <div key={stat.label} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+              <div className="p-2 bg-gray-50 rounded-lg">{stat.icon}</div>
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
+                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-xs text-gray-500">{stat.label}</p>
               </div>
             </div>
           ))}
@@ -221,46 +221,46 @@ const EventsManagement = () => {
 
         {/* ── Events Table ───────────────────────────────── */}
         {activeTab === "events" && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             {eventsLoading ? (
-              <div className="p-12 text-center text-gray-500 dark:text-gray-400">Loading events…</div>
+              <div className="p-12 text-center text-gray-500">Loading events…</div>
             ) : events.length === 0 ? (
               <div className="p-12 text-center">
-                <CalendarDays className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
-                <p className="text-gray-500 dark:text-gray-400">No events yet. Create your first one!</p>
+                <CalendarDays className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+                <p className="text-gray-500">No events yet. Create your first one!</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+                    <tr className="bg-gray-50 border-b border-gray-200">
                       {["Name", "Category", "Keywords", "Start", "End", "Status", "Actions"].map((h) => (
-                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{h}</th>
+                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                  <tbody className="divide-y divide-gray-100">
                     {events.map((ev) => (
-                      <tr key={ev.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                        <td className="px-4 py-3 font-medium text-gray-900 dark:text-white max-w-[180px] truncate">{ev.name}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{getCatName(ev.categoryId)}</td>
+                      <tr key={ev.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-3 font-medium text-gray-900 max-w-[180px] truncate">{ev.name}</td>
+                        <td className="px-4 py-3 text-gray-600">{getCatName(ev.categoryId)}</td>
                         <td className="px-4 py-3 max-w-[200px]">
                           <div className="flex flex-wrap gap-1">
                             {ev.keyWords.slice(0, 3).map((kw) => (
-                              <span key={kw} className="px-2 py-0.5 text-xs rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">{kw}</span>
+                              <span key={kw} className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">{kw}</span>
                             ))}
                             {ev.keyWords.length > 3 && (
-                              <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500">+{ev.keyWords.length - 3}</span>
+                              <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-500">+{ev.keyWords.length - 3}</span>
                             )}
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-300 whitespace-nowrap">{formatDate(ev.startDate)}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-300 whitespace-nowrap">{formatDate(ev.endDate)}</td>
+                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{formatDate(ev.startDate)}</td>
+                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{formatDate(ev.endDate)}</td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                             ev.isCommingSoon
-                              ? "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300"
-                              : "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300"
+                              ? "bg-amber-100 text-amber-700"
+                              : "bg-green-100 text-green-700"
                           }`}>
                             {ev.isCommingSoon ? "Coming Soon" : "Scheduled"}
                           </span>
@@ -271,7 +271,7 @@ const EventsManagement = () => {
                               id={`rename-event-${ev.id}`}
                               onClick={() => { setSelectedEvent(ev); setRenameEventOpen(true); }}
                               title="Rename"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                              className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                             >
                               <Pencil className="w-3.5 h-3.5" />
                             </button>
@@ -279,7 +279,7 @@ const EventsManagement = () => {
                               id={`keywords-event-${ev.id}`}
                               onClick={() => { setSelectedEvent(ev); setKwModalOpen(true); }}
                               title="Update keywords"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors"
+                              className="p-1.5 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors"
                             >
                               <KeyRound className="w-3.5 h-3.5" />
                             </button>
@@ -287,7 +287,7 @@ const EventsManagement = () => {
                               id={`dates-event-${ev.id}`}
                               onClick={() => { setSelectedEvent(ev); setDatesModalOpen(true); }}
                               title="Update dates"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors"
+                              className="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 transition-colors"
                             >
                               <CalendarDays className="w-3.5 h-3.5" />
                             </button>
@@ -296,7 +296,7 @@ const EventsManagement = () => {
                               onClick={() => handleDeleteEvent(ev)}
                               disabled={deletingEvent}
                               title="Delete"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50"
+                              className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -315,29 +315,29 @@ const EventsManagement = () => {
         {activeTab === "categories" && (
           <div>
             {catLoading ? (
-              <div className="p-12 text-center text-gray-500 dark:text-gray-400">Loading categories…</div>
+              <div className="p-12 text-center text-gray-500">Loading categories…</div>
             ) : categories.length === 0 ? (
               <div className="p-12 text-center">
-                <Tag className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
-                <p className="text-gray-500 dark:text-gray-400">No categories yet.</p>
+                <Tag className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+                <p className="text-gray-500">No categories yet.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categories.map((cat) => (
                   <div
                     key={cat.id}
-                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3"
+                    className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col gap-3"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg shrink-0">
-                        <Tag className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      <div className="p-2 bg-purple-100 rounded-lg shrink-0">
+                        <Tag className="w-4 h-4 text-purple-600" />
                       </div>
                       <div className="flex gap-1 ml-auto">
                         <button
                           id={`edit-cat-${cat.id}`}
                           onClick={() => { setEditingCat(cat); setCatModalOpen(true); }}
                           title="Edit"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                         >
                           <Pencil className="w-3.5 h-3.5" />
                         </button>
@@ -346,16 +346,16 @@ const EventsManagement = () => {
                           onClick={() => handleDeleteCategory(cat)}
                           disabled={deletingCat}
                           title="Delete"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{cat.name}</h3>
+                      <h3 className="font-semibold text-gray-900">{cat.name}</h3>
                       {cat.description ? (
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{cat.description}</p>
+                        <p className="mt-1 text-sm text-gray-500 line-clamp-2">{cat.description}</p>
                       ) : (
                         <p className="mt-1 text-sm text-gray-400 italic">No description</p>
                       )}

@@ -29,7 +29,7 @@ export const FormInput: FC<FormInputProps> = ({
     <div className="space-y-2">
       <label
         htmlFor={id}
-        className="text-sm font-medium text-gray-700 dark:text-gray-300"
+        className="text-sm font-medium text-gray-700"
       >
         {label}
       </label>
@@ -41,7 +41,7 @@ export const FormInput: FC<FormInputProps> = ({
           id={id}
           type={type}
           {...register(id)}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} ${rightElement ? "pr-12" : "pr-4"} py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${className}`}
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} ${rightElement ? "pr-12" : "pr-4"} py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${className}`}
           placeholder={placeholder}
         />
         {rightElement && (

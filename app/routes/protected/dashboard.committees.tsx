@@ -74,27 +74,27 @@ const CommitteesManagement = () => {
     <ProtectedRoute allowedRoles={[1, 2]}>
       <div className="space-y-6 rounded-2xl ">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          <h1 className="text-2xl font-semibold text-gray-900">
             Committees Management
           </h1>
         </div>
         <Button variant="primary" onClick={handleCreateClick}>
           Create Committee
         </Button>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+        <div className="bg-white rounded-lg shadow">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-medium text-gray-900">
               All Committees
             </h2>
           </div>
           <div className="p-6">
             {isLoading && (
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500">
                 Loading committees...
               </div>
             )}
             {isError && (
-              <div className="text-sm text-red-600 dark:text-red-400">
+              <div className="text-sm text-red-600">
                 {(error as Error)?.message || "Failed to load committees"}
               </div>
             )}
@@ -103,29 +103,29 @@ const CommitteesManagement = () => {
                 {data?.map((committee: any) => (
                   <li
                     key={committee.id}
-                    className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-gray-900 dark:text-gray-100">
+                      <span className="font-medium text-gray-900">
                         {committee.name}
                       </span>
                       {/* {committee.description && (
-                        <span className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                        <span className="text-sm text-gray-600 mt-1">
                           {committee.description}
                         </span>
                       )} */}
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-gray-500">
                         Head ID: {committee.headId}
                       </span>
 
                       {Array.isArray(committee.vicesId) &&
                         committee.vicesId.length > 0 && (
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                          <span className="text-sm text-gray-500">
                             Vices IDs: {committee.vicesId.join(", ")}
                           </span>
                         )}
 
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-gray-500">
                         Members: {committee.memberCount}
                       </span>
                     </div>

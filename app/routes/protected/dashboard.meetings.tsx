@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -110,8 +111,8 @@ export default function DashboardMeetings() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Meetings</h1>
-          <p className="text-gray-600 dark:text-gray-400">Manage IEEE meetings and attendance</p>
+          <h1 className="text-3xl font-bold text-gray-900">Meetings</h1>
+          <p className="text-gray-600">Manage IEEE meetings and attendance</p>
         </div>
         <button
           onClick={openCreateModal}
@@ -123,31 +124,31 @@ export default function DashboardMeetings() {
       </div>
 
       {/* Meetings List */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">All Meetings</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">All Meetings</h2>
           
           {meetingsLoading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">Loading meetings...</p>
+              <p className="mt-2 text-gray-600">Loading meetings...</p>
             </div>
           ) : meetings && meetings.length > 0 ? (
             <div className="grid gap-4">
               {meetings.map((meeting) => (
                 <div
                   key={meeting.id}
-                  className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      <h3 className="text-lg font-semibold text-gray-900">
                         {meeting.title}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-gray-600 mt-1">
                         {meeting.description}
                       </p>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           {meeting.type}
@@ -159,7 +160,7 @@ export default function DashboardMeetings() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openAttendanceModal(meeting.id)}
-                        className="flex items-center gap-2 px-3 py-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       >
                         <Users className="w-4 h-4" />
                         Attendance
@@ -172,8 +173,8 @@ export default function DashboardMeetings() {
           ) : (
             <div className="text-center py-8">
               <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-gray-400">No meetings found</p>
-              <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+              <p className="text-gray-600">No meetings found</p>
+              <p className="text-sm text-gray-500 mt-1">
                 Create your first meeting to get started
               </p>
             </div>
@@ -184,13 +185,13 @@ export default function DashboardMeetings() {
       {/* Create Meeting Modal */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Meeting</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Create New Meeting</h2>
                 <button
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="text-gray-400 hover:text-gray-600"
                 >
                   ✕
                 </button>
@@ -232,13 +233,13 @@ export default function DashboardMeetings() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Committee
                     </label>
                     <select
                       {...createMeetingForm.register("committeeId", { valueAsNumber: true })}
                       onChange={(e) => handleCommitteeChange(Number(e.target.value))}
-                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-900"
                     >
                       <option value={0}>Select Committee</option>
                       {committees?.map((committee) => (
@@ -250,13 +251,13 @@ export default function DashboardMeetings() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Head ID
                     </label>
                     <input
                       type="number"
                       {...createMeetingForm.register("headId", { valueAsNumber: true })}
-                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-900"
                       placeholder="Enter head ID"
                     />
                   </div>
@@ -265,13 +266,13 @@ export default function DashboardMeetings() {
                 {/* Users Section */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700">
                       Meeting Participants
                     </label>
                     <button
                       type="button"
                       onClick={() => appendMeetingUser({ userId: 0, attended: false, mark: 0 })}
-                      className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40"
+                      className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200"
                     >
                       <Plus className="w-4 h-4" />
                       Add User
@@ -279,14 +280,14 @@ export default function DashboardMeetings() {
                   </div>
 
                   {meetingUsers.map((field, index) => (
-                    <div key={field.id} className="grid grid-cols-3 gap-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div key={field.id} className="grid grid-cols-3 gap-4 p-4 border border-gray-200 rounded-lg">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           User
                         </label>
                         <select
                           {...createMeetingForm.register(`users.${index}.userId` as const, { valueAsNumber: true })}
-                          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-900"
                         >
                           <option value={0}>Select User</option>
                           {committeeUsers.map((user) => (
@@ -298,7 +299,7 @@ export default function DashboardMeetings() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Attended
                         </label>
                         <input
@@ -309,7 +310,7 @@ export default function DashboardMeetings() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Mark
                         </label>
                         <input
@@ -317,7 +318,7 @@ export default function DashboardMeetings() {
                           min="0"
                           max="10"
                           {...createMeetingForm.register(`users.${index}.mark` as const, { valueAsNumber: true })}
-                          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-900"
                           placeholder="0-10"
                         />
                       </div>
@@ -326,7 +327,7 @@ export default function DashboardMeetings() {
                         <button
                           type="button"
                           onClick={() => removeMeetingUser(index)}
-                          className="col-span-3 flex items-center justify-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          className="col-span-3 flex items-center justify-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
                           Remove User
@@ -347,7 +348,7 @@ export default function DashboardMeetings() {
                   <button
                     type="button"
                     onClick={() => setIsCreateModalOpen(false)}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>
@@ -361,13 +362,13 @@ export default function DashboardMeetings() {
       {/* Attendance Modal */}
       {isAttendanceModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Meeting Attendance</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Meeting Attendance</h2>
                 <button
                   onClick={() => setIsAttendanceModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="text-gray-400 hover:text-gray-600"
                 >
                   ✕
                 </button>
@@ -376,13 +377,13 @@ export default function DashboardMeetings() {
               <form onSubmit={attendanceForm.handleSubmit(onSubmitAttendance)} className="space-y-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700">
                       Meeting ID: {selectedMeetingId}
                     </label>
                     <button
                       type="button"
                       onClick={() => appendAttendanceUser({ userId: "", isAttend: true, score: "" })}
-                      className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40"
+                      className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200"
                     >
                       <Plus className="w-4 h-4" />
                       Add Attendee
@@ -390,21 +391,21 @@ export default function DashboardMeetings() {
                   </div>
 
                   {attendanceUsers.map((field, index) => (
-                    <div key={field.id} className="grid grid-cols-4 gap-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div key={field.id} className="grid grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           User ID
                         </label>
                         <input
                           type="number"
                           {...attendanceForm.register(`usersAttendents.${index}.userId` as const)}
-                          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-900"
                           placeholder="Enter user ID"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Attended
                         </label>
                         <input
@@ -415,7 +416,7 @@ export default function DashboardMeetings() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Score
                         </label>
                         <input
@@ -423,7 +424,7 @@ export default function DashboardMeetings() {
                           min="0"
                           max="10"
                           {...attendanceForm.register(`usersAttendents.${index}.score` as const)}
-                          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-900"
                           placeholder="0-10"
                         />
                       </div>
@@ -432,7 +433,7 @@ export default function DashboardMeetings() {
                         <button
                           type="button"
                           onClick={() => removeAttendanceUser(index)}
-                          className="col-span-4 flex items-center justify-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          className="col-span-4 flex items-center justify-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
                           Remove Attendee
@@ -453,7 +454,7 @@ export default function DashboardMeetings() {
                   <button
                     type="button"
                     onClick={() => setIsAttendanceModalOpen(false)}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>

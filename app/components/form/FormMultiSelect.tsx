@@ -67,7 +67,7 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
     <div className="space-y-2">
       <label
         htmlFor={id}
-        className="text-sm font-medium text-gray-700 dark:text-gray-300"
+        className="text-sm font-medium text-gray-700"
       >
         {label}
       </label>
@@ -88,18 +88,18 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-10 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-left text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${className}`}
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg text-left text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${className}`}
         >
           <div className="flex flex-wrap gap-1">
             {selectedValues.length === 0 ? (
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-gray-500">
                 {placeholder}
               </span>
             ) : (
               getSelectedLabels().map((label, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-md"
+                  className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-md"
                 >
                   {label}
                   <div
@@ -108,7 +108,7 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
                       const option = options.find((opt) => opt.label === label);
                       if (option) removeOption(option.value);
                     }}
-                    className="ml-1 hover:text-blue-600 dark:hover:text-blue-300 cursor-pointer inline-flex"
+                    className="ml-1 hover:text-blue-600 cursor-pointer inline-flex"
                   >
                     <X className="w-3 h-3" />
                   </div>
@@ -123,16 +123,16 @@ export const FormMultiSelect: FC<FormMultiSelectProps> = ({
 
         {/* Options dropdown */}
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
             {options.map((option) => (
               <button
                 key={option.value}
                 type="button"
                 onClick={() => toggleOption(option.value)}
-                className={`w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                className={`w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors ${
                   selectedValues.includes(option.value)
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                    : "text-gray-800 dark:text-gray-200"
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-gray-800"
                 }`}
               >
                 <div className="flex items-center justify-between">

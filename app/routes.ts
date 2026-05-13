@@ -4,6 +4,7 @@ export default [
   index("routes/home.tsx"),
   route("/about", "routes/about.tsx"),
   route("/events", "routes/events.tsx"),
+  route("/articles", "routes/Articles.tsx"),
   route("/login", "routes/Login.tsx"),
   route("/register", "routes/Register.tsx"),
   route("/commitees", "routes/commitees.tsx"),
@@ -20,5 +21,6 @@ export default [
     route("meetings", "routes/protected/dashboard.meetings.tsx"),
     route("emails", "routes/protected/dashboard.emails.tsx"),
     route("events", "routes/protected/dashboard.events.tsx"),
+    route("sponsors", "routes/protected/dashboard.sponsors.tsx"),
   ]),
 ] satisfies RouteConfig;

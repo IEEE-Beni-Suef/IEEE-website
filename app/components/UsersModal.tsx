@@ -46,13 +46,15 @@ export const UsersModal: FC<UserModalProps> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { data: committees = [] } = useCommittees();
-  
 
-  const committeeOptions = React.useMemo(() => 
-    committees.map((committee: Committee) => ({
-      value: committee.id.toString(),
-      label: committee.name,
-    })), [committees]);
+  const committeeOptions = React.useMemo(
+    () =>
+      committees.map((committee: Committee) => ({
+        value: committee.id.toString(),
+        label: committee.name,
+      })),
+    [committees],
+  );
 
   const {
     register,
@@ -66,7 +68,7 @@ export const UsersModal: FC<UserModalProps> = ({
     defaultValues: {
       CommitteeIds: [] as string[],
       isActive: true,
-      roleId: "3" as const
+      roleId: "3" as const,
     },
   });
 
@@ -77,7 +79,7 @@ export const UsersModal: FC<UserModalProps> = ({
         // Convert numbers to strings for the form if needed
         const formUser = {
           ...user,
-          CommitteeIds: user.CommitteeIds?.map(id => id.toString()) || [],
+          CommitteeIds: user.CommitteeIds?.map((id) => id.toString()) || [],
         };
         reset(formUser);
       } else {
@@ -103,11 +105,11 @@ export const UsersModal: FC<UserModalProps> = ({
   const handleFormSubmit = async (data: UserFormData) => {
     try {
       console.log("Form data before submission:", data);
-      
+
       // The schema will handle the conversion of CommitteeIds to numbers
       const submitData = {
         ...data,
-        CommitteeIds: data.CommitteeIds || []
+        CommitteeIds: data.CommitteeIds || [],
       };
 
       console.log("Transformed data:", submitData);
@@ -250,7 +252,7 @@ export const UsersModal: FC<UserModalProps> = ({
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="text-gray-400 hover:text-gray-600"
             >
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -264,7 +266,7 @@ export const UsersModal: FC<UserModalProps> = ({
         <div className="flex items-center space-x-2">
           <label
             htmlFor="isActive"
-            className="text-m font-medium text-gray-700 dark:text-gray-200"
+            className="text-m font-medium text-gray-700"
           >
             Active User
           </label>
@@ -272,7 +274,7 @@ export const UsersModal: FC<UserModalProps> = ({
             type="checkbox"
             id="isActive"
             {...register("isActive")}
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-400"
+            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
           />
         </div>
 

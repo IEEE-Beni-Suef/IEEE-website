@@ -2,15 +2,15 @@ import React from "react";
 
 const cardVariants = {
   default:
-    "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700",
+    "bg-white border border-gray-200",
   elevated:
-    "bg-white dark:bg-gray-900 shadow-lg hover:shadow-xl border border-gray-200 dark:border-gray-700",
+    "bg-white shadow-lg hover:shadow-xl border border-gray-200",
   glass:
-    "backdrop-blur-md bg-white/20 dark:bg-gray-900/20 border border-white/30 dark:border-gray-700/30",
+    "backdrop-blur-md bg-white/20 border border-white/30",
   gradient:
-    "bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border border-gray-200 dark:border-gray-700",
+    "bg-gradient-to-br from-white to-gray-50 border border-gray-200",
   feature:
-    "bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800",
+    "bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200",
 };
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -80,7 +80,7 @@ const CardDescription = React.forwardRef<
 >(({ className = "", ...props }, ref) => (
   <p
     ref={ref}
-    className={`text-sm text-gray-600 dark:text-gray-400 ${className}`}
+    className={`text-sm text-gray-600 ${className}`}
     {...props}
   />
 ));

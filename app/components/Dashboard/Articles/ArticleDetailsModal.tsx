@@ -113,14 +113,14 @@ export function ArticleDetailsModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">
             Article Details
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="text-gray-400 hover:text-gray-600"
           >
             <X className="w-6 h-6" />
           </button>
@@ -129,7 +129,7 @@ export function ArticleDetailsModal({
         <div className="p-6 space-y-6">
           {detailsLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+              <div className="flex items-center space-x-2 text-gray-600">
                 <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                 <span>Loading article details...</span>
               </div>
@@ -150,19 +150,19 @@ export function ArticleDetailsModal({
               {/* Article Info */}
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h4 className="text-2xl font-bold text-gray-900 mb-2">
                     {detailedArticle.title}
                   </h4>
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                     {getCategoryName(detailedArticle.category.categoryId)}
                   </span>
                 </div>
 
                 <div>
-                  <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">
                     Description
                   </h5>
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     {detailedArticle.description}
                   </p>
                 </div>
@@ -170,7 +170,7 @@ export function ArticleDetailsModal({
                 {detailedArticle.keywords &&
                   detailedArticle.keywords.length > 0 && (
                     <div>
-                      <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                      <h5 className="text-sm font-medium text-gray-900 mb-2">
                         Keywords
                       </h5>
                       <div className="flex flex-wrap gap-2">
@@ -178,7 +178,7 @@ export function ArticleDetailsModal({
                           (keyword: string, index: number) => (
                             <span
                               key={index}
-                              className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
+                              className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-200 text-gray-700"
                             >
                               {keyword}
                             </span>
@@ -191,7 +191,7 @@ export function ArticleDetailsModal({
                 {/* Subsections */}
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h5 className="text-lg font-medium text-gray-900 dark:text-white">
+                    <h5 className="text-lg font-medium text-gray-900">
                       Subsections
                     </h5>
                     <Button
@@ -206,8 +206,8 @@ export function ArticleDetailsModal({
 
                   {/* Add New Subsection Form */}
                   {isAddingSubsection && (
-                    <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4">
-                      <h6 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
+                      <h6 className="text-sm font-medium text-gray-900 mb-3">
                         Add New Subsection
                       </h6>
                       <form
@@ -222,7 +222,7 @@ export function ArticleDetailsModal({
                           error={errorsNew.subtitle}
                         />
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700">
                             Content
                           </label>
                           <textarea
@@ -231,7 +231,7 @@ export function ArticleDetailsModal({
                             })}
                             placeholder="Enter subsection content"
                             rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                           />
                           {errorsNew.paragraph && (
                             <p className="text-sm text-red-600">
@@ -240,14 +240,14 @@ export function ArticleDetailsModal({
                           )}
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="block text-sm font-medium text-gray-700">
                             Photo (Optional)
                           </label>
                           <input
                             type="file"
                             accept="image/*"
                             {...registerNew("photo")}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                           />
                         </div>
                         <div className="flex gap-2">
@@ -275,7 +275,7 @@ export function ArticleDetailsModal({
                       {detailedArticle.subsections.map((subsection: any) => (
                         <div
                           key={subsection.id}
-                          className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                          className="border border-gray-200 rounded-lg p-4"
                         >
                           {editingSubsection?.id === subsection.id ? (
                             <form
@@ -290,7 +290,7 @@ export function ArticleDetailsModal({
                                 error={errorsEdit.subtitle}
                               />
                               <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <label className="block text-sm font-medium text-gray-700">
                                   Content
                                 </label>
                                 <textarea
@@ -299,7 +299,7 @@ export function ArticleDetailsModal({
                                   })}
                                   placeholder="Enter subsection content"
                                   rows={3}
-                                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                                 />
                                 {errorsEdit.paragraph && (
                                   <p className="text-sm text-red-600">
@@ -308,14 +308,14 @@ export function ArticleDetailsModal({
                                 )}
                               </div>
                               <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <label className="block text-sm font-medium text-gray-700">
                                   Photo (Optional)
                                 </label>
                                 <input
                                   type="file"
                                   accept="image/*"
                                   {...registerEdit("photo")}
-                                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                                 />
                               </div>
                               <div className="flex gap-2">
@@ -340,7 +340,7 @@ export function ArticleDetailsModal({
                           ) : (
                             <>
                               <div className="flex items-start justify-between mb-3">
-                                <h6 className="text-lg font-medium text-gray-900 dark:text-white">
+                                <h6 className="text-lg font-medium text-gray-900">
                                   {subsection.subtitle}
                                 </h6>
                                 <div className="flex gap-2">
@@ -380,7 +380,7 @@ export function ArticleDetailsModal({
                                   className="w-full h-48 object-cover rounded-lg mb-3"
                                 />
                               )}
-                              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                              <p className="text-gray-600 leading-relaxed">
                                 {subsection.paragraph}
                               </p>
                             </>
@@ -391,10 +391,10 @@ export function ArticleDetailsModal({
                   ) : (
                     !isAddingSubsection && (
                       <div className="text-center py-8">
-                        <p className="text-gray-500 dark:text-gray-400">
+                        <p className="text-gray-500">
                           No subsections found
                         </p>
-                        <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                        <p className="text-sm text-gray-400 mt-1">
                           Add a subsection to get started
                         </p>
                       </div>
@@ -406,7 +406,7 @@ export function ArticleDetailsModal({
           ) : (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500">
                   Failed to load article details
                 </p>
               </div>
