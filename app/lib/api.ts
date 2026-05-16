@@ -84,7 +84,7 @@ export const refreshTokenApi = async (token: string) => {
   try {
     // Use a separate axios instance for refresh token to avoid interceptor loops
     const refreshClient = axios.create({
-      baseURL: "https://ieee.runasp.net/api",
+      baseURL: import.meta.env.DEV ? "/api" : "https://ieee.runasp.net/api",
       withCredentials: true,
       timeout: 10000,
       headers: {

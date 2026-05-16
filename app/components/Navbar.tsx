@@ -108,7 +108,7 @@ const Navbar = () => {
 
           {/* Right Side Actions (no theme toggle, only auth button) */}
           <div className="flex items-center space-x-3">
-            {!isAuthenticated ? (
+            {!isMounted || !isAuthenticated ? (
               <Link
                 to="/login"
                 className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200 shadow"
@@ -165,7 +165,7 @@ const Navbar = () => {
             })}
             {/* Mobile auth button */}
             <div className="pt-3 border-t border-gray-200">
-              {!isAuthenticated ? (
+              {!isMounted || !isAuthenticated ? (
                 <Link
                   to="/login"
                   onClick={() => setIsMenuOpen(false)}

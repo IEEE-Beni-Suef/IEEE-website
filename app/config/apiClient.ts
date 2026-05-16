@@ -22,7 +22,7 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 const apiClient = axios.create({
-  baseURL: "https://ieee.runasp.net/api",
+  baseURL: import.meta.env.DEV ? "/api" : "https://ieee.runasp.net/api",
   withCredentials: true,
   timeout: 10000,
   headers: {

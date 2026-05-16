@@ -28,42 +28,42 @@ export const boardData: BoardMember[] = [
     name: 'MOHAMED SHARAF',
     role: 'CHAIRMAN',
     imageUrl: chairman, 
-    socials: { linkedin: '#', email: 'mailto:#' }
+    socials: { linkedin: 'https://www.linkedin.com/in/mohamed-sharaf01/', email: 'mailto:ahmedsharaf1965.n@gmail.com' }
   },
   {
     id: '2',
     name: 'AMR HASSAN',
     role: 'VICE CHAIRMAN',
     imageUrl: viceChairman,
-    socials: { linkedin: '#', email: 'mailto:#' }
+    socials: { linkedin: 'https://www.linkedin.com/in/amrhk/', email: 'mailto:amrhassanhd@gmail.com' }
   },
   {
     id: '3',
     name: 'SAHAR EHAB',
     role: 'VICE CHAIRWOMAN',
     imageUrl: viceChairwoman,
-    socials: { linkedin: '#', email: 'mailto:#' }
+    socials: { linkedin: 'https://www.linkedin.com/in/sahar-ehab125/', email: 'mailto:saharehab54321@gmail.com' }
   },
   {
     id: '4',
     name: 'MOHAMED ELSHISHTAWY',
     role: 'WEBMASTER',
     imageUrl: webmaster,
-    socials: { linkedin: '#', email: 'mailto:#' }
+    socials: { linkedin: 'https://www.linkedin.com/in/mo-shish/', email: 'mailto:mohamed.elshishtawy11@gmail.com' }
   },
   {
     id: '5',
     name: 'SULTAN AMED',
     role: 'TREASURE',
     imageUrl: treasure,
-    socials: { linkedin: '', email: 'mailto:#' }
+    socials: { linkedin: 'https://www.linkedin.com/in/sultan-a7med/', email: 'mailto:sultan393493@gmail.com' }
   },
   {
     id: '6',
     name: 'MOHAMED MEDHAT',
     role: 'SECRETARY',
     imageUrl: secretary,
-    socials: { linkedin: '#', email: 'mailto:#' }
+    socials: { linkedin: 'https://www.linkedin.com/in/m0-medhat/', email: 'mailto:mo.medhat.me@gmail.com' }
   }
 ];
 
