@@ -1,4 +1,3 @@
-
 import type { ISponserCard } from "~/types";
 
 // List might come form the backend
@@ -107,6 +106,7 @@ export const sidebarConfigs = {
       { to: "/dashboard/articles", icon: "FileText", label: "Articles" },
       { to: "/dashboard/events", icon: "CalendarDays", label: "Events" },
       { to: "/dashboard/emails", icon: "Mail", label: "Emails" },
+      { to: "/dashboard/sponsors", icon: "Award", label: "Sponsors" },
       { to: "/dashboard/settings", icon: "Split", label: "Branch" },
     ],
   },

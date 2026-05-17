@@ -1,54 +1,197 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-@theme {
-  --font-sans:
-    "Frutiger", "Poppins", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
+@layer base {
+   :root {
+      /* =========================================
+       PRIMITIVE TOKENS (Core Palette)
+       ========================================= */
+      --color-primary-light: #EFE7F6;
+      --color-primary-light-hover: #E6DBF2;
+      --color-primary-light-active: #CCB5E3;
+      --color-primary-normal: #5A10A5;
+      --color-primary-normal-hover: #510E95;
+      --color-primary-normal-active: #480D84;
+      --color-primary-dark: #440C7C;
+      --color-primary-dark-hover: #360A63;
+      --color-primary-dark-active: #28074A;
+      --color-primary-darker: #1F063A;
 
-  --color-primary: #0066cc;
-  --color-primary-dark: #004a99;
-  --color-secondary: #00a8ff;
-  --color-accent: #ff6b35;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+      --color-secondary-light: #ECEFFD;
+      --color-secondary-light-hover: #E3E7FD;
+      --color-secondary-light-active: #C5CEFA;
+      --color-secondary-normal: #4460EF;
+      --color-secondary-normal-hover: #3D56D7;
+      --color-secondary-normal-active: #364DBF;
+      --color-secondary-dark: #3348B3;
+      --color-secondary-dark-hover: #293A8F;
+      --color-secondary-dark-active: #1F2B6C;
+      --color-secondary-darker: #182254;
 
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
-  --color-gray-950: #030712;
+      --color-tertiary-light: #E7EAEF;
+      --color-tertiary-light-hover: #DBDFE7;
+      --color-tertiary-light-active: #B4BECD;
+      --color-tertiary-normal: #0E2C5E;
+      --color-tertiary-normal-hover: #0D2855;
+      --color-tertiary-normal-active: #0B234B;
+      --color-tertiary-dark: #0B2147;
+      --color-tertiary-dark-hover: #081A38;
+      --color-tertiary-dark-active: #06142A;
+      --color-tertiary-darker: #050F21;
 
-  --gradient-primary: linear-gradient(135deg, #0066cc 0%, #00a8ff 100%);
-  --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-accent: linear-gradient(135deg, #ff6b35 0%, #f7971e 100%);
+      --color-bg-light: #FEFEFF;
+      --color-bg-light-hover: #FEFEFF;
+      --color-bg-light-active: #FDFDFF;
+      --color-bg-normal: #F8F9FF;
+      --color-bg-normal-hover: #DFE0E6;
+      --color-bg-normal-active: #C6C7CC;
+      --color-bg-dark: #BABBBF;
+      --color-bg-dark-hover: #959599;
+      --color-bg-dark-active: #707073;
+      --color-bg-darker: #575759;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl:
-    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+      /* =========================================
+       SEMANTIC TOKENS (Text & Buttons)
+       ========================================= */
+      --btn-primary-light: var(--color-primary-light);
+      --btn-primary-light-hover: var(--color-primary-light-hover);
+      --btn-primary-light-active: var(--color-primary-light-active);
+      --btn-primary-normal: var(--color-primary-normal);
+      --btn-primary-normal-hover: var(--color-primary-normal-hover);
+      --btn-primary-normal-active: var(--color-primary-normal-active);
+      --btn-primary-dark: var(--color-primary-dark);
+      --btn-primary-dark-hover: var(--color-primary-dark-hover);
+      --btn-primary-dark-active: var(--color-primary-dark-active);
+      --btn-primary-darker: var(--color-primary-darker);
 
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
+      --btn-tertiary-light: var(--color-tertiary-light);
+      --btn-tertiary-light-hover: var(--color-tertiary-light-hover);
+      --btn-tertiary-light-active: var(--color-tertiary-light-active);
+      --btn-tertiary-normal: var(--color-tertiary-normal);
+      --btn-tertiary-normal-hover: var(--color-tertiary-normal-hover);
+      --btn-tertiary-normal-active: var(--color-tertiary-normal-active);
+      --btn-tertiary-dark: var(--color-tertiary-dark);
+      --btn-tertiary-dark-hover: var(--color-tertiary-dark-hover);
+      --btn-tertiary-dark-active: var(--color-tertiary-dark-active);
+      --btn-tertiary-darker: var(--color-tertiary-darker);
+
+      --text-primary-light: #E6E6EC;
+      --text-primary-light-hover: #D9DAE2;
+      --text-primary-light-active: #B0B2C4;
+      --text-primary-normal: #000640;
+      --text-primary-normal-hover: #00053A;
+      --text-primary-normal-active: #000533;
+      --text-primary-dark: #000530;
+      --text-primary-dark-hover: #000426;
+      --text-primary-dark-active: #00031D;
+      --text-primary-darker: #000216;
+
+      --text-secondary-light: var(--color-secondary-light);
+      --text-secondary-light-hover: var(--color-secondary-light-hover);
+      --text-secondary-light-active: var(--color-secondary-light-active);
+      --text-secondary-normal: var(--color-secondary-normal);
+      --text-secondary-normal-hover: var(--color-secondary-normal-hover);
+      --text-secondary-normal-active: var(--color-secondary-normal-active);
+      --text-secondary-dark: var(--color-secondary-dark);
+      --text-secondary-dark-hover: var(--color-secondary-dark-hover);
+      --text-secondary-dark-active: var(--color-secondary-dark-active);
+      --text-secondary-darker: var(--color-secondary-darker);
+
+      --color-text-btn-01: #FFFFFF;
+      --color-text-btn-02: #FFFFFF;
+      --color-text-btn-03: var(--color-primary-normal);
+
+      /* =========================================
+       SYSTEM COLORS (Feedback & Status)
+       ========================================= */
+      --color-alert: #EB5757;
+      --color-alert-hover: #FFECEC;
+      --color-alert-pressed: #CF1B1B;
+
+      --color-success: #09800F;
+      --color-success-hover: #009E2B;
+      --color-success-pressed: #105E13;
+
+      --color-warning-1: #FFC107;
+      --color-warning-1-hover: #FFCF77;
+      --color-warning-1-pressed: #EF9A00;
+
+      --color-warning-2: #FF8800;
+      --color-warning-2-hover: #FFAA4A;
+      --color-warning-2-pressed: #E47A00;
+
+      --color-info: #17A2B8;
+      --color-info-hover: #50BCCD;
+      --color-info-pressed: #048FA5;
+
+      --color-disabled: #6C757D;
+      --color-disabled-hover: #939393;
+      --color-disabled-pressed: #7A7A7A;
+
+      /* =========================================
+       TYPOGRAPHY
+       ========================================= */
+      --font-family-primary: 'Montserrat', sans-serif;
+
+      --font-weight-light: 300;
+      --font-weight-regular: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+      --font-weight-extrabold: 800;
+
+      --text-h1: 61px;
+      --text-h2: 49px;
+      --text-h3: 39px;
+      --text-h4: 31px;
+      --text-h5: 25px;
+      --text-h6: 20px;
+      --text-p1: 18px;
+      --text-p2: 16px;
+      --text-p3: 14px;
+      --text-p4: 12px;
+      --text-p5: 11px;
+      --text-p6: 10px;
+
+      /* =========================================
+       GRID & SPACING
+       ========================================= */
+      --grid-columns: 12;
+      --grid-margin: 80px;
+      --grid-gutter: 24px;
+
+      --spacing-01: 4px;
+      --spacing-02: 8px;
+      --spacing-03: 16px;
+      --spacing-04: 24px;
+      --spacing-05: 32px;
+      --spacing-06: 40px;
+      --spacing-07: 48px;
+      --spacing-08: 56px;
+      --spacing-09: 64px;
+      --spacing-10: 80px;
+      --spacing-11: 96px;
+
+      /* =========================================
+       SHAPE & BORDER
+       ========================================= */
+      --round-01: 4px;
+      --round-02: 8px;
+      --round-03: 12px;
+      --round-04: 16px;
+      --round-05: 20px;
+      --round-06: 24px;
+      --round-07: 28px;
+      --round-08: 32px;
+      --round-09: 36px;
+
+      --stroke-01: 0.5px;
+      --stroke-02: 1px;
+      --stroke-03: 1.5px;
+      --stroke-04: 2px;
+      --stroke-05: 2.5px;
+      --stroke-06: 3px;
+   }
 }
-
 /* Base Styles */
 html {
   scroll-behavior: smooth;
@@ -56,7 +199,8 @@ html {
 
 html,
 body {
-  @apply font-sans bg-gray-50 dark:bg-gray-950 transition-colors duration-300;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  @apply bg-gray-50 transition-colors duration-300;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
@@ -66,15 +210,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-800;
+  @apply bg-gray-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  @apply bg-gray-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-gray-500;
+  @apply bg-gray-400;
 }
 
 /* Utility Classes */
@@ -91,7 +235,7 @@ body {
 }
 
 .glass-morphism {
-  @apply backdrop-blur-md bg-white/20 dark:bg-gray-900/20 border border-white/30 dark:border-gray-700/30;
+  @apply backdrop-blur-md bg-white/20 border border-white/30;
 }
 
 .animate-float {

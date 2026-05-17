@@ -25,8 +25,8 @@ export const ProgressSteps = ({ steps, currentStep }: ProgressStepsProps) => {
                   step.id < currentStep
                     ? "bg-blue-600 border-blue-600 text-white"
                     : step.id === currentStep
-                      ? "bg-blue-50 border-blue-600 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
-                      : "bg-gray-50 border-gray-300 text-gray-400 dark:bg-gray-800 dark:border-gray-600"
+                      ? "bg-blue-50 border-blue-600 text-blue-600"
+                      : "bg-gray-50 border-gray-300 text-gray-400"
                 }`}
               >
                 {step.id < currentStep ? (
@@ -39,8 +39,8 @@ export const ProgressSteps = ({ steps, currentStep }: ProgressStepsProps) => {
                 <div
                   className={`text-sm font-medium ${
                     step.id <= currentStep
-                      ? "text-gray-900 dark:text-white"
-                      : "text-gray-500 dark:text-gray-400"
+                      ? "text-gray-900"
+                      : "text-gray-500"
                   }`}
                 >
                   {step.title}
@@ -52,7 +52,7 @@ export const ProgressSteps = ({ steps, currentStep }: ProgressStepsProps) => {
                 className={`flex-1 h-0.5 mx-4 transition-colors duration-200 ${
                   step.id < currentStep
                     ? "bg-blue-600"
-                    : "bg-gray-200 dark:bg-gray-700"
+                    : "bg-gray-200"
                 }`}
               />
             )}

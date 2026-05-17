@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { useAuth, clearAuth } from "../hooks/useAuth";
-import ThemeToggle from "./ThemeToggle";
+import { motion } from "framer-motion";
+import { useIntro } from "../context/IntroContext";
 import {
   Menu,
   X,
@@ -13,23 +14,23 @@ import {
   FileText,
   Calendar,
   LogOut,
-  User,
   LayoutDashboard,
-  Clock,
-  CheckCircle,
+  LogIn,
 } from "lucide-react";
 import Logo from "./ui/Logo";
-import Commitees from "../routes/commitees";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const isDark = useSelector((state: RootState) => state.theme.isDark);
   const { isAuthenticated, user, isLoading } = useAuth();
+  const { introReady } = useIntro();
+
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     if (typeof window !== "undefined") {
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 20);
@@ -39,22 +40,27 @@ const Navbar = () => {
     }
   }, []);
 
+  // Shared nav items (added "Contact Us")
   const navItems = [
     { label: "Home", path: "/", icon: Home },
-    {label:"Commitees",path:"/#committees",icon: Boxes},
+    { label: "Committees", path: "/#committees", icon: Boxes },
     { label: "Events", path: "/events", icon: Calendar },
-    { label: "Articles", path: "/#articles", icon: FileText },
+    { label: "Articles", path: "/articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
+    { label: "Contact Us", path: "/contact", icon: Users },
   ];
 
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Home", path: "/", icon: Home },
-    { label:"Commitees",path:"/#committees",icon: Boxes},
+    { label: "Committees", path: "/#committees", icon: Boxes },
     { label: "Events", path: "/events", icon: Calendar },
-    { label: "Articles", path: "/#articles", icon: FileText },
+    { label: "Articles", path: "/articles", icon: FileText },
     { label: "About", path: "/about", icon: Users },
+    { label: "Contact Us", path: "/contact", icon: Users },
   ];
+
+  const currentNavItems = isMounted && isAuthenticated ? authNavItems : navItems;
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -64,134 +70,127 @@ const Navbar = () => {
   };
 
   return (
-    <>
-      {/* Main Navbar */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "backdrop-blur-md bg-white/80 dark:bg-gray-900/80 shadow-lg"
-            : "bg-transparent"
+    <motion.nav
+      className={`fixed top-0 left-0 right-0 z-50 duration-300 bg-transparent`}
+      initial={{ y: -80, opacity: 0 }}
+      animate={introReady ? { y: 0, opacity: 1 } : { y: -80, opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center h-24">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <figure className="h-20 p-3">
+              <Logo />
+            </figure>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
+            {currentNavItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                    isActive(item.path)
+                      ? "text-white bg-[var(--color-primary-normal)]"
+                      : "text-black hover:bg-[var(--color-primary-normal)]"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Right Side Actions (no theme toggle, only auth button) */}
+          <div className="flex items-center space-x-3">
+            {!isAuthenticated ? (
+              <Link
+                to="/login"
+                className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200 shadow"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Sign In</span>
+              </Link>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200 shadow"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log out</span>
+              </button>
+            )}
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors duration-200"
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Drawer (solid white background, no dark mode) */}
+      <div
+        className={`md:hidden transition-all duration-300 overflow-hidden ${
+          isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="max-w-7xl mx-auto ">
-          <div className="flex justify-between items-center h-24">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 group">
-              <figure className="h-20 p-3">
-                <Logo />
-              </figure>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
-              {(isAuthenticated ? authNavItems : navItems).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                      isActive(item.path)
-                        ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span className="font-medium">{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            {/* Right Side Actions */}
-            <div className="flex items-center space-x-3">
-              {!isAuthenticated && (
-                /* Non-authenticated Login/Signup buttons */
-                <div className="hidden sm:flex items-center space-x-2">
-                  <Link
-                    to="/login"
-                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                  >
-                    Sign In
-                  </Link>
-                  {/* <Link
-                    to="/register"
-                    className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                  >
-                    Join Now
-                  </Link> */}
-                </div>
+        <div className="px-4 py-3 bg-white border-t border-gray-200">
+          <div className="space-y-2">
+            {currentNavItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                    isActive(item.path)
+                      ? "bg-[var(--color-primary-light)] text-[var(--color-primary-normal)]"
+                      : "text-gray-700 hover:bg-[var(--color-primary-light)]"
+                  }`}
+                >
+                  <Icon className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
+            {/* Mobile auth button */}
+            <div className="pt-3 border-t border-gray-200">
+              {!isAuthenticated ? (
+                <Link
+                  to="/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Sign In</span>
+                </Link>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-600 transition-colors duration-200"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Log out</span>
+                </button>
               )}
-
-              <ThemeToggle />
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-              >
-                {isMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
             </div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <div
-          className={`md:hidden transition-all duration-300 overflow-hidden ${
-            isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="px-4 py-3 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-            <div className="space-y-2">
-              {(isAuthenticated ? authNavItems : navItems).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
-                      isActive(item.path)
-                        ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span className="font-medium">{item.label}</span>
-                  </Link>
-                );
-              })}
-              <div className="pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
-                {!isAuthenticated && (
-                  /* Non-authenticated Mobile Menu */
-                  <>
-                    <Link
-                      to="/login"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      to="/register"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="block px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-center font-medium"
-                    >
-                      Join Now
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </>
+      </div>
+    </motion.nav>
   );
 };
 

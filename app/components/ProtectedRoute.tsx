@@ -26,6 +26,11 @@ export function ProtectedRoute({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // // Block inactive users from accessing protected pages
+  // if (user && !user.isActive) {
+  //   return <Navigate to="/" replace />;
+  // }
+
   if (
     allowedRoles &&
     user?.roleId !== undefined &&

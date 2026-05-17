@@ -79,21 +79,21 @@ export function UpdateKeywordsModal({
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Chips */}
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Keywords <span className="text-red-500">*</span>
             <span className="ml-2 text-xs text-gray-400 font-normal">Press Enter or comma to add</span>
           </label>
-          <div className="flex flex-wrap gap-2 min-h-[40px] p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
+          <div className="flex flex-wrap gap-2 min-h-[40px] p-2 border border-gray-300 rounded-lg bg-white">
             {keywords.map((kw) => (
               <span
                 key={kw}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
               >
                 {kw}
                 <button
                   type="button"
                   onClick={() => removeKeyword(kw)}
-                  className="hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
+                  className="hover:text-blue-600 transition-colors"
                   aria-label={`Remove ${kw}`}
                 >
                   ×
@@ -108,7 +108,7 @@ export function UpdateKeywordsModal({
               onKeyDown={handleKeyDown}
               onBlur={addKeyword}
               placeholder={keywords.length === 0 ? "Type a keyword…" : ""}
-              className="flex-1 min-w-[120px] bg-transparent text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 outline-none"
+              className="flex-1 min-w-[120px] bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none"
             />
           </div>
           {error && <p className="text-xs text-red-500">{error}</p>}

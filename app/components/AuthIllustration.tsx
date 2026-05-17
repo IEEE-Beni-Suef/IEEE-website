@@ -92,7 +92,7 @@ export const AuthIllustration = ({
             <circle cx="350" cy="220" r="12" fill="#1D4ED8" opacity="0.2" />
           </svg>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-lg -z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg -z-10"></div>
       </div>
     );
   }
@@ -199,7 +199,7 @@ export const AuthIllustration = ({
           <circle cx="360" cy="200" r="10" fill="#1D4ED8" opacity="0.3" />
         </svg>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/10 dark:to-green-900/10 rounded-lg -z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-green-50 rounded-lg -z-10"></div>
     </div>
   );
 };

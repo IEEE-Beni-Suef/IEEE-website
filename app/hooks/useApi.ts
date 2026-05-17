@@ -2,6 +2,7 @@ import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "~/config/queryClient";
 import {
   activateUserByIdApi,
+  setUserActivationApi,
   createCommitteeApi,
   deleteCommitteeApi,
   deleteUserByIdApi,
@@ -33,6 +34,11 @@ import {
   sendChatMessage,
   resetChat,
   sendEmailApi,
+  getAllSponsorsApi,
+  createSponsorApi,
+  updateSponsorApi,
+  deleteSponsorApi,
+  eventsApi,
 } from "~/lib/api";
 
 import type {
@@ -46,6 +52,7 @@ import type {
   MeetingAttendance,
   ISponsorCard,
 } from "~/types";
+import type { ApiEvent } from "~/types/api.types";
 
 export const useCommittees = () => {
   const { data, ...rest } = useQuery<Committee[]>({
@@ -82,9 +89,26 @@ export const useActiveUser = (id: number) => {
   const { mutate, ...rest } = useMutation({
     mutationKey: ["activeUser", id],
     mutationFn: () => activateUserByIdApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
   });
 
   return { mutate, ...rest };
+};
+
+// Flexible: supports both activate (true) and deactivate (false)
+export const useSetUserActivation = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["setUserActivation"],
+    mutationFn: ({ id, isActive }: { id: number; isActive: boolean }) =>
+      setUserActivationApi(id, isActive),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
+  return { mutate, mutateAsync, ...rest };
 };
 // Assuming you have an API endpoint to activate a user
 
@@ -426,4 +450,65 @@ export const useSendEmail = () => {
   });
 
   return { mutate, ...rest };
+};
+
+// Sponsor s hooks
+
+export const useAllSponsors = () => {
+  const { data, ...rest } = useQuery<ISponsorCard[]>({
+    queryKey: ["sponsors"],
+    queryFn: getAllSponsorsApi,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  return { data, ...rest };
+};
+
+export const useCreateSponsor = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["createSponsor "],
+    mutationFn: (data: any) => createSponsorApi(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sponsors"] });
+    },
+  });
+
+  return { mutate, mutateAsync, ...rest };
+};
+
+export const useUpdateSponsor = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["updateSponsor"],
+    mutationFn: ({ id, data }: { id: number; data: any }) => updateSponsorApi(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
+    },
+  });
+
+  return { mutate, mutateAsync, ...rest };
+};
+
+export const useDeleteSponsor = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["deleteSponsor "],
+    mutationFn: (id: number) => deleteSponsorApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
+    },
+  });
+
+  return { mutate, mutateAsync, ...rest };
+};
+
+// Events hook — fetches from /api/Events (dedicated endpoint)
+export const useAllEvents = () => {
+  const { data, ...rest } = useQuery<ApiEvent[]>({
+    queryKey: ["events"],
+    queryFn: () => eventsApi.getAll(),
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  return { data, ...rest };
 };

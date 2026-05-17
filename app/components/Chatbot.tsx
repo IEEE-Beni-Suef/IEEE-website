@@ -4,6 +4,8 @@ import { Button } from "./ui/Button";
 import toast from "react-hot-toast";
 import { Bot, BotMessageSquare, CircleX, Send, Trash } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { motion, AnimatePresence } from "framer-motion";
+import { useIntro } from "../context/IntroContext";
 import remarkGfm from "remark-gfm";
 
 interface ChatMessage {
@@ -27,39 +29,39 @@ const MarkdownMessage = ({
   }
 
   return (
-    <div className="prose prose-sm dark:prose-invert max-w-none">
+    <div className="prose prose-sm max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ children }) => (
-            <h1 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
+            <h1 className="text-lg font-bold mb-2 text-gray-900">
               {children}
             </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-base font-semibold mb-2 text-gray-900 dark:text-white">
+            <h2 className="text-base font-semibold mb-2 text-gray-900">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-sm font-medium mb-1 text-gray-900 dark:text-white">
+            <h3 className="text-sm font-medium mb-1 text-gray-900">
               {children}
             </h3>
           ),
 
           p: ({ children }) => (
-            <p className="mb-2 last:mb-0 text-gray-900 dark:text-white">
+            <p className="mb-2 last:mb-0 text-gray-900">
               {children}
             </p>
           ),
 
           ul: ({ children }) => (
-            <ul className="list-disc list-inside mb-2 text-gray-900 dark:text-white">
+            <ul className="list-disc list-inside mb-2 text-gray-900">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="list-decimal list-inside mb-2 text-gray-900 dark:text-white">
+            <ol className="list-decimal list-inside mb-2 text-gray-900">
               {children}
             </ol>
           ),
@@ -69,20 +71,20 @@ const MarkdownMessage = ({
             const isInline = !className;
             if (isInline) {
               return (
-                <code className="bg-gray-200 dark:bg-gray-600 px-1 py-0.5 rounded text-xs font-mono text-gray-900 dark:text-white">
+                <code className="bg-gray-200 px-1 py-0.5 rounded text-xs font-mono text-gray-900">
                   {children}
                 </code>
               );
             }
             return (
-              <code className="block bg-gray-200 dark:bg-gray-600 p-2 rounded text-xs font-mono overflow-x-auto text-gray-900 dark:text-white">
+              <code className="block bg-gray-200 p-2 rounded text-xs font-mono overflow-x-auto text-gray-900">
                 {children}
               </code>
             );
           },
 
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-gray-300 dark:border-gray-600 pl-3 italic text-gray-700 dark:text-gray-300 mb-2">
+            <blockquote className="border-l-4 border-gray-300 pl-3 italic text-gray-700 mb-2">
               {children}
             </blockquote>
           ),
@@ -92,30 +94,30 @@ const MarkdownMessage = ({
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-200"
+              className="text-blue-600 underline hover:text-blue-800"
             >
               {children}
             </a>
           ),
 
           strong: ({ children }) => (
-            <strong className="font-semibold text-gray-900 dark:text-white">
+            <strong className="font-semibold text-gray-900">
               {children}
             </strong>
           ),
 
           table: ({ children }) => (
-            <table className="border-collapse border border-gray-300 dark:border-gray-600 text-xs mb-2">
+            <table className="border-collapse border border-gray-300 text-xs mb-2">
               {children}
             </table>
           ),
           th: ({ children }) => (
-            <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 bg-gray-100 dark:bg-gray-700 font-medium text-gray-900 dark:text-white">
+            <th className="border border-gray-300 px-2 py-1 bg-gray-100 font-medium text-gray-900">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="border border-gray-300 dark:border-gray-600 px-2 py-1 text-gray-900 dark:text-white">
+            <td className="border border-gray-300 px-2 py-1 text-gray-900">
               {children}
             </td>
           ),
@@ -136,6 +138,7 @@ export function Chatbot() {
   const location = typeof window !== "undefined" ? window.location.href : "";
   const { mutate: sendMessage, isPending } = useChatbot();
   const { mutate: resetChat } = useResetChat();
+  const { introReady } = useIntro();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -225,6 +228,7 @@ export function Chatbot() {
           <img src="/public/chatbot.png" className="" alt="" />
         </Button>
       </div>
+
     );
   }
 
@@ -237,7 +241,7 @@ export function Chatbot() {
   {
     /* <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center">
-          <h3 className="font-semibold text-gray-900 dark:text-white ml-2 flex items-center gap-2">
+          <h3 className="font-semibold text-gray-900 ml-2 flex items-center gap-2">
             <BotMessageSquare />
             IEEE AI Assistant
           </h3>
@@ -273,7 +277,7 @@ export function Chatbot() {
   {
     /* <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
         {messages.length === 0 && (
-          <div className="text-center text-gray-500 dark:text-gray-400 text-sm">
+          <div className="text-center text-gray-500 text-sm">
             Ask me anything about IEEE or the management system!
           </div>
         )}
@@ -287,7 +291,7 @@ export function Chatbot() {
               className={`max-w-[85%] md:max-w-[70%] p-3 rounded-lg text-sm ${
                 msg.isUser
                   ? "bg-blue-600 text-white rounded-br-sm"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-sm"
+                  : "bg-gray-100 text-gray-900 rounded-bl-sm"
               }`}
             >
               <MarkdownMessage content={msg.message} isUser={msg.isUser} />
@@ -296,7 +300,7 @@ export function Chatbot() {
         ))}
         {isPending && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-bl-sm">
+            <div className="bg-gray-100 p-3 rounded-lg rounded-bl-sm">
               <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                 <div
@@ -327,7 +331,7 @@ export function Chatbot() {
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
-            className="flex-1 w-full resize-none border border-gray-300 dark:border-gray-600 rounded-sm px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 w-full resize-none border border-gray-300 rounded-sm px-3 py-2 text-sm bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows={1}
             disabled={isPending}
           />

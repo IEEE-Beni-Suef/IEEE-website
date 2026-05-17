@@ -26,7 +26,7 @@ export function ArticleCard({
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
+    <div className="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
       {/* Article Image */}
       {article.photo && (
         <div className="mb-4">
@@ -45,16 +45,16 @@ export function ArticleCard({
       {/* Article Content */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
             {getCategoryName(article.categoryId)}
           </span>
         </div>
 
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
+        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
           {article.title}
         </h3>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+        <p className="text-sm text-gray-600 line-clamp-3">
           {article.description}
         </p>
 
@@ -65,13 +65,13 @@ export function ArticleCard({
               .map((keyword: string, index: number) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
+                  className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-200 text-gray-700"
                 >
                   {keyword}
                 </span>
               ))}
             {article.keywords.length > 3 && (
-              <span className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300">
+              <span className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-200 text-gray-700">
                 +{article.keywords.length - 3} more
               </span>
             )}

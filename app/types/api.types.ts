@@ -44,9 +44,10 @@ export interface ApiEvent {
   endDate: string | null;
   isCommingSoon: boolean;
   categoryId: string;
+  categoryName: string;        // direct field from backend
   category?: ApiCategory;
   createdAt: string;
-  updatedAt: string;
+  lastUpdatedAt: string;       // backend uses lastUpdatedAt not updatedAt
 }
 
 export interface CreateEventPayload {

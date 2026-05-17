@@ -45,9 +45,9 @@ export function ArticlesList({
     }) || [];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-200">
+        <h2 className="text-lg font-semibold text-gray-900">
           All Articles ({filteredArticles.length})
         </h2>
       </div>
@@ -55,7 +55,7 @@ export function ArticlesList({
       <div className="overflow-x-auto">
         {isLoading && (
           <div className="flex items-center justify-center py-12">
-            <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+            <div className="flex items-center space-x-2 text-gray-600">
               <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
               <span>Loading articles...</span>
             </div>
@@ -68,7 +68,7 @@ export function ArticlesList({
               <div className="w-12 h-12 mx-auto mb-4 text-red-500">
                 <FileText className="w-full h-full" />
               </div>
-              <p className="text-red-600 dark:text-red-400 font-medium">
+              <p className="text-red-600 font-medium">
                 {(error as Error)?.message || "Failed to load articles"}
               </p>
             </div>
@@ -81,12 +81,12 @@ export function ArticlesList({
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                   <FileText className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                  <p className="text-gray-500 dark:text-gray-400 font-medium">
+                  <p className="text-gray-500 font-medium">
                     {searchTerm || selectedCategory
                       ? "No articles match your filters"
                       : "No articles found"}
                   </p>
-                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                  <p className="text-sm text-gray-400 mt-1">
                     {searchTerm || selectedCategory
                       ? "Try adjusting your search or filters"
                       : "Get started by creating your first article"}
