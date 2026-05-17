@@ -22,7 +22,6 @@ import "./app.css";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "~/config/queryClient";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -69,7 +68,6 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
       <Provider store={store}>
         <Navbar />
         <InactiveBanner />
