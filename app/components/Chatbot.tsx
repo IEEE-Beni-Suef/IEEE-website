@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { useChatbot, useResetChat } from "~/hooks/useApi";
-import { Button } from "./ui/Button";
 import toast from "react-hot-toast";
 import { Bot, BotMessageSquare, CircleX, Send, Trash } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -221,12 +220,12 @@ export function Chatbot() {
       <div
         className={`fixed ${location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"} right-4 z-50`}
       >
-        <Button
+        <button
           onClick={() => setIsOpen(true)}
-          className=" cursor-pointer w-14 h-14 rounded-full bg-[#4460EF] hover:bg-[#364dbe] "
+          className=" cursor-pointer w-17 h-17 rounded-full bg-[#4460EF] hover:bg-[#364dbe] flex justify-center items-center"
         >
-          <img src="/public/chatbot.png" className="" alt="" />
-        </Button>
+          <img className="w-10 h-10" src="/public/chatbot.png" alt="" />
+        </button>
       </div>
 
     );
