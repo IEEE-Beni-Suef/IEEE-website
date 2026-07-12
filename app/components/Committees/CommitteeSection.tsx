@@ -45,12 +45,19 @@ const CommitteesSection = ({
   ];
 
   const technical = committees.filter((c) =>
-    technicalNames.some((name) => c.name.toLowerCase().includes(name)),
+    c.name && technicalNames.some((name) => c.name.toLowerCase().includes(name)),
   );
 
   const operational = committees.filter(
-    (c) => !technicalNames.some((name) => c.name.toLowerCase().includes(name)),
+    (c) => c.name && !technicalNames.some((name) => c.name.toLowerCase().includes(name)),
   );
+
+  // Fallback: if filtering produces nothing, show all committees
+  const currentList =
+    commmitteList === "technicalcommittees"
+      ? technical.length > 0 ? technical : committees
+      : operational.length > 0 ? operational : committees;
+
   if (isLoading) {
     return (
       <Swiper
@@ -94,6 +101,14 @@ const CommitteesSection = ({
     );
   }
 
+  if (!committees || committees.length === 0) {
+    return (
+      <div className="flex justify-center items-center text-gray-400 py-16">
+        No committees available.
+      </div>
+    );
+  }
+
   return (
     <div>
       {/* BUTTONS========================================= */}
@@ -104,12 +119,11 @@ const CommitteesSection = ({
       {/* BUTTONS========================================= */}
 
       {/* COMMITTEES========================================= */}
-      <CommitteesSwipper
-        data={commmitteList === "technicalcommittees" ? technical : operational}
-      />
+      <CommitteesSwipper data={currentList} />
       {/* COMMITTEES========================================= */}
     </div>
   );
 };
 
 export default CommitteesSection;
+
