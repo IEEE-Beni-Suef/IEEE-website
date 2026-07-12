@@ -9,9 +9,9 @@ const CommitteeCard = ({ committee }: IProps) => {
   const { name, description, imageUrl } = committee;
   
   // Ensure "Committee" is appended nicely
-  const displayName = name.toLowerCase().includes("committee") 
-    ? name 
-    : `${name} Committee`;
+  const displayName = (name || "").toLowerCase().includes("committee") 
+    ? (name || "") 
+    : `${name || ""} Committee`;
 
   return (
     <div className="flex flex-col bg-white rounded-2xl p-4 border border-gray-200 h-[460px] w-full shadow-sm hover:shadow-md transition-shadow duration-300">

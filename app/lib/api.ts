@@ -123,7 +123,9 @@ export const createUser = async <T = any>(
 export const getCommitteesApi = async (): Promise<Committee[]> => {
   try {
     const response = await apiClient.get("/Committees");
-    return response.data as Committee[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -231,7 +233,9 @@ export const getUser = async (id: number): Promise<User> => {
 export const getAllUsersApi = async (): Promise<User[]> => {
   try {
     const response = await apiClient.get("/Users");
-    return response.data as User[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -310,7 +314,9 @@ export const updateUserById = async <T = any>(
 export const getAllArticlesApi = async (): Promise<Article[]> => {
   try {
     const response = await apiClient.get("/Articles");
-    return response.data as Article[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data.message || "Failed to get Articles");
@@ -419,7 +425,9 @@ export const getArticleSubsectionByIdApi = async (
 export const getAllCategoryApi = async (): Promise<Category[]> => {
   try {
     const response = await apiClient.get("/Category");
-    return response.data as Category[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data.message || "Failed to get Category");
@@ -478,7 +486,9 @@ export const updateCategoryApi = async <T = any>(
 export const getAllSubsectionsApi = async (): Promise<Subsection[]> => {
   try {
     const response = await apiClient.get("/Subsections");
-    return response.data as Subsection[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -574,7 +584,9 @@ export const apiCreateMeeting = async <T = any>(
 export const getAllMeetingsApi = async (): Promise<Meeting[]> => {
   try {
     const response = await apiClient.get("/Meetings");
-    return response.data as Meeting[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -606,7 +618,9 @@ export const getMeetingAttendanceApi = async (
 ): Promise<MeetingAttendance[]> => {
   try {
     const response = await apiClient.get(`/Meetings/attendents/${meetingId}`);
-    return response.data as MeetingAttendance[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -693,8 +707,12 @@ export const categoriesApi = {
   /** Fetch all categories */
   getAll: (): Promise<ApiCategory[]> =>
     apiClient
-      .get<ApiCategory[]>(CAT)
-      .then((r) => r.data ?? []),
+      .get<any>(CAT)
+      .then((r) => {
+        if (r.data && Array.isArray(r.data)) return r.data;
+        if (r.data && Array.isArray(r.data.data)) return r.data.data;
+        return [];
+      }),
 
   /** Fetch a single category by GUID */
   getById: (id: string): Promise<ApiCategory | undefined> =>
@@ -740,7 +758,11 @@ const EV = "/events";
 export const eventsApi = {
   /** Fetch all events */
   getAll: (): Promise<ApiEvent[]> =>
-    apiClient.get<ApiEvent[]>(EV).then((r) => r.data ?? []),
+    apiClient.get<any>(EV).then((r) => {
+      if (r.data && Array.isArray(r.data)) return r.data;
+      if (r.data && Array.isArray(r.data.data)) return r.data.data;
+      return [];
+    }),
 
   /** Fetch a single event by GUID */
   getById: (id: string): Promise<ApiEvent | undefined> =>
@@ -791,7 +813,9 @@ export const eventsApi = {
 export const getAllSponsorsApi = async (): Promise<ISponsorCard[]> => {
   try {
     const response = await apiClient.get("/Sponsors");
-    return response.data as ISponsorCard[];
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (response.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data.message || "Failed to get Sponsors");
