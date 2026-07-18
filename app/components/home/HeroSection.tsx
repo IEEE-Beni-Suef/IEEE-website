@@ -277,101 +277,97 @@ export default function HeroSection() {
             exit={{ opacity: 0 }}
           >
         
-        {/* ─── LEFT SECTION: TEXT ─── */}
-        <div className="flex-1 flex flex-col justify-center h-full">
+            {/* ─── LEFT SECTION: TEXT ─── */}
+            <div className="flex-1 flex flex-col justify-center h-full">
+              <div className="relative space-y-6">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={`text-group-${currentSlide.id}`}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                  >
+                    {/* Title Animation */}
+                    <motion.h1
+                      variants={titleVariants}
+                      className="text-5xl md:text-4xl lg:text-7xl font-bold leading-tight text-white max-w-4xl block"
+                    >
+                      <HighlightedTitle title={currentSlide.title} />
+                    </motion.h1>
 
-          <div className="relative space-y-6">
-            <AnimatePresence mode="wait" initial={false}>
-              {/* Title Animation */}
-              <motion.h1
-                key={`title-${currentSlide.id}`}
-                variants={titleVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="text-5xl md:text-4xl lg:text-7xl font-bold leading-tight text-white max-w-4xl block"
+                    {/* Subtitle Animation */}
+                    <motion.p
+                      variants={subtitleVariants}
+                      className="text-gray-200 text-base lg:text-lg leading-relaxed max-w-lg block mt-6"
+                    >
+                      {currentSlide.subtitle}
+                    </motion.p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+                className="flex flex-wrap gap-4 mt-8"
               >
-                <HighlightedTitle title={currentSlide.title} />
-              </motion.h1>
+                <Link
+                  to="/events"
+                  className="bg-white hover:bg-[var(--color-primary-normal)] text-black font-semibold px-8 py-3 rounded-lg transition-all hover:text-white duration-300 hover:shadow-lg hover:shadow-blue-600/50 hover:-translate-y-1 active:translate-y-0"
+                >
+                  Explore Events
+                </Link>
+              </motion.div>
+            </div>
 
-              {/* Subtitle Animation */}
-              <motion.p
-                key={`subtitle-${currentSlide.id}`}
-                variants={subtitleVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="text-gray-200 text-base lg:text-lg leading-relaxed max-w-lg block mt-6"
-              >
-                {currentSlide.subtitle}
-              </motion.p>
-            </AnimatePresence>
-          </div>
+            {/* ─── RIGHT SECTION: IMAGES ─── */}
+            <div className="flex-1 relative h-full hidden lg:flex items-center justify-center  ">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div
+                  key={`images-container-${slideIndex}`}
+                  variants={imageGroupVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  className="relative w-[450px] h-[480px] xl:w-[500px] xl:h-[530px]"
+                >
+                  {/* Big Image */}
+                  <div className="absolute top-2/5 left-0 w-2/3 h-2/3 rounded-[2.5rem] overflow-hidden shadow-2xl border-[3px] border-amber-400/80 z-10">
+                    <img
+                      src={HERO_IMAGES[bigImageIdx]}
+                      alt="Hero showcase"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10" />
+                    <motion.div
+                      variants={flashVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      className="absolute inset-0 bg-black z-20 pointer-events-none"
+                    />
+                  </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="flex flex-wrap gap-4 mt-8"
-          >
-            <Link
-              to="/events"
-              className="bg-white hover:bg-[var(--color-primary-normal)] text-black font-semibold px-8 py-3 rounded-lg transition-all hover:text-white duration-300 hover:shadow-lg hover:shadow-blue-600/50 hover:-translate-y-1 active:translate-y-0"
-            >
-              Explore Events
-            </Link>
+                  {/* Small Image */}
+                  <div className="absolute top-2/3 left-4/6 w-[55%] h-[45%] rounded-[2.5rem] overflow-hidden shadow-2xl border-[4px] border-white/10 z-20">
+                    <img
+                      src={HERO_IMAGES[smallImageIdx]}
+                      alt="Hero detail"
+                      className="w-full h-full object-cover"
+                    />
+                    <motion.div
+                      variants={flashVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      className="absolute inset-0 bg-black z-20 pointer-events-none"
+                    />
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </motion.div>
-        </div>
-
-        {/* ─── RIGHT SECTION: IMAGES ─── */}
-        <div className="flex-1 relative h-full hidden lg:flex items-center justify-center  ">
-          <AnimatePresence mode="popLayout" initial={false}>
-            <motion.div
-              key={`images-container-${slideIndex}`}
-              variants={imageGroupVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="relative w-[450px] h-[480px] xl:w-[500px] xl:h-[530px]"
-            >
-
-              {/* Big Image */}
-              <div className="absolute top-2/5 left-0 w-2/3 h-2/3 rounded-[2.5rem] overflow-hidden shadow-2xl border-[3px] border-amber-400/80 z-10">
-                <img
-                  src={HERO_IMAGES[bigImageIdx]}
-                  alt="Hero showcase"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10" />
-                <motion.div
-                  variants={flashVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 bg-black z-20 pointer-events-none"
-                />
-              </div>
-
-              {/* Small Image */}
-              <div className="absolute top-2/3 left-4/6 w-[55%] h-[45%] rounded-[2.5rem] overflow-hidden shadow-2xl border-[4px] border-white/10 z-20">
-                <img
-                  src={HERO_IMAGES[smallImageIdx]}
-                  alt="Hero detail"
-                  className="w-full h-full object-cover"
-                />
-                <motion.div
-                  variants={flashVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 bg-black z-20 pointer-events-none"
-                />
-              </div>
-
-            </motion.div>
-          </AnimatePresence>
-        </div>
-        </motion.div>
         )}
       </AnimatePresence>
     </motion.section>
