@@ -46,11 +46,11 @@ const ChatBotCard = ({ setIsOpen }: IProps) => {
 
   const buttonStatus = !inputValue.trim();
   return (
-    <div className="h-150 w-110 mx-auto my-10 flex flex-col justify-between p-2 fixed -bottom-8 right-0 z-100">
+    <div className="h-155 w-110 mx-auto my-10 flex flex-col justify-between p-2 fixed -bottom-8 right-0 z-100">
       {/* =============Messages=================== */}
       <div className="w-full h-[89%] flex flex-col justify-betweenbg-amber-950 rounded-2xl truncate">
         {/* =============Header=================== */}
-        <div className="w-full h-[15%] bg-[#4460EF] flex justify-between items-center px-5 py-3">
+        <div className="w-full h-[13%] bg-[#4460EF] flex justify-between items-center px-5 py-3">
           {/* ============First Div Header================= */}
           <div className="flex items-center space-x-3">
             <div className="w-8 h-10 ">
@@ -79,13 +79,13 @@ const ChatBotCard = ({ setIsOpen }: IProps) => {
         </div>
         {/* =============Header=================== */}
         {/* =============Old Messages============= */}
-        <div className="w-full h-[85%] bg-[#FEFEFF] p-2  overflow-y-auto overflow-x-hidden">
+        <div className="w-full h-[85%] bg-[#FEFEFF] p-2 rounded-b-2xl  overflow-y-auto overflow-x-hidden">
           <ChatMessage
             sender="bot"
             text="Hi! I'm the IEEE AI Assistant. How can I help you today?"
           />
           {newChat && (
-            <div className="mt-6">
+            <div className="mt-5">
               {boxes.map((box) => (
                 <NewChatBox key={box.id} icon={box.icon} text={box.text} />
               ))}
