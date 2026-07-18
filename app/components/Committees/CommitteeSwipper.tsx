@@ -1,24 +1,30 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-// import "./customSwipper.css"
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import "swiper/css/autoplay";
+import { Navigation, Autoplay } from "swiper/modules";
 import CommitteeCard from "./CommitteeCard";
 import type { Committee } from "~/types";
-
 
 interface IProps {
   data: Committee[];
 }
 
 const CommitteesSwipper = ({ data }: IProps) => {
-  // ** Renders
-
-  const listToRender = data;
-
   return (
-    <div className="relative w-full px-2 md:px-10 py-8">
+    <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] px-2 md:px-10 py-8 overflow-hidden bg-white">
       <style>{`
+        .committees-swiper {
+          overflow: visible !important;
+          width: 100% !important;
+        }
+        .committees-swiper .swiper-wrapper {
+          align-items: stretch;
+        }
+        .committees-swiper .swiper-slide {
+          height: auto;
+          display: flex;
+        }
         .swiper-button-next, .swiper-button-prev {
           background-color: #F1F5F9;
           width: 44px;
@@ -34,35 +40,37 @@ const CommitteesSwipper = ({ data }: IProps) => {
         .swiper-button-next:hover, .swiper-button-prev:hover {
           background-color: #E2E8F0;
         }
-        /* Hide default swiper arrows if we want custom ones, but here we style the default */
       `}</style>
+
       <Swiper
-        modules={[Navigation]}
+        key={data.map((c) => c.id).join("-")}
+        modules={[Navigation, Autoplay]}
         navigation={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: true,
+        }}
         spaceBetween={24}
-        className="w-full py-4 px-2"
+        className="committees-swiper w-full py-4"
         breakpoints={{
           1: {
-            slidesPerView: 1.1,
+            slidesPerView: 1,
           },
           480: {
-            slidesPerView: 1.5,
+            slidesPerView: 2,
           },
-          670: {
-            slidesPerView: 2.2,
+          768: {
+            slidesPerView: 3,
           },
-          900: {
-            slidesPerView: 3.2,
-          },
-          1200: {
-            slidesPerView: 4.2,
+          1024: {
+            slidesPerView: 4,
           },
         }}
       >
-        {listToRender.map((committe) => (
+        {data.map((committe, index) => (
           <SwiperSlide
-            key={committe.id}
-            className="flex justify-center items-center h-auto"
+            key={committe.id ?? index}
+            className="!flex !justify-center !items-stretch min-w-0"
           >
             <CommitteeCard committee={committe} />
           </SwiperSlide>

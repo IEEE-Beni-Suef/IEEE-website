@@ -257,14 +257,14 @@ export interface SendEmailPayload {
 export interface ISponsorCard {
   id: number;
   img: string;
-  title: string;
+  name: string;
   description: string;
 }
 
 export interface ICommittee {
   id: number;
   img: string;
-  title: string;
+  name: string;
   description: string;
 }
 

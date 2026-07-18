@@ -53,26 +53,7 @@ const CommitteesSection = ({
   );
   if (isLoading) {
     return (
-      <Swiper
-        className="w-full"
-        breakpoints={{
-          1: {
-            slidesPerView: 1.1,
-          },
-          480: {
-            slidesPerView: 1.5,
-          },
-          670: {
-            slidesPerView: 2.2,
-          },
-          900: {
-            slidesPerView: 3.2,
-          },
-          1200: {
-            slidesPerView: 4.2,
-          },
-        }}
-      >
+      <div className="flex gap-6">
         {Array.from({ length: 8 }, (_, idx) => (
           <SwiperSlide
             key={idx}
@@ -81,7 +62,7 @@ const CommitteesSection = ({
             <CommitteeCardSkeleton />
           </SwiperSlide>
         ))}
-      </Swiper>
+      </div>
     );
   }
   if (isError) {
@@ -93,7 +74,8 @@ const CommitteesSection = ({
       </div>
     );
   }
-
+  console.log(committees);
+  
   return (
     <div>
       {/* BUTTONS========================================= */}
@@ -104,9 +86,23 @@ const CommitteesSection = ({
       {/* BUTTONS========================================= */}
 
       {/* COMMITTEES========================================= */}
-      <CommitteesSwipper
-        data={commmitteList === "technicalcommittees" ? technical : operational}
-      />
+      {commmitteList === "technicalcommittees" && technical.length === 0 ? (
+        <div className="flex justify-center items-center py-12 text-gray-500">
+          No technical committees found.
+        </div>
+      ) : commmitteList === "operationalcommittees" &&
+        operational.length === 0 ? (
+        <div className="flex justify-center items-center py-12 text-gray-500">
+          No operational committees found.
+        </div>
+      ) : (
+        <CommitteesSwipper
+          data={
+            commmitteList === "technicalcommittees" ? technical : operational
+          }
+        />
+      )}
+
       {/* COMMITTEES========================================= */}
     </div>
   );

@@ -10,7 +10,7 @@ const Commitees = () => {
 
   return (
     <div
-      className="bg-slate-50 min-h-screen w-screen md:px-10 my-25 "
+      className="bg-slate-50 min-h-screen w-full md:px-10 my-25 overflow-x-hidden"
       id="committees"
     >
       <div className=" flex flex-col items-center justify-center space-y-5">
@@ -33,7 +33,12 @@ const Commitees = () => {
           future today.
         </p>
         {/* DESCROPTION========================================= */}
-        <CommitteesSection error={error} isLoading={isLoading} isError={isError} committees={committees || []} />
+        <CommitteesSection
+          error={error}
+          isLoading={isLoading}
+          isError={isError}
+          committees={committees || []}
+        />
       </div>
     </div>
   );

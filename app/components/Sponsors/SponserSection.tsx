@@ -9,7 +9,7 @@ const SponsorsSection = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-5 p-5"  >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-5 p-5">
         {Array.from({ length: 8 }, (_, idx) => (
           <SponsersSkeleton key={idx} />
         ))}
@@ -52,9 +52,9 @@ const SponsorsSection = () => {
         <SponsorCard
           key={sponsor.id}
           id={sponsor.id}
-          description={sponsor.description}
+          description={sponsor.description ?? ""}
           img={sponsor.img}
-          title={sponsor.title}
+          title={sponsor.name}
         />
       ))}
     </div>
