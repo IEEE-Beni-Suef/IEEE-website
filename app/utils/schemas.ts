@@ -1,5 +1,4 @@
-
-import z from "zod";
+import z, { email } from "zod";
 
 export const registerSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
@@ -25,6 +24,18 @@ export const registerSchema = z.object({
 export const createUserSchema = registerSchema.extend({
   isActive: z.boolean(),
   CommitteeIds: z.array(z.string().transform((val) => Number(val))),
+});
+
+export const newCreateUserSchema = z.object({
+  fullName: z.string().min(1, { message: "Full name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  phone: z.string().min(1, { message: "Phone number is required" }),
+  roleId: z.enum(["1", "2", "3", "4", "5"], {
+    message: "Role ID is required and must be a valid number",
+  }),
+  isActive: z.boolean(),
+  CommitteeIds: z.array(z.string().transform((val) => Number(val))),
+  goverment: z.string().min(1, { message: "Government is required" }),
 });
 
 export const loginSchema = z.object({
@@ -151,7 +162,9 @@ export const updateCategoryDescSchema = z.object({
     .nullable()
     .optional(),
 });
-export type UpdateCategoryDescFormData = z.infer<typeof updateCategoryDescSchema>;
+export type UpdateCategoryDescFormData = z.infer<
+  typeof updateCategoryDescSchema
+>;
 
 // ============================================================
 // Event Schemas
@@ -171,7 +184,12 @@ export const createEventSchema = z
       .min(3, "Event name must be at least 3 characters")
       .max(150, "Event name must not exceed 150 characters"),
     keyWords: z
-      .array(z.string().min(1, "Keyword cannot be empty").max(50, "Keyword too long"))
+      .array(
+        z
+          .string()
+          .min(1, "Keyword cannot be empty")
+          .max(50, "Keyword too long"),
+      )
       .min(1, "At least one keyword is required")
       .max(10, "Maximum 10 keywords allowed"),
     startDate: dateStringOrNull,
@@ -179,13 +197,15 @@ export const createEventSchema = z
     isCommingSoon: z.boolean(),
     categoryId: z.string().uuid("Invalid category ID"),
   })
+  .refine((d) => d.isCommingSoon || (!!d.startDate && !!d.endDate), {
+    message: "Start & end dates are required when event is not coming soon",
+    path: ["startDate"],
+  })
   .refine(
-    (d) => d.isCommingSoon || (!!d.startDate && !!d.endDate),
-    { message: "Start & end dates are required when event is not coming soon", path: ["startDate"] }
-  )
-  .refine(
-    (d) => !(d.startDate && d.endDate) || new Date(d.startDate!) < new Date(d.endDate!),
-    { message: "Start date must be before end date", path: ["endDate"] }
+    (d) =>
+      !(d.startDate && d.endDate) ||
+      new Date(d.startDate!) < new Date(d.endDate!),
+    { message: "Start date must be before end date", path: ["endDate"] },
   );
 export type CreateEventFormData = z.infer<typeof createEventSchema>;
 
@@ -200,11 +220,15 @@ export type RenameEventFormData = z.infer<typeof renameEventSchema>;
 
 export const updateEventKeywordsSchema = z.object({
   keyWords: z
-    .array(z.string().min(1, "Keyword cannot be empty").max(50, "Keyword too long"))
+    .array(
+      z.string().min(1, "Keyword cannot be empty").max(50, "Keyword too long"),
+    )
     .min(1, "At least one keyword is required")
     .max(10, "Maximum 10 keywords allowed"),
 });
-export type UpdateEventKeywordsFormData = z.infer<typeof updateEventKeywordsSchema>;
+export type UpdateEventKeywordsFormData = z.infer<
+  typeof updateEventKeywordsSchema
+>;
 
 export const updateEventDatesSchema = z
   .object({
@@ -212,12 +236,14 @@ export const updateEventDatesSchema = z
     endDate: dateStringOrNull,
     isCommingSoon: z.boolean(),
   })
+  .refine((d) => d.isCommingSoon || (!!d.startDate && !!d.endDate), {
+    message: "Start & end dates are required when event is not coming soon",
+    path: ["startDate"],
+  })
   .refine(
-    (d) => d.isCommingSoon || (!!d.startDate && !!d.endDate),
-    { message: "Start & end dates are required when event is not coming soon", path: ["startDate"] }
-  )
-  .refine(
-    (d) => !(d.startDate && d.endDate) || new Date(d.startDate!) < new Date(d.endDate!),
-    { message: "Start date must be before end date", path: ["endDate"] }
+    (d) =>
+      !(d.startDate && d.endDate) ||
+      new Date(d.startDate!) < new Date(d.endDate!),
+    { message: "Start date must be before end date", path: ["endDate"] },
   );
 export type UpdateEventDatesFormData = z.infer<typeof updateEventDatesSchema>;

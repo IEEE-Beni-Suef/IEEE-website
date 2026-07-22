@@ -22,6 +22,8 @@ import { SidebarItem } from "./SidebarItem";
 import { useAuth, clearAuth } from "~/hooks/useAuth";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import Logo from "../ui/SidebarLogo";
+import { getRoleName } from "~/utils/utile";
 
 // Icon mapping helper
 const getIconComponent = (iconName: string) => {
@@ -52,6 +54,8 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
     sidebarConfigs.default;
 
   const { user } = useAuth();
+  console.log(user);
+
   const navigate = useNavigate();
   const [isProfileExpanded, setIsProfileExpanded] = useState(false);
 
@@ -61,15 +65,22 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full w-16 md:w-full border-1.5 border-[#CCB5E3] shadow-[0px_1px_17.1px_0px_#CCB5E3]  flex flex-col justify-between border-r-1.5  ">
       <div>
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-slate-900 ">
+        <div className="flex flex-col items-center mt-3 mb-10">
+          <Link to="/" className="flex items-center space-x-3 group">
+            <figure className="h-13 w-13 md:h-25 md:w-25 md:p-3">
+              <Logo />
+            </figure>
+          </Link>
+          <h2 className="hidden md:block text-xl font-bold  text-[##000640] ">
             {config.title}
           </h2>
-          <p className="text-sm text-gray-500">{config.description}</p>
+          <p className="hidden md:block text-sm font-normal text-[#1F2B6C]">
+            {config.description}
+          </p>
         </div>
-        <nav className="space-y-2">
+        <nav className=" space-y-2 lg:ml-8">
           {config.navigation.map((item, index) => (
             <SidebarItem
               key={index}
@@ -80,63 +91,31 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
           ))}
         </nav>
       </div>
-      <div className="space-y-2">
-        <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="space-y-2 ">
+        <div className="w-full bg-white rounded-lg  overflow-hidden">
           {/* Profile Actions - Collapsible */}
-          <div
-            className={`transition-all duration-300 ease-in-out ${
-              isProfileExpanded ? "max-h-32 opacity-100" : "max-h-0 opacity-0"
-            } overflow-hidden`}
-          >
-            <div className="px-3 pb-3 space-y-1 border-b border-gray-200">
-              <Link
-                to="/dashboard/profile"
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200 mt-2"
-              >
-                <User className="w-4 h-4" />
-                <span>Profile</span>
-              </Link>
-              <Link
-                to="/dashboard/settings"
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-              >
-                <Settings className="w-4 h-4" />
-                <span>Settings</span>
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 cursor-pointer"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          </div>
-          <button
+
+          {/* <button
             onClick={() => setIsProfileExpanded(!isProfileExpanded)}
             className="w-full p-3 flex items-center justify-between hover:bg-gray-50 transition-colors duration-200  cursor-pointer"
-          >
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <User2 className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  {user?.firstName && user?.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : "User"}
-                </p>
-                <p className="text-xs text-gray-500 truncate">
-                  {user?.email}
-                </p>
-              </div>
+          > */}
+          <div className="flex p-3 items-center space-x-3">
+            <div className="p-2 bg-blue-100 rounded-full">
+              <User2 className="w-6.25 h-6.25 text-blue-600" />
             </div>
-            {isProfileExpanded ? (
-              <ChevronUp className="w-4 h-4 text-gray-400" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-gray-400" />
-            )}
-          </button>
+            <div className="flex-1 min-w-0 text-left">
+              <p className="text-sm font-semibold text-[#000640] truncate">
+                {user?.fName && user?.lName
+                  ? `${user.fName} ${user.lName}`
+                  : "User"}
+              </p>
+              <p className="text-xs text-[#3348B3] truncate">
+                {getRoleName(user?.roleId)}
+              </p>
+            </div>
+          </div>
+
+          {/* </button> */}
         </div>
       </div>
     </div>

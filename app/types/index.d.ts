@@ -1,8 +1,8 @@
 export interface User {
   id: number;
-  firstName: string;
-  middleName: string;
-  lastName: string;
+  fName: string;
+  mName: string;
+  lName: string;
   email: string;
   phone?: string;
   year?: string;
