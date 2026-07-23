@@ -600,6 +600,22 @@ export const getMeetingByIdApi = async (id: number): Promise<Meeting> => {
   }
 };
 
+// Delete meeting by ID
+export const deleteMeetingApi = async <T = any>(id: number): Promise<T> => {
+  try {
+    const response = await apiClient.delete(`/Meetings/${id}`);
+    return response.data as T;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.message || "Failed to delete meeting",
+      );
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+
 // Get meeting attendance
 export const getMeetingAttendanceApi = async (
   meetingId: number,

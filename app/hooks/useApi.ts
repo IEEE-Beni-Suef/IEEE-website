@@ -28,6 +28,7 @@ import {
   createUser,
   getAllMeetingsApi,
   getMeetingByIdApi,
+  deleteMeetingApi,
   getMeetingAttendanceApi,
   apiCreateMeeting,
   apiSubmitAttendance,
@@ -390,7 +391,7 @@ export const useGetMeetingAttendance = (meetingId: number) => {
 };
 
 export const useCreateMeeting = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createMeeting"],
     mutationFn: (meetingData: any) => apiCreateMeeting(meetingData),
     onSuccess: () => {
@@ -398,7 +399,19 @@ export const useCreateMeeting = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
+};
+
+export const useDeleteMeeting = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["deleteMeeting"],
+    mutationFn: (id: number) => deleteMeetingApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
+    },
+  });
+
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useSubmitAttendance = () => {

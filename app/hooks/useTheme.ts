@@ -1,8 +1,19 @@
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "~/store/store";
+import { toggleTheme, setTheme } from "~/store/slices/themeSlice";
+
 export const useTheme = () => {
+  const isDark = useSelector((state: RootState) => state.theme?.isDark ?? false);
+  const dispatch = useDispatch();
+
+  const toggle = () => dispatch(toggleTheme());
+  const setDark = (dark: boolean) => dispatch(setTheme(dark));
+
   return {
-    isDark: false,
-    toggle: () => {},
-    setDark: (_dark: boolean) => {},
-    theme: "light",
+    isDark,
+    toggle,
+    setDark,
+    theme: isDark ? "dark" : "light",
   };
 };
+
