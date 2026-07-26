@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useState } from "react";
 import { txtSlicer } from "~/utils/utile";
 import { Pencil, Trash2 } from "lucide-react";
 
@@ -10,8 +11,10 @@ interface IProps {
   isActionLoading?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
-  children?: ReactNode
+  children?: ReactNode;
 }
+
+const DEFAULT_IMAGE = "/SocialMedia.png";
 
 const SponsorCard = ({
   description,
@@ -21,9 +24,16 @@ const SponsorCard = ({
   onEdit,
   onDelete,
 }: IProps) => {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  const finalImageUrl = imageError || !img ? DEFAULT_IMAGE : img;
+
   return (
     <div className="relative w-3xs h-60 bg-white rounded-4xl flex flex-col justify-evenly items-center bt-0.5 shadow-[0px_2px_0px_#ABBED166] group">
-      
       {/* Actions (Edit / Delete) */}
       {(onEdit || onDelete) && (
         <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -51,10 +61,18 @@ const SponsorCard = ({
       )}
 
       <div className="h-24 w-48 rounded-lg truncate">
-        <img className="w-full h-full" src={img} alt="" />
+        <img
+          className="w-full h-full object-cover"
+          src={finalImageUrl}
+          alt={title}
+          onError={handleImageError}
+          loading="lazy"
+        />
       </div>
       <div className="w-fit flex flex-col space-y-0.5">
-        <h2 className="text-center font-bold text-xl">{txtSlicer(title, 15)}</h2>
+        <h2 className="text-center font-bold text-xl">
+          {txtSlicer(title, 15)}
+        </h2>
         <p className="text-center p-0 text-[#364DBF]">
           {txtSlicer(description, 25)}
         </p>

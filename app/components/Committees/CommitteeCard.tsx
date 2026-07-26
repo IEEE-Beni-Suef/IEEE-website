@@ -1,57 +1,40 @@
 import { useState } from "react";
 import { MoveRight } from "lucide-react";
+import { useState } from "react";
 import type { Committee } from "~/types";
 
 interface IProps {
   committee: Committee;
 }
 
-// Color palette for fallback placeholders
-const placeholderColors = [
-  "from-purple-500 to-indigo-600",
-  "from-blue-500 to-cyan-600",
-  "from-emerald-500 to-teal-600",
-  "from-orange-500 to-red-500",
-  "from-pink-500 to-rose-600",
-  "from-violet-500 to-purple-600",
-  "from-sky-500 to-blue-600",
-  "from-amber-500 to-orange-600",
-  "from-teal-500 to-emerald-600",
-];
+const DEFAULT_IMAGE = "/SocialMedia.png";
 
 const CommitteeCard = ({ committee }: IProps) => {
   const { name, description, imageUrl } = committee;
-  const [imgError, setImgError] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   // Ensure "Committee" is appended nicely
-  const displayName = (name || "").toLowerCase().includes("committee")
-    ? (name || "")
-    : `${name || ""} Committee`;
+  const displayName = name.toLowerCase().includes("committee")
+    ? name
+    : `${name} Committee`;
 
-  // Pick a consistent color based on the committee name
-  const colorIndex = (name || "").length % placeholderColors.length;
-  const gradientClass = placeholderColors[colorIndex];
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  const finalImageUrl = imageError || !imageUrl ? DEFAULT_IMAGE : imageUrl;
 
   return (
     <div className="flex flex-col bg-white rounded-2xl p-4 border border-gray-200 h-[460px] w-full shadow-sm hover:shadow-md transition-shadow duration-300">
       {/* Image Container */}
       <div className="w-full h-52 rounded-xl overflow-hidden shrink-0 bg-gray-100">
-        {!imgError && imageUrl ? (
-          <img
-            className="w-full h-full object-cover"
-            src={imageUrl}
-            alt={`${name} image`}
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div
-            className={`w-full h-full bg-gradient-to-br ${gradientClass} flex items-center justify-center`}
-          >
-            <span className="text-white text-5xl font-bold opacity-80">
-              {(name || "?").charAt(0).toUpperCase()}
-            </span>
-          </div>
-        )}
+        <img
+          className="w-full h-full object-cover"
+          src={finalImageUrl}
+          alt={`${name} image`}
+          onError={handleImageError}
+          loading="lazy"
+        />
       </div>
 
       {/* Content Container */}

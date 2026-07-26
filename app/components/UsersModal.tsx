@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Modal } from "./Modal";
 import { FormInput, FormSelect, FormMultiSelect } from "./form";
 import { Button } from "./ui/Button";
-import { createUserSchema } from "~/utils/schemas";
+import { createUserSchema, newCreateUserSchema } from "~/utils/schemas";
 import { useCommittees } from "~/hooks/useApi";
 import {
   User,
@@ -27,7 +27,7 @@ import {
 } from "~/utils/lists";
 import type { Committee } from "~/types";
 
-type UserFormData = z.infer<typeof createUserSchema>;
+type UserFormData = z.infer<typeof newCreateUserSchema>;
 
 interface UserModalProps {
   isOpen: boolean;
@@ -64,7 +64,7 @@ export const UsersModal: FC<UserModalProps> = ({
     watch,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(createUserSchema),
+    resolver: zodResolver(newCreateUserSchema),
     defaultValues: {
       CommitteeIds: [] as string[],
       isActive: true,
@@ -84,16 +84,17 @@ export const UsersModal: FC<UserModalProps> = ({
         reset(formUser);
       } else {
         reset({
-          firstName: "",
-          middleName: "",
-          lastName: "",
+          // firstName: "",
+          // middleName: "",
+          // lastName: "",
+          fullName: "",
           email: "",
-          password: "",
+          // password: "",
           phone: "",
-          year: "",
-          faculty: "",
+          // year: "",
+          // faculty: "",
           goverment: "",
-          sex: undefined,
+          // sex: undefined,
           roleId: "3" as const,
           CommitteeIds: [] as string[],
           isActive: true,
@@ -129,11 +130,27 @@ export const UsersModal: FC<UserModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title={user ? "Edit User" : "Create User"}
+      title={user ? "Edit User" : "Add new Member"}
+      description="Fill in the details to register a new IEEE member."
     >
       <form onSubmit={handleRHFSubmit(handleFormSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormInput
+            id="fullname"
+            label="Full Name*"
+            placeholder="e.g. Ahmed Khaled"
+            register={register}
+            error={errors.fullName}
+          />
+          <FormInput
+            id="email"
+            label="Email Address*"
+            type="email"
+            placeholder="e.g. ahmed@ieee.org"
+            register={register}
+            error={errors.email}
+          />
+          {/* <FormInput
             id="firstName"
             label="First Name"
             placeholder="John"
@@ -155,11 +172,30 @@ export const UsersModal: FC<UserModalProps> = ({
             placeholder="Doe"
             register={register}
             error={errors.lastName}
-          />
+          /> */}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <FormInput
+            id="phone"
+            label="Phone Number"
+            type="tel"
+            placeholder="+20 1XX XXX XXXX"
+            register={register}
+            error={errors.phone}
+          />
           <FormSelect
+            id="status"
+            label="Status"
+            options={[
+              { label: "Active", value: "active" },
+              { label: "Inactive", value: "inactive" },
+            ]}
+            placeholder="Active"
+            register={register}
+            error={errors.isActive}
+          />
+          {/* <FormSelect
             id="year"
             label="Academic Year"
             options={yearOptions}
@@ -167,44 +203,36 @@ export const UsersModal: FC<UserModalProps> = ({
             register={register}
             error={errors.year}
             icon={GraduationCap}
-          />
-          <FormSelect
+          /> */}
+          {/* <FormSelect
             id="sex"
             label="Gender"
             options={genderOptions}
             placeholder="Select Gender"
             register={register}
             error={errors.sex}
-          />
+          /> */}
         </div>
 
-        <FormSelect
+        {/* <FormSelect
           id="faculty"
           label="Faculty"
           options={facultyOptions}
           placeholder="Select Your Faculty"
           register={register}
           error={errors.faculty}
-        />
+        /> */}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormSelect
-            id="goverment"
-            label="Government"
-            options={governorateOptions}
-            placeholder="e.g., Beni Suef"
+        <div className="grid grid-cols-1 gap-4">
+          <FormMultiSelect
+            id="CommitteeIds"
+            label="Committees*"
+            options={committeeOptions}
+            placeholder="Select committees"
             register={register}
-            error={errors.goverment}
-            icon={MapPin}
-          />
-          <FormInput
-            id="phone"
-            label="Phone Number"
-            type="tel"
-            placeholder="+20 123 456 7890"
-            register={register}
-            error={errors.phone}
-            icon={Phone}
+            setValue={setValue}
+            watch={watch}
+            error={errors.CommitteeIds as any}
           />
         </div>
 
@@ -213,34 +241,21 @@ export const UsersModal: FC<UserModalProps> = ({
             id="roleId"
             label="Role"
             options={roleOptions}
-            placeholder="Select Role"
+            placeholder="Select Role*"
             register={register}
             error={errors.roleId}
           />
-          <FormMultiSelect
-            id="CommitteeIds"
-            label="Committees"
-            options={committeeOptions}
-            placeholder="Select committees"
+          <FormSelect
+            id="goverment"
+            label="Government*"
+            options={governorateOptions}
+            placeholder="e.g., Beni Suef"
             register={register}
-            setValue={setValue}
-            watch={watch}
-            error={errors.CommitteeIds as any}
-            icon={Users}
+            error={errors.goverment}
           />
         </div>
 
-        <FormInput
-          id="email"
-          label="Email Address"
-          type="email"
-          placeholder="your.email@example.com"
-          register={register}
-          error={errors.email}
-          icon={Mail}
-        />
-
-        <FormInput
+        {/* <FormInput
           id="password"
           label="Password"
           type={showPassword ? "text" : "password"}
@@ -261,9 +276,9 @@ export const UsersModal: FC<UserModalProps> = ({
               )}
             </button>
           }
-        />
+        /> */}
 
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <label
             htmlFor="isActive"
             className="text-m font-medium text-gray-700"
@@ -276,20 +291,24 @@ export const UsersModal: FC<UserModalProps> = ({
             {...register("isActive")}
             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
           />
-        </div>
+        </div> */}
 
-        <div className="flex justify-end space-x-3 pt-4">
-          <Button
+        <div className="flex w-full space-x-3 pt-4">
+          <button
             type="button"
-            variant="secondary"
+            className="w-[50%] h-10.5 border border-[#5A10A5] text-[#5A10A5] text-sm font-semibold rounded-xl"
             onClick={handleClose}
             disabled={isLoading}
           >
             Cancel
-          </Button>
-          <Button type="submit" variant="primary" disabled={isLoading}>
+          </button>
+          <button
+            type="submit"
+            className="w-[50%] h-10.5 bg-linear-to-br from-[#5A10A5] to-[#4460EF] text-white text-sm font-semibold rounded-xl"
+            disabled={isLoading}
+          >
             {isLoading ? "Creating..." : user ? "Update User" : "Create User"}
-          </Button>
+          </button>
         </div>
       </form>
     </Modal>

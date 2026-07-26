@@ -4,8 +4,27 @@ import { deleteUserByIdApi } from "~/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { facultyOptions, governorateOptions } from "~/utils/lists";
-import { useAllUsers, useCreateUser, useUpdateUser, useSetUserActivation } from "~/hooks/useApi";
+import UserNotFound from "../../../public/UsersNotFound.png";
+import {
+  useAllUsers,
+  useCreateUser,
+  useUpdateUser,
+  useSetUserActivation,
+} from "~/hooks/useApi";
 import { UsersModal } from "~/components/UsersModal";
+import { ApproveModal } from "~/components/ApproveModal";
+import { NotificationModal } from "~/components/NotificationModal";
+import {
+  Download,
+  GraduationCap,
+  Plus,
+  TriangleAlert,
+  UserCheck,
+  Users,
+} from "lucide-react";
+import DashboardUserHeader from "~/components/Users/DashboardUserHeader";
+import UserStatsCard from "~/components/Users/UserStatsCard";
+import TableSelect from "~/components/Users/TableSelect";
 
 export default function UsersManagement() {
   const { data, isLoading, isError, error } = useAllUsers();
@@ -15,7 +34,53 @@ export default function UsersManagement() {
   const [showDetails, setShowDetails] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
-  const { mutate: createUser} = useCreateUser();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const [showPendingApprovals, setShowPendingApprovals] = useState(false);
+  // TODO: Show notification modal after successful user creation
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  // TODO: Replace with API data for success notification
+  const [successNotificationData, setSuccessNotificationData] =
+    useState<any>(null);
+
+  // TODO: DELETE the hardcoded data below and replace with API call
+  // TODO: Create a hook: const { data: pendingApprovalsData, isLoading: approvalsLoading } = usePendingApprovalsAPI();
+  // Example endpoint: GET /api/approvals/pending
+  const [pendingApprovalsData] = useState<any[]>([
+    {
+      id: 1,
+      name: "Karim Nasser",
+      role: "Analytics - Committee Head",
+      date: "Applied Jun 1, 2024",
+      status: "pending",
+      avatar: "KN",
+    },
+    {
+      id: 2,
+      name: "test test",
+      role: "Navigation & Space Tech - Committee Head",
+      date: "Applied May 15, 2024",
+      status: "pending",
+      avatar: "TT",
+    },
+    {
+      id: 3,
+      name: "Nour El-Din",
+      role: "Power & Energy - Member",
+      date: "Applied Jun 10, 2024",
+      status: "pending",
+      avatar: "NE",
+    },
+    {
+      id: 4,
+      name: "Dina Sameh",
+      role: "Member",
+      date: "Applied Jun 5, 2024",
+      status: "pending",
+      avatar: "DS",
+    },
+  ]);
+  const { mutate: createUser } = useCreateUser();
   const { mutate: updateUser } = useUpdateUser(editingUser?.id || 0);
   const { mutateAsync: setActivation } = useSetUserActivation();
 
@@ -39,12 +104,31 @@ export default function UsersManagement() {
       if (editingUser) {
         await updateUser(userData);
         alert("User updated successfully!");
+        handleCloseModal();
       } else {
-        await createUser(userData);
+        // TODO: Replace with actual API response that includes user details
+        const createdUser = await createUser(userData);
+
+        // TODO: Construct success notification data from API response:
+        // const successData = {
+        //   name: createdUser.fullName,
+        //   committee: createdUser.CommitteeIds[0]?.name || "IEEE",
+        // };
+        setSuccessNotificationData({
+          name: userData.fullName,
+          committee: "IEEE Committee", // TODO: Replace with actual committee name from API
+        });
+
+        handleCloseModal();
+
+        // TODO: Replace setTimeout with actual success callback from API
+        // Show notification modal after a brief delay
+        setTimeout(() => {
+          setShowNotificationModal(true);
+        }, 500);
       }
-      handleCloseModal();
     } catch (error) {
-      console.error('Error handling user:', error);
+      console.error("Error handling user:", error);
       alert((error as Error).message);
     }
   };
@@ -90,44 +174,46 @@ export default function UsersManagement() {
     }
   };
 
+  // Pagination helpers
+  const totalItems = data?.length || 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedData = data?.slice(startIndex, endIndex) || [];
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // TODO: DELETE the old pending approvals handlers below - they are now in ApproveModal.tsx
+  // Old handlers that were moved:
+  // - handleOpenPendingApprovals
+  // - handleApprove
+  // - handleReject
+  // - handleUndoDecision
+  // - handleSubmitDecisions
+  // - handleDoneReview
+  // - approvedCount
+  // - rejectedCount
+
+  const handleOpenPendingApprovals = () => {
+    setShowPendingApprovals(true);
+  };
+
+  console.log(data);
+
   return (
     <ProtectedRoute allowedRoles={[1, 2]}>
-      <div className="min-h-screen  transition-colors duration-200">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Users Management
-              </h1>
-              <p className="mt-2 text-sm text-gray-600">
-                Manage and oversee all IEEE members and their details
-              </p>
-            </div>
-            <div className="mt-4 sm:mt-0">
-              <button 
-                onClick={handleCreateClick}
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-              >
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-                Add New User
-              </button>
-            </div>
-          </div>
-        </div>
-
+      <div className="min-h-screen   transition-colors duration-200 px-3">
+        <DashboardUserHeader handleCreateClick={handleCreateClick} />
         {/* User Modal */}
         <UsersModal
           isOpen={showAddModal}
@@ -137,171 +223,89 @@ export default function UsersManagement() {
         />
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Total Users
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {data?.length || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Active Users
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {data?.filter((u: any) => u.isActive).length || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-yellow-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Pending
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {data?.filter((u: any) => !u.isActive).length || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-purple-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Committees
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {new Set(
-                    data
-                      ?.flatMap((u: any) => u.committeesId || [])
-                      .filter(Boolean)
-                  ).size || 0}
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+          <UserStatsCard
+            icon={<Users color="#5A10A5" size={20} />}
+            iconBackground="#F3E8FF"
+            subText="↑ 2 this week"
+            subTextColor="#09800F"
+            title="Total Members"
+            number={44}
+          />
+          <UserStatsCard
+            icon={<UserCheck color="#09800F" size={20} />}
+            iconBackground="#09800F1A"
+            subText="↑ 5 active now"
+            subTextColor="#09800F"
+            title="Active Members"
+            number={12}
+          />
+          <UserStatsCard
+            icon={<TriangleAlert color="#FFC107" size={20} />}
+            iconBackground="#EEBF6E26"
+            subText="Requires your approval"
+            subTextColor="#6C757D"
+            title="Pending Approvals"
+            number={32}
+            extraButtonText="review now"
+            extraButtonBackground="#FEF3C7"
+            extraButtonColor="#B45309"
+            onExtraButtonClick={handleOpenPendingApprovals}
+          />
+          <UserStatsCard
+            icon={<GraduationCap color="#5A10A5" size={20} />}
+            iconBackground="#F3E8FF"
+            subText="Alumni all members"
+            subTextColor="#6C757D"
+            title="Alumni"
+            number={15}
+          />
         </div>
 
         {/* Main Content */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">
-                All Users
-              </h2>
-              <div className="mt-4 sm:mt-0 flex space-x-3">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search users..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
-                    <svg
-                      className="h-4 w-4 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <select className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                  <option>All Statuses</option>
-                  <option>Active</option>
-                  <option>Inactive</option>
-                </select>
-              </div>
+        {/* Search and Filters */}
+        <div className="my-5 sm:mt-0 flex justify-between flex-wrap space-y-3">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search by name, email, etc."
+              className="w-80 h-10 pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
+              <svg
+                className="h-4 w-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
             </div>
           </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 space-x-1 space-y-1">
+            <TableSelect
+              mainText="All Statuses"
+              options={["Active", "Inactive"]}
+            />
+            <TableSelect
+              mainText="All Roles"
+              options={["Active", "Inactive"]}
+            />
+            <TableSelect
+              mainText="All Committees"
+              options={["Active", "Inactive"]}
+            />
+            <TableSelect mainText="Sort" options={["Active", "Inactive"]} />
+          </div>
+        </div>
+        {/* ===Search and Filters=== */}
 
+        <div className=" rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             {isLoading && (
               <div className="flex items-center justify-center py-12">
@@ -311,7 +315,6 @@ export default function UsersManagement() {
                 </div>
               </div>
             )}
-
             {isError && (
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
@@ -331,34 +334,39 @@ export default function UsersManagement() {
                 </div>
               </div>
             )}
-
             {!isLoading && !isError && (
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User
+                    <th className="px-4 py-3 text-left">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 cursor-pointer"
+                      />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Contact
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Academic Info
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Email
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Role & Committee
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Committee
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Department
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                       Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {(data || []).map((user: any) => {
-                    const email = user.email || user.eamil; // handle possible typo from backend
+                  {(paginatedData || []).map((user: any) => {
+                    const email = user.email || user.eamil;
                     const fullName = getFullName(user);
                     const initials = getInitials(user);
 
@@ -367,161 +375,59 @@ export default function UsersManagement() {
                         key={user.id}
                         className="hover:bg-gray-50 transition-colors duration-150"
                       >
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 cursor-pointer"
+                          />
+                        </td>
+
+                        <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <div className="h-10 w-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
-                                <span className="text-sm font-medium text-white">
-                                  {initials}
-                                </span>
-                              </div>
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                              <span className="text-sm font-medium text-white">
+                                {initials}
+                              </span>
                             </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
-                                {fullName}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                ID: {user.id}
-                              </div>
-                            </div>
+                            <span className="ml-3 text-sm font-medium text-gray-900">
+                              {fullName}
+                            </span>
                           </div>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {email}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {user.phoneNumber}
-                          </div>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span className="text-sm text-gray-700">{email}</span>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {getFacultyName(user.faculty || "")}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {user.year || "Unknown"} •{" "}
-                            {getGovernorateName(user.goverment || "")}
-                          </div>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">
-                            {getRoleName(user.roleId)}
-                          </div>
-                          <div className="text-sm text-gray-500">
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span className="text-sm text-gray-700">
                             {getCommitteeNames(user.committeesId)}
-                          </div>
+                          </span>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {user.isActive ? (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                              <div className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5"></div>
-                              Active
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-1.5"></div>
-                              Inactive
-                            </span>
-                          )}
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            {getRoleName(user.roleId)}
+                          </span>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                          <button
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setShowDetails(true);
-                            }}
-                            className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150"
-                          >
-                            <svg
-                              className="w-3 h-3 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                              />
-                            </svg>
-                            View
-                          </button>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span className="text-sm text-gray-700">
+                            {getFacultyName(user.faculty || "")}
+                          </span>
+                        </td>
 
-                          {!user.isActive ? (
-                            <button
-                              onClick={() => handleSetActivation(user.id, true)}
-                              disabled={actionLoadingId === user.id}
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
-                            >
-                              {actionLoadingId === user.id ? (
-                                <div className="w-3 h-3 mr-1 border border-white border-t-transparent rounded-full animate-spin"></div>
-                              ) : (
-                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                              )}
-                              Activate
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => handleSetActivation(user.id, false)}
-                              disabled={actionLoadingId === user.id}
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
-                            >
-                              {actionLoadingId === user.id ? (
-                                <div className="w-3 h-3 mr-1 border border-white border-t-transparent rounded-full animate-spin"></div>
-                              ) : (
-                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                </svg>
-                              )}
-                              Deactivate
-                            </button>
-                          )}
-
-                          <button
-                            onClick={() => handleDelete(user.id)}
-                            disabled={actionLoadingId === user.id}
-                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
-                          >
-                            {actionLoadingId === user.id ? (
-                              <div className="w-3 h-3 mr-1 border border-white border-t-transparent rounded-full animate-spin"></div>
-                            ) : (
-                              <svg
-                                className="w-3 h-3 mr-1"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                            )}
-                            Delete
-                          </button>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            {user.isActive ? "Active" : "Inactive"}
+                          </span>
                         </td>
                       </tr>
                     );
                   })}
                   {data?.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center">
+                      <td colSpan={7} className="px-6 py-12 text-center">
                         <div className="text-gray-500">
                           <svg
                             className="w-12 h-12 mx-auto mb-4"
@@ -547,10 +453,89 @@ export default function UsersManagement() {
                 </tbody>
               </table>
             )}
+
+            {/* Pagination */}
+            {!isLoading && !isError && data && data.length > 0 && (
+              <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-gray-200">
+                <div className="text-sm text-gray-600">
+                  Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of{" "}
+                  {totalItems} results
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                    className="h-8 w-8 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageClick(page)}
+                        className={`h-8 w-8 flex items-center justify-center rounded-lg font-medium transition-colors ${
+                          currentPage === page
+                            ? "bg-[#5A10A5] text-white"
+                            : "border border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ),
+                  )}
+
+                  <button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    className="h-8 w-8 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-
-                {/* User Details Modal */}
+        {data?.length === 0 && (
+          <div className="h-full w-full flex flex-col justify-center items-center">
+            <h1 className="text-[39px] font-semibold text-[#0E2C5E]">
+              No Results Found !!
+            </h1>
+            <img
+              src={UserNotFound}
+              className="w-100 h-78"
+              alt="users not found"
+            />
+          </div>
+        )}
+        {/* User Details Modal */}
         {showDetails && selectedUser && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -563,8 +548,18 @@ export default function UsersManagement() {
                   className="text-gray-400 hover:text-gray-500"
                 >
                   <span className="sr-only">Close</span>
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -593,9 +588,7 @@ export default function UsersManagement() {
                       {selectedUser.lName || "N/A"}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600">
-                        Gender:
-                      </span>{" "}
+                      <span className="font-medium text-gray-600">Gender:</span>{" "}
                       {selectedUser.sex || "N/A"}
                     </p>
                   </div>
@@ -607,15 +600,11 @@ export default function UsersManagement() {
                   </h5>
                   <div className="space-y-2 text-sm">
                     <p>
-                      <span className="font-medium text-gray-600">
-                        Email:
-                      </span>{" "}
+                      <span className="font-medium text-gray-600">Email:</span>{" "}
                       {selectedUser.email || "N/A"}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600">
-                        Phone:
-                      </span>{" "}
+                      <span className="font-medium text-gray-600">Phone:</span>{" "}
                       {selectedUser.phoneNumber || "N/A"}
                     </p>
                     <p>
@@ -639,9 +628,7 @@ export default function UsersManagement() {
                       {getFacultyName(selectedUser.faculty || "")}
                     </p>
                     <p>
-                      <span className="font-medium text-gray-600">
-                        Year:
-                      </span>{" "}
+                      <span className="font-medium text-gray-600">Year:</span>{" "}
                       {selectedUser.year || "N/A"}
                     </p>
                   </div>
@@ -653,9 +640,7 @@ export default function UsersManagement() {
                   </h5>
                   <div className="space-y-2 text-sm">
                     <p>
-                      <span className="font-medium text-gray-600">
-                        Role:
-                      </span>{" "}
+                      <span className="font-medium text-gray-600">Role:</span>{" "}
                       {getRoleName(selectedUser.roleId)}
                     </p>
                     <p>
@@ -684,6 +669,35 @@ export default function UsersManagement() {
             </div>
           </div>
         )}
+        {/* TODO: DELETE the old modal code below and use the new ApproveModal component */}
+        {/* Pending Approvals Modal - Now in separate component */}
+        <ApproveModal
+          isOpen={showPendingApprovals}
+          onClose={() => setShowPendingApprovals(false)}
+          members={pendingApprovalsData}
+          isLoading={false} // TODO: Replace with actual loading state from API
+        />
+
+        {/* TODO: Success Notification Modal after user creation */}
+        {/* FUTURE: Replace hardcoded notifications with API call */}
+        {/* Modify NotificationModal to accept a success-specific prop for showing only the success message */}
+        <NotificationModal
+          isOpen={showNotificationModal}
+          onClose={() => {
+            setShowNotificationModal(false);
+            setSuccessNotificationData(null);
+          }}
+          notifications={[
+            {
+              id: 1,
+              type: "member_added",
+              title: "Member Added",
+              description: `${successNotificationData?.name || "User"} was successfully added to ${successNotificationData?.committee || "IEEE Committee"}`,
+              timeAgo: "just now",
+              read: false,
+            },
+          ]}
+        />
       </div>
     </ProtectedRoute>
   );

@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
 import { Provider } from "react-redux";
 import { Toaster } from "react-hot-toast";
@@ -23,7 +24,6 @@ import { queryClient } from "~/config/queryClient";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { IntroProvider } from "./context/IntroContext";
-
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -60,6 +60,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function AppShell() {
+  const location = useLocation();
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
+
+  return (
+    <>
+      {!isDashboardRoute && <Navbar />}
+      <InactiveBanner />
+      <Outlet />
+      <Chatbot />
+    </>
+  );
+}
+
 export default function App() {
   // Initialize navigation service
   useNavigationInit();
@@ -68,10 +82,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <IntroProvider>
-          <Navbar />
-          <InactiveBanner />
-          <Outlet />
-          <Chatbot />
+          <AppShell />
         </IntroProvider>
         <Toaster
           position="top-right"

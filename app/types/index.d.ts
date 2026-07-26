@@ -1,8 +1,8 @@
 export interface User {
   id: number;
-  firstName: string;
-  middleName: string;
-  lastName: string;
+  fName: string;
+  mName: string;
+  lName: string;
   email: string;
   phone?: string;
   year?: string;
@@ -257,14 +257,14 @@ export interface SendEmailPayload {
 export interface ISponsorCard {
   id: number;
   img: string;
-  title: string;
+  name: string;
   description: string;
 }
 
 export interface ICommittee {
   id: number;
   img: string;
-  title: string;
+  name: string;
   description: string;
 }
 

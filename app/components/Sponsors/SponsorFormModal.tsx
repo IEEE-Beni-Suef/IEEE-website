@@ -37,7 +37,7 @@ export function SponsorFormModal({
   } = useForm<SponsorFormData>({
     resolver: zodResolver(sponsorFormSchema),
     defaultValues: {
-      title: sponsor?.title || "",
+      title: sponsor?.name || "",
       description: sponsor?.description || "",
     },
   });
@@ -45,7 +45,7 @@ export function SponsorFormModal({
   React.useEffect(() => {
     if (isOpen) {
       reset({
-        title: sponsor?.title || "",
+        title: sponsor?.name || "",
         description: sponsor?.description || "",
       });
       setSelectedFile(null);

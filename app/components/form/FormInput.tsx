@@ -29,7 +29,7 @@ export const FormInput: FC<FormInputProps> = ({
     <div className="space-y-2">
       <label
         htmlFor={id}
-        className="text-sm font-medium text-gray-700"
+        className="text-sm font-semibold text-[inactive]"
       >
         {label}
       </label>
