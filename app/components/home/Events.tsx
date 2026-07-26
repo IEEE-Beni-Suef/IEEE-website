@@ -1,45 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import { useAllArticles } from '../../hooks/useApi';
 import { Link } from 'react-router';
+import { motion } from 'framer-motion';
 
-const defaultImage = new URL("./Events.png", import.meta.url).href;
+import defaultImage from "../../assets/images/heroImage1.png";
 
 export default function Events() {
-    const { data: articles, isLoading, error } = useAllArticles();
+    const { data: articles, isLoading } = useAllArticles();
     
-    // Filter for events and take only the first 3
-    const eventsData = articles
-        ? articles.filter(article => article.categoryName === "Events").slice(0, 3)
-        : [];
+    // Fetch articles directly from API. Filter by "Events" category or take top articles
+    const eventsData = React.useMemo(() => {
+        if (!articles || articles.length === 0) return [];
+        const eventsCategoryArticles = articles.filter(a => a.categoryName === "Events");
+        return eventsCategoryArticles.length > 0 
+            ? eventsCategoryArticles.slice(0, 3) 
+            : articles.slice(0, 3);
+    }, [articles]);
 
-
-    // State لتتبع الدورة الحالية (0 = المنتصف مفتوح، 1 = الأطراف مفتوحة)
+    // State for auto-cycle (0 = middle open, 1 = ends open)
     const [cycleStep, setCycleStep] = useState<number>(0);
-    // State لتتبع العنصر الذي يقع عليه مؤشر الماوس (Hover)
+    // State for hover tracking
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-    // 2. إدارة التبديل التلقائي (Auto-sliding) باستخدام useEffect
+    // Auto-sliding interval (every 4 seconds) — pauses when user hovers over any card
     useEffect(() => {
+        if (hoveredIndex !== null) return;
+
         const interval = setInterval(() => {
-            // تبديل الحالة بين 0 و 1 كل 4 ثوانٍ
             setCycleStep((prev) => (prev === 0 ? 1 : 0));
         }, 4000); 
 
-        // تنظيف الـ Interval عند تدمير المكون لتجنب Memory Leaks
         return () => clearInterval(interval);
-    }, []);
+    }, [hoveredIndex]);
 
     return (
         <section className="relative w-full overflow-hidden pt-10 pb-40 min-h-screen bg-white">
-            {/* الدوائر الخلفية */}
-            <div className="absolute top-[-633px] left-[-607px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full opacity-80 pointer-events-none"></div>
-            <div className="absolute top-[838px] left-[1116px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full pointer-events-none"></div>
-            <div className="absolute top-[935px] left-[756px] w-[961px] h-[961px] bg-[#E6DBF2] rounded-full pointer-events-none"></div>
+            {/* Background Circles */}
+            <div className="absolute top-[-633px] left-[-607px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full opacity-80 pointer-events-none" />
+            <div className="absolute top-[838px] right-[-480px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full pointer-events-none" />
+            <div className="absolute top-[935px] right-[-200px] w-[961px] h-[961px] bg-[#E6DBF2] rounded-full pointer-events-none" />
             
-            {/* المحتوى */}
+            {/* Main Content Container */}
             <div className="relative z-10 container mx-auto px-4">
-                {/* العنوان والوصف */}
-                <div className="mx-auto max-w-4xl space-y-6 text-center">
+                {/* Title & Description Header */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="mx-auto max-w-4xl space-y-6 text-center"
+                >
                     <h1 className="text-4xl md:text-5xl font-bold text-[#000640]">
                         Our Events & <span className="text-[#5A10A5]">Activities</span>
                     </h1>
@@ -48,46 +58,75 @@ export default function Events() {
                         These events reflect our commitment to knowledge sharing, technical development,
                         and building a strong community of future engineers and innovators.
                     </p>
-                </div>
+                </motion.div>
 
-                {/* الكروت (Cards) */}
-                <div className="mt-20 flex flex-row justify-center gap-[120px] items-center w-full max-w-7xl mx-auto px-4">
+                {/* Cards Container with Staggered Scale-In Entrance */}
+                <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={{
+                        visible: {
+                            transition: {
+                                staggerChildren: 0.15,
+                            }
+                        },
+                        hidden: {}
+                    }}
+                    className="mt-20 flex flex-row justify-center gap-8 md:gap-16 lg:gap-[200px] items-center w-full max-w-7xl mx-auto px-4 flex-wrap md:flex-nowrap"
+                >
                     {eventsData.map((event, index) => {
-                        // تحديد ما إذا كان الكارت هو الأوسط
                         const isCenter = index === 1;
-                        
-                        // تحديد الحالة الافتراضية بناءً على الدورة الحالية (اللفة)
-                        // اللفة 0: الأوسط مفتوح. اللفة 1: الأطراف مفتوحة.
                         const isDefaultOpen = cycleStep === 0 ? isCenter : !isCenter;
-                        
-                        // التحقق من حالة الـ Hover لعكس الحالة (XOR Logic)
                         const isHovered = hoveredIndex === index;
-                        const isOpen = isHovered ? !isDefaultOpen : isDefaultOpen;
+                        // When user hovers over a card, that card is ALWAYS open, and auto-cycle is paused
+                        const isOpen = hoveredIndex !== null ? isHovered : isDefaultOpen;
 
                         return (
-                            <div 
+                            <motion.div 
                                 key={event.id}
-                                className="relative ml-10 mr-10 w-[250px] h-[452px] group"
+                                variants={{
+                                    hidden: { opacity: 0, scale: 0.85, y: 30 },
+                                    visible: { 
+                                        opacity: 1, 
+                                        scale: 1, 
+                                        y: 0,
+                                        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+                                    }
+                                }}
+                                className="relative w-[250px] h-[452px] group"
                                 onMouseEnter={() => setHoveredIndex(index)}
                                 onMouseLeave={() => setHoveredIndex(null)}
                             >
-                                {/* حاوية النص (الكتاب المفتوح) */}
-                                {/* استخدمنا transform: translateX للحصول على أداء أفضل في الأنيميشن */}
-                                <div className={`absolute top-0 left-0 w-[280px] h-[452px] bg-white border border-[#5A10A5] rounded-[32px] p-8 pr-16 z-0 flex flex-col justify-center text-left transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] 
+                                {/* Slide-left Revealed Text Panel ("Book Opening") */}
+                                <div className={`absolute top-0 left-0 w-[280px] h-[452px] bg-white border border-[#5A10A5] rounded-[32px] p-8 pr-16 z-0 flex flex-col justify-center text-left transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 
                                     ${isOpen ? '-translate-x-[160px] opacity-100 shadow-xl' : 'translate-x-0 opacity-0 pointer-events-none'}`}>
                                     <h2 className="text-[#480D84] text-2xl font-bold mb-4 line-clamp-2">{event.title}</h2>
                                     <p className="text-[#1C1A1A] text-sm leading-relaxed line-clamp-6">{event.description}</p>
                                 </div>
 
-                                {/* حاوية الصورة */}
-                                <div className={`relative ة w-[250px] h-[452px] z-10 transition-all duration-700 ease-in-out bg-white rounded-[40px] overflow-hidden
-                                    ${isOpen ? 'shadow-[25px_0_40px_-10px_#6D10A580]' : 'shadow-md'}`}>
-                                    <img src={event.photo || defaultImage} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                                {/* Front Image Card Container */}
+                                <div className={`relative w-[250px] h-[452px] z-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] bg-white rounded-[40px] overflow-hidden
+                                    ${isOpen ? 'shadow-[25px_0_40px_-10px_rgba(109,16,165,0.5)] scale-[1.02]' : 'shadow-md scale-100'}`}>
+                                    <img 
+                                        src={event.photo || defaultImage} 
+                                        alt={event.title} 
+                                        onError={(e) => {
+                                            const target = e.currentTarget;
+                                            if (target.src !== defaultImage) {
+                                                target.src = defaultImage;
+                                            }
+                                        }}
+                                        className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105" 
+                                    />
                                     
-                                    {/* زر Discover - يظهر فقط عندما يكون الكارت مفتوحاً */}
-                                    <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-6 transition-all duration-700 delay-100 
+                                    {/* Discover Button CTA */}
+                                    <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-100 
                                         ${isOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-10 opacity-0 invisible'}`}>
-                                        <Link to={`/article/${event.id}`} className="flex items-center justify-center gap-2 w-full bg-[#5A10A5] text-white text-base font-semibold py-3 rounded-full hover:bg-[#480D84] transition-colors shadow-lg backdrop-blur-sm bg-opacity-95">
+                                        <Link 
+                                            to={`/article/${event.id}`} 
+                                            className="flex items-center justify-center gap-2 w-full bg-[#5A10A5] text-white text-base font-semibold py-3 rounded-full hover:bg-[#480D84] transition-all duration-200 shadow-lg hover:shadow-purple-500/30 hover:scale-105 active:scale-95"
+                                        >
                                             Discover
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <circle cx="12" cy="12" r="10"></circle>
@@ -97,23 +136,46 @@ export default function Events() {
                                         </Link>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         );
                     })}
-                </div>
+                </motion.div>
 
-                {/* مؤشرات الحركة (Slider Dots) تعكس الدورة الحالية */}
-                <div className="mt-24 flex justify-center items-center gap-3">
-                    <div onClick={() => setCycleStep(0)} className={`w-[18px] h-[18px] rounded-full shadow-sm cursor-pointer transition-colors duration-300 ${cycleStep === 0 ? 'bg-[#5A10A5]' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100'}`}></div>
-                    <div onClick={() => setCycleStep(1)} className={`w-[18px] h-[18px] rounded-full shadow-sm cursor-pointer transition-colors duration-300 ${cycleStep === 1 ? 'bg-[#5A10A5]' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100'}`}></div>
-                </div>
+                {/* Slider Dots */}
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
+                    className="mt-24 flex justify-center items-center gap-3"
+                >
+                    <button 
+                        onClick={() => setCycleStep(0)} 
+                        aria-label="First slide group"
+                        className={`w-[18px] h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${cycleStep === 0 ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
+                    />
+                    <button 
+                        onClick={() => setCycleStep(1)} 
+                        aria-label="Second slide group"
+                        className={`w-[18px] h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${cycleStep === 1 ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
+                    />
+                </motion.div>
 
-                {/* الزر الرئيسي */}
-                <div className="mt-10 flex justify-center">
-                    <Link to="/events" className="inline-block bg-[#5A10A5] text-white text-center text-lg font-semibold px-16 py-3 rounded-full hover:bg-[#480D84] transition-colors shadow-lg min-w-[250px]">
+                {/* Discover More CTA Button */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5, duration: 0.5 }}
+                    className="mt-10 flex justify-center"
+                >
+                    <Link 
+                        to="/events" 
+                        className="inline-block bg-[#5A10A5] text-white text-center text-lg font-semibold px-16 py-3 rounded-full hover:bg-[#480D84] transition-all duration-300 shadow-lg hover:shadow-purple-500/25 hover:scale-105 active:scale-95 min-w-[250px]"
+                    >
                         Discover more
                     </Link>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

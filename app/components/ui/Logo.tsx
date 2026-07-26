@@ -1,9 +1,14 @@
 import React from "react";
 
-const Logo = () => {
+interface LogoProps {
+  color?: string;
+}
+
+const Logo = ({ color = "#0E2C5E" }: LogoProps) => {
   return (
       <svg
-        className="w-full h-full fill-gray-900"
+        className="w-full h-full"
+        style={{ fill: color, transition: "fill 0.4s ease" }}
         viewBox="0 0 200 160"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid meet"

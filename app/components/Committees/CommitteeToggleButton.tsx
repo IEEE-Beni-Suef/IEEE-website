@@ -12,38 +12,39 @@ interface IProps {
 
 const CommitteeToggleButton = ({ commmitteList, handleChange }: IProps) => {
   return (
-    <div>
+    <div className="flex justify-center w-full my-2">
       <ToggleButtonGroup
-        className="w-95 md:w-122.5"
+        className="w-full max-w-[460px]"
         value={commmitteList}
         exclusive
         onChange={handleChange}
-        aria-label="Platform"
+        aria-label="Committee Category Toggle"
         sx={{
-          backgroundColor: "#F1F5F9",
-          p: "6px",
+          backgroundColor: "#EAEDF6",
+          p: "5px",
           display: "flex",
-          justifyContent: "space-evenly",
+          justifyContent: "space-between",
           alignItems: "center",
-          borderRadius: "12px",
+          borderRadius: "30px",
 
           "& .MuiToggleButton-root": {
             border: 0,
-            borderRadius: "8px",
+            borderRadius: "24px",
             flex: 1,
             textTransform: "none",
-            color: "#475569",
+            color: "#5C6B89",
             fontWeight: 600,
             fontSize: "14px",
             py: "10px",
-            transition: "all 0.2s ease-in-out",
+            px: "20px",
+            transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
           },
 
           "& .MuiToggleButton-root.Mui-selected": {
             backgroundColor: "white",
             color: "#5A10A5",
-            fontWeight: "bold",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+            fontWeight: 700,
+            boxShadow: "0 2px 8px rgba(90, 16, 165, 0.12)",
           },
           "& .MuiToggleButton-root.Mui-selected:hover": {
             backgroundColor: "white",

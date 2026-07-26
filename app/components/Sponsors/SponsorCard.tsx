@@ -33,15 +33,15 @@ const SponsorCard = ({
   const finalImageUrl = imageError || !img ? DEFAULT_IMAGE : img;
 
   return (
-    <div className="relative w-3xs h-60 bg-white rounded-4xl flex flex-col justify-evenly items-center bt-0.5 shadow-[0px_2px_0px_#ABBED166] group">
+    <div className="relative w-full max-w-[280px] h-[280px] bg-white rounded-[28px] p-5 flex flex-col justify-between items-center border border-[#CCB5E3]/80 hover:border-[#5A10A5] shadow-sm hover:shadow-xl transition-all duration-300 group">
       {/* Actions (Edit / Delete) */}
       {(onEdit || onDelete) && (
-        <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
           {onEdit && (
             <button
               onClick={onEdit}
               disabled={isActionLoading}
-              className="p-1.5 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors disabled:opacity-50"
+              className="p-1.5 bg-purple-100 text-[#5A10A5] rounded-full hover:bg-purple-200 transition-colors disabled:opacity-50"
               title="Edit Sponsor"
             >
               <Pencil className="w-4 h-4" />
@@ -60,21 +60,24 @@ const SponsorCard = ({
         </div>
       )}
 
-      <div className="h-24 w-48 rounded-lg truncate">
+      {/* Image Container */}
+      <div className="h-32 w-full rounded-[20px] overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center p-2 border border-gray-100">
         <img
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
           src={finalImageUrl}
           alt={title}
           onError={handleImageError}
           loading="lazy"
         />
       </div>
-      <div className="w-fit flex flex-col space-y-0.5">
-        <h2 className="text-center font-bold text-xl">
-          {txtSlicer(title, 15)}
-        </h2>
-        <p className="text-center p-0 text-[#364DBF]">
-          {txtSlicer(description, 25)}
+
+      {/* Title & Description Container */}
+      <div className="w-full flex flex-col space-y-1 text-center mt-2">
+        <h3 className="font-bold text-lg text-[#000640] line-clamp-1">
+          {txtSlicer(title, 22)}
+        </h3>
+        <p className="text-xs text-gray-500 font-medium line-clamp-2 leading-relaxed">
+          {description}
         </p>
       </div>
     </div>

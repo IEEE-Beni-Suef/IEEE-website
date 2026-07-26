@@ -1,15 +1,19 @@
 import  { type ReactNode } from 'react';
 
 interface IProps  {
-    text:string,
-    icon:ReactNode
+    text: string;
+    icon: ReactNode;
+    onClick?: () => void;
 }
 
-const NewChatBox = ({icon , text} : IProps) => {
+const NewChatBox = ({ icon, text, onClick }: IProps) => {
   return (
-    <div className='w-full h-13 flex gap-2 mt-5 items-center ps-3 border-transparent rounded-2xl shadow-[0_0_4px_0_rgba(0,0,0,0.50)]'>
+    <div 
+      onClick={onClick}
+      className='w-full h-13 flex gap-3 mt-3 items-center px-4 border border-slate-100 rounded-2xl shadow-sm hover:shadow-md hover:bg-purple-50/50 cursor-pointer transition-all duration-200'
+    >
       {icon}
-      <p className='text-[#000640] text-[16px] font-medium'>{text}</p>
+      <p className='text-[#000640] text-sm font-semibold'>{text}</p>
     </div>
   );
 };

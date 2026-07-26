@@ -195,11 +195,12 @@
 /* Base Styles */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 html,
 body {
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-family-primary);
   @apply bg-gray-50 transition-colors duration-300;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
@@ -219,6 +220,34 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400;
+}
+
+/* About Section – Animated Star Background */
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%       { opacity: 0.85; transform: scale(1.35); }
+}
+
+@keyframes star-drift {
+  0%   { transform: translateY(0px) scale(1); }
+  50%  { transform: translateY(-6px) scale(1.1); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+.about-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #5A10A5;
+  animation: star-twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s),
+             star-drift    calc(var(--dur, 3s) * 2.5) ease-in-out infinite var(--delay, 0s);
+  pointer-events: none;
+}
+
+/* Navigation Hover State */
+.nav-item-hover:hover {
+  color: #5A10A5;
+  background-color: #F8F9FF;
+  box-shadow: 0 0 34px #5A10A5;
 }
 
 /* Utility Classes */

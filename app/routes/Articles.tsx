@@ -83,10 +83,10 @@ export default function Artical() {
     <Section id="articles" padding="xl" className="bg-white">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-[#000640] mb-4">
             Latest News & Articles
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-[#3348B3] max-w-3xl mx-auto font-medium">
             Stay updated with the latest developments, events, and insights
             from our IEEE BNS community.
           </p>
@@ -94,7 +94,7 @@ export default function Artical() {
 
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5A10A5] mx-auto"></div>
             <p className="text-gray-600 mt-4">
               Loading articles...
             </p>
@@ -142,7 +142,7 @@ export default function Artical() {
                         onClick={() => setCurrentPage(page)}
                         className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                           currentPage === page
-                            ? "bg-blue-600 text-white"
+                            ? "bg-[#5A10A5] text-white"
                             : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                         }`}
                       >

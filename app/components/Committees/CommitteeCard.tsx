@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { MoveRight } from "lucide-react";
-import { useState } from "react";
 import type { Committee } from "~/types";
 
 interface IProps {
@@ -25,11 +24,11 @@ const CommitteeCard = ({ committee }: IProps) => {
   const finalImageUrl = imageError || !imageUrl ? DEFAULT_IMAGE : imageUrl;
 
   return (
-    <div className="flex flex-col bg-white rounded-2xl p-4 border border-gray-200 h-[460px] w-full shadow-sm hover:shadow-md transition-shadow duration-300">
+    <div className="flex flex-col bg-white rounded-[28px] p-5 border border-[#CCB5E3]/80 hover:border-[#5A10A5] h-[460px] w-full shadow-sm hover:shadow-xl transition-all duration-300 group">
       {/* Image Container */}
-      <div className="w-full h-52 rounded-xl overflow-hidden shrink-0 bg-gray-100">
+      <div className="w-full h-52 rounded-[20px] overflow-hidden shrink-0 bg-gray-100 relative">
         <img
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           src={finalImageUrl}
           alt={`${name} image`}
           onError={handleImageError}
@@ -39,21 +38,21 @@ const CommitteeCard = ({ committee }: IProps) => {
 
       {/* Content Container */}
       <div className="flex flex-col flex-grow mt-5">
-        <h2 className="font-bold text-lg text-[#1E1E2F] capitalize mb-3">
+        <h3 className="font-bold text-xl text-[#000640] capitalize mb-2">
           {displayName}
-        </h2>
-        <p className="text-sm text-gray-500 font-medium line-clamp-5 leading-relaxed pr-2">
+        </h3>
+        <p className="text-sm text-gray-500 font-normal line-clamp-4 leading-relaxed pr-1">
           {description}
         </p>
 
         {/* Action Button */}
-        <div className="flex space-x-2 items-center cursor-pointer mt-auto pt-4 group w-fit">
+        <div className="flex space-x-2 items-center cursor-pointer mt-auto pt-4 w-fit">
           <span className="text-[#5A10A5] font-bold text-sm">Learn More</span>
           <MoveRight
             size={18}
             color="#5A10A5"
             strokeWidth={2.5}
-            className="transform transition-transform group-hover:translate-x-1"
+            className="transform transition-transform group-hover:translate-x-1.5"
           />
         </div>
       </div>

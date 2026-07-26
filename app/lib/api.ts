@@ -50,6 +50,18 @@ import type {
 //?   }
 //? };
 
+// Helper to safely extract array data regardless of response structure (.NET $values, nested data, items, etc.)
+export function extractArrayData<T>(data: any): T[] {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data.data)) return data.data;
+  if (Array.isArray(data.$values)) return data.$values;
+  if (data.data && Array.isArray(data.data.$values)) return data.data.$values;
+  if (Array.isArray(data.items)) return data.items;
+  if (Array.isArray(data.results)) return data.results;
+  return [];
+}
+
 export const registerApi = async <T = any>(
   data: z.infer<typeof registerSchema>,
 ): Promise<T> => {
@@ -58,7 +70,11 @@ export const registerApi = async <T = any>(
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Registration failed");
+      throw new Error(
+        error.response?.data?.message ||
+          error.response?.data?.title ||
+          "Registration failed",
+      );
     }
     throw new Error("An unexpected error occurred");
   }
@@ -67,14 +83,26 @@ export const registerApi = async <T = any>(
 export const loginApi = async (data: z.infer<typeof loginSchema>) => {
   try {
     const response = await apiClient.post("/Account/Login", data);
-    return response.data as {
-      accessToken: string;
-      refreshToken: string;
-      user: { id: number };
+    const res = response.data || {};
+    const accessToken =
+      res.accessToken || res.token || res.data?.accessToken || res.data?.token || "";
+    const refreshToken =
+      res.refreshToken || res.data?.refreshToken || "";
+    const userId =
+      res.user?.id || res.userId || res.data?.user?.id || res.data?.userId || 0;
+
+    return {
+      accessToken,
+      refreshToken,
+      user: { id: userId },
     };
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Login failed");
+      throw new Error(
+        error.response?.data?.message ||
+          error.response?.data?.title ||
+          "Login failed",
+      );
     }
     throw new Error("An unexpected error occurred");
   }
@@ -92,12 +120,18 @@ export const refreshTokenApi = async (token: string) => {
       },
     });
 
-    const response = await refreshClient.post("/Account/refresh", token);
-    return response.data as { accessToken: string; refreshToken: string };
+    const response = await refreshClient.post("/Account/refresh", { token });
+    const res = response.data || {};
+    const accessToken =
+      res.accessToken || res.token || res.data?.accessToken || res.data?.token || "";
+    const refreshToken =
+      res.refreshToken || res.data?.refreshToken || token;
+
+    return { accessToken, refreshToken };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to refresh token",
+        error.response?.data?.message || "Failed to refresh token",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -112,7 +146,11 @@ export const createUser = async <T = any>(
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "failed to create user");
+      throw new Error(
+        error.response?.data?.message ||
+          error.response?.data?.title ||
+          "Failed to create user",
+      );
     }
     throw new Error("An unexpected error occurred");
   }
@@ -123,13 +161,11 @@ export const createUser = async <T = any>(
 export const getCommitteesApi = async (): Promise<Committee[]> => {
   try {
     const response = await apiClient.get("/Committees");
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<Committee>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to fetch committees",
+        error.response?.data?.message || "Failed to fetch committees",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -233,13 +269,11 @@ export const getUser = async (id: number): Promise<User> => {
 export const getAllUsersApi = async (): Promise<User[]> => {
   try {
     const response = await apiClient.get("/Users");
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<User>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to fetch all users",
+        error.response?.data?.message || "Failed to fetch all users",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -254,7 +288,7 @@ export const deleteUserByIdApi = async <T = any>(id: number): Promise<T> => {
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to delete user");
+      throw new Error(error.response?.data?.message || "Failed to delete user");
     }
     throw new Error("An unexpected error occurred");
   }
@@ -267,7 +301,7 @@ export const activateUserByIdApi = async <T = any>(id: number): Promise<T> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to activate user",
+        error.response?.data?.message || "Failed to activate user",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -287,7 +321,7 @@ export const setUserActivationApi = async <T = any>(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message ||
+        error.response?.data?.message ||
           `Failed to ${isActive ? "activate" : "deactivate"} user`,
       );
     }
@@ -304,7 +338,7 @@ export const updateUserById = async <T = any>(
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to update user");
+      throw new Error(error.response?.data?.message || "Failed to update user");
     }
     throw new Error("An unexpected error occurred");
   }
@@ -314,12 +348,10 @@ export const updateUserById = async <T = any>(
 export const getAllArticlesApi = async (): Promise<Article[]> => {
   try {
     const response = await apiClient.get("/Articles");
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<Article>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to get Articles");
+      throw new Error(error.response?.data?.message || "Failed to get Articles");
     }
     throw new Error("An unexpected error occurred");
   }
@@ -332,7 +364,7 @@ export const getArticleByIdApi = async (id: number): Promise<Article> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to get Article data",
+        error.response?.data?.message || "Failed to get Article data",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -357,7 +389,7 @@ export const createArticle = async <T = any>(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to create Article",
+        error.response?.data?.message || "Failed to create Article",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -371,7 +403,7 @@ export const deleteArticleApi = async <T = any>(id: number): Promise<T> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to delete Article",
+        error.response?.data?.message || "Failed to delete Article",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -397,7 +429,7 @@ export const updateArticleApi = async <T = any>(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to update Article",
+        error.response?.data?.message || "Failed to update Article",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -413,7 +445,7 @@ export const getArticleSubsectionByIdApi = async (
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to show Articles",
+        error.response?.data?.message || "Failed to show Articles",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -425,12 +457,10 @@ export const getArticleSubsectionByIdApi = async (
 export const getAllCategoryApi = async (): Promise<Category[]> => {
   try {
     const response = await apiClient.get("/Category");
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<Category>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to get Category");
+      throw new Error(error.response?.data?.message || "Failed to get Category");
     }
     throw new Error("An unexpected error occurred");
   }
@@ -443,7 +473,7 @@ export const createCategory = async <T = any>(data: any): Promise<T> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to create Category",
+        error.response?.data?.message || "Failed to create Category",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -457,7 +487,7 @@ export const deleteCategoryApi = async <T = any>(id: number): Promise<T> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to delete Category",
+        error.response?.data?.message || "Failed to delete Category",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -474,7 +504,7 @@ export const updateCategoryApi = async <T = any>(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to update Category",
+        error.response?.data?.message || "Failed to update Category",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -486,13 +516,11 @@ export const updateCategoryApi = async <T = any>(
 export const getAllSubsectionsApi = async (): Promise<Subsection[]> => {
   try {
     const response = await apiClient.get("/Subsections");
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<Subsection>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to get Subsections",
+        error.response?.data?.message || "Failed to get Subsections",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -515,7 +543,7 @@ export const createSubsections = async <T = any>(data: any): Promise<T> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to create Subsections",
+        error.response?.data?.message || "Failed to create Subsections",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -529,7 +557,7 @@ export const deleteSubsectionsApi = async <T = any>(id: number): Promise<T> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to delete Subsections",
+        error.response?.data?.message || "Failed to delete Subsections",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -555,7 +583,7 @@ export const updateSubsectionsApi = async <T = any>(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to update Subsections",
+        error.response?.data?.message || "Failed to update Subsections",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -573,7 +601,7 @@ export const apiCreateMeeting = async <T = any>(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to create meeting",
+        error.response?.data?.message || "Failed to create meeting",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -584,13 +612,11 @@ export const apiCreateMeeting = async <T = any>(
 export const getAllMeetingsApi = async (): Promise<Meeting[]> => {
   try {
     const response = await apiClient.get("/Meetings");
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<Meeting>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to fetch meetings",
+        error.response?.data?.message || "Failed to fetch meetings",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -605,7 +631,7 @@ export const getMeetingByIdApi = async (id: number): Promise<Meeting> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to fetch meeting",
+        error.response?.data?.message || "Failed to fetch meeting",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -620,7 +646,7 @@ export const deleteMeetingApi = async <T = any>(id: number): Promise<T> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to delete meeting",
+        error.response?.data?.message || "Failed to delete meeting",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -634,13 +660,11 @@ export const getMeetingAttendanceApi = async (
 ): Promise<MeetingAttendance[]> => {
   try {
     const response = await apiClient.get(`/Meetings/attendents/${meetingId}`);
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<MeetingAttendance>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to fetch meeting attendance",
+        error.response?.data?.message || "Failed to fetch meeting attendance",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -658,7 +682,7 @@ export const apiSubmitAttendance = async <T = any>(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
-        error.response?.data.message || "Failed to submit attendance",
+        error.response?.data?.message || "Failed to submit attendance",
       );
     }
     throw new Error("An unexpected error occurred");
@@ -707,7 +731,7 @@ export const sendEmailApi = async <T = any>(
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to send email");
+      throw new Error(error.response?.data?.message || "Failed to send email");
     }
     throw new Error("An unexpected error occurred");
   }
@@ -724,23 +748,19 @@ export const categoriesApi = {
   getAll: (): Promise<ApiCategory[]> =>
     apiClient
       .get<any>(CAT)
-      .then((r) => {
-        if (r.data && Array.isArray(r.data)) return r.data;
-        if (r.data && Array.isArray(r.data.data)) return r.data.data;
-        return [];
-      }),
+      .then((r) => extractArrayData<ApiCategory>(r.data)),
 
   /** Fetch a single category by GUID */
   getById: (id: string): Promise<ApiCategory | undefined> =>
     apiClient
       .get<ApiResponse<ApiCategory>>(`${CAT}/${id}`)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiCategory)),
 
   /** Create a new category */
   create: (payload: CreateCategoryPayload): Promise<ApiCategory | undefined> =>
     apiClient
       .post<ApiResponse<ApiCategory>>(CAT, payload)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiCategory)),
 
   /** Rename a category */
   rename: (
@@ -749,7 +769,7 @@ export const categoriesApi = {
   ): Promise<ApiCategory | undefined> =>
     apiClient
       .put<ApiResponse<ApiCategory>>(`${CAT}/${id}/rename`, payload)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiCategory)),
 
   /** Update a category's description */
   updateDescription: (
@@ -758,7 +778,7 @@ export const categoriesApi = {
   ): Promise<ApiCategory | undefined> =>
     apiClient
       .put<ApiResponse<ApiCategory>>(`${CAT}/${id}/description`, payload)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiCategory)),
 
   /** Delete a category */
   delete: (id: string): Promise<void> =>
@@ -774,21 +794,17 @@ const EV = "/events";
 export const eventsApi = {
   /** Fetch all events */
   getAll: (): Promise<ApiEvent[]> =>
-    apiClient.get<any>(EV).then((r) => {
-      if (r.data && Array.isArray(r.data)) return r.data;
-      if (r.data && Array.isArray(r.data.data)) return r.data.data;
-      return [];
-    }),
+    apiClient.get<any>(EV).then((r) => extractArrayData<ApiEvent>(r.data)),
 
   /** Fetch a single event by GUID */
   getById: (id: string): Promise<ApiEvent | undefined> =>
     apiClient
       .get<ApiResponse<ApiEvent>>(`${EV}/${id}`)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiEvent)),
 
   /** Create a new event */
   create: (payload: CreateEventPayload): Promise<ApiEvent | undefined> =>
-    apiClient.post<ApiResponse<ApiEvent>>(EV, payload).then((r) => r.data.data),
+    apiClient.post<ApiResponse<ApiEvent>>(EV, payload).then((r) => r.data?.data || (r.data as unknown as ApiEvent)),
 
   /** Rename an event */
   rename: (
@@ -797,7 +813,7 @@ export const eventsApi = {
   ): Promise<ApiEvent | undefined> =>
     apiClient
       .put<ApiResponse<ApiEvent>>(`${EV}/${id}/rename`, payload)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiEvent)),
 
   /** Update an event's keywords */
   updateKeywords: (
@@ -806,7 +822,7 @@ export const eventsApi = {
   ): Promise<ApiEvent | undefined> =>
     apiClient
       .put<ApiResponse<ApiEvent>>(`${EV}/${id}/keywords`, payload)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiEvent)),
 
   /** Update an event's dates / coming-soon flag */
   updateDates: (
@@ -815,7 +831,7 @@ export const eventsApi = {
   ): Promise<ApiEvent | undefined> =>
     apiClient
       .put<ApiResponse<ApiEvent>>(`${EV}/${id}/dates`, payload)
-      .then((r) => r.data.data),
+      .then((r) => r.data?.data || (r.data as unknown as ApiEvent)),
 
   /** Delete an event */
   delete: (id: string): Promise<void> =>
@@ -829,12 +845,10 @@ export const eventsApi = {
 export const getAllSponsorsApi = async (): Promise<ISponsorCard[]> => {
   try {
     const response = await apiClient.get("/Sponsors");
-    if (response.data && Array.isArray(response.data)) return response.data;
-    if (response.data && Array.isArray(response.data.data)) return response.data.data;
-    return [];
+    return extractArrayData<ISponsorCard>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to get Sponsors");
+      throw new Error(error.response?.data?.message || "Failed to get Sponsors");
     }
     throw new Error("An unexpected error occurred");
   }

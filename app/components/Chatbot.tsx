@@ -130,6 +130,7 @@ const MarkdownMessage = ({
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<Chat_history_Array>([]);
@@ -138,6 +139,21 @@ export function Chatbot() {
   const { mutate: sendMessage, isPending } = useChatbot();
   const { mutate: resetChat } = useResetChat();
   const { introReady } = useIntro();
+
+  // Show welcome bubble exactly 2s after mount — independent of intro animation
+  useEffect(() => {
+    const showTimer = setTimeout(() => setShowWelcome(true), 2000);
+    const hideTimer = setTimeout(() => setShowWelcome(false), 8000);
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
+  const handleOpen = () => {
+    setShowWelcome(false);
+    setIsOpen(true);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -218,133 +234,43 @@ export function Chatbot() {
   if (!isOpen) {
     return (
       <div
-        className={`fixed ${location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"} right-4 z-50`}
+        className={`fixed ${
+          location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"
+        } right-4 z-50 flex flex-col items-end gap-3`}
       >
+        {/* Welcome bubble */}
+        <AnimatePresence>
+          {showWelcome && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="relative max-w-[220px] bg-white text-[#0E2C5E] text-sm font-medium px-4 py-3 rounded-2xl rounded-br-sm shadow-lg border border-[#EFE7F6] cursor-pointer"
+              onClick={handleOpen}
+            >
+              👋 Hi! I'm the IEEE AI Assistant. Got a question? I'm here to help!
+              {/* Tail */}
+              <span className="absolute -bottom-2 right-4 w-0 h-0 border-l-8 border-l-transparent border-r-0 border-t-8 border-t-white" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Chatbot toggle button */}
         <button
-          onClick={() => setIsOpen(true)}
-          className=" cursor-pointer w-17 h-17 rounded-full bg-[#4460EF] hover:bg-[#364dbe] flex justify-center items-center"
+          onClick={handleOpen}
+          className="cursor-pointer w-17 h-17 rounded-full bg-[#4460EF] hover:bg-[#364dbe] flex justify-center items-center shadow-lg transition-colors duration-200"
+          aria-label="Open AI Assistant"
         >
-          <img className="w-10 h-10" src="/public/chatbot.png" alt="" />
+          <img className="w-10 h-10" src="/chatbot.png" alt="IEEE AI Assistant" />
         </button>
       </div>
-
     );
   }
 
-  return <ChatBotCard setIsOpen={setIsOpen} />;
-  // return (
-  // <div className={`fixed ${location.includes("/dashboard") ? "bottom-20 lg:bottom-4" : "bottom-4"} right-4 z-50 w-[calc(100vw-2rem)] md:w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col`}>
-  {
-    /* Header */
-  }
-  {
-    /* <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center">
-          <h3 className="font-semibold text-gray-900 ml-2 flex items-center gap-2">
-            <BotMessageSquare />
-            IEEE AI Assistant
-          </h3>
-        </div>
-        <div className="flex items-center space-x-1">
-          {messages.length > 0 && (
-            <Button
-              onClick={handleResetChat}
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 cursor-pointer p-0"
-              title="Clear chat"
-            >
-              <Trash size={20} />
-            </Button>
-          )}
-          <Button
-            onClick={() => setIsOpen(false)}
-            variant="ghost"
-            size="default"
-            className="h-8 w-8 cursor-pointer p-0"
-          >
-            <span className="sr-only">Close</span>
-            <CircleX size={20} />
-          </Button>
-        </div>
-      </div> */
-  }
-
-  {
-    /* Messages */
-  }
-  {
-    /* <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
-        {messages.length === 0 && (
-          <div className="text-center text-gray-500 text-sm">
-            Ask me anything about IEEE or the management system!
-          </div>
-        )}
-
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex ${msg.isUser ? "justify-end" : "justify-start"}`}
-          >
-            <div
-              className={`max-w-[85%] md:max-w-[70%] p-3 rounded-lg text-sm ${
-                msg.isUser
-                  ? "bg-blue-600 text-white rounded-br-sm"
-                  : "bg-gray-100 text-gray-900 rounded-bl-sm"
-              }`}
-            >
-              <MarkdownMessage content={msg.message} isUser={msg.isUser} />
-            </div>
-          </div>
-        ))}
-        {isPending && (
-          <div className="flex justify-start">
-            <div className="bg-gray-100 p-3 rounded-lg rounded-bl-sm">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.1s" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
-      </div> */
-  }
-
-  {
-    /* Input */
-  }
-  {
-    /* <div className="p-3 border-t flex  border-gray-200 dark:border-gray-700">
-        <div className="flex flex-1 space-x-2">
-          <textarea
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type your message..."
-            className="flex-1 w-full resize-none border border-gray-300 rounded-sm px-3 py-2 text-sm bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            rows={1}
-            disabled={isPending}
-          />
-          <Button
-            onClick={handleSendMessage}
-            disabled={!inputMessage.trim() || isPending}
-            size="sm"
-            className="px-3 h-full rounded-sm flex justify-center items-center py-2"
-          >
-            <Send size={20} />
-          </Button>
-        </div>
-      </div> */
-  }
-  // </div>
-  // );
+  return (
+    <AnimatePresence>
+      {isOpen && <ChatBotCard setIsOpen={setIsOpen} />}
+    </AnimatePresence>
+  );
 }

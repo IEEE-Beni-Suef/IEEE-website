@@ -77,25 +77,28 @@ export const useAllUsers = () => {
   return { data, ...rest };
 };
 
-export const useDeleteUser = (id: number) => {
-  const { mutate, ...rest } = useMutation({
-    mutationKey: ["deleteUser", id],
-    mutationFn: () => deleteUserByIdApi(id),
-  });
-
-  return { mutate, ...rest };
-};
-
-export const useActiveUser = (id: number) => {
-  const { mutate, ...rest } = useMutation({
-    mutationKey: ["activeUser", id],
-    mutationFn: () => activateUserByIdApi(id),
+export const useDeleteUser = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["deleteUser"],
+    mutationFn: (id: number) => deleteUserByIdApi(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
+};
+
+export const useActiveUser = () => {
+  const { mutate, mutateAsync, ...rest } = useMutation({
+    mutationKey: ["activeUser"],
+    mutationFn: (id: number) => activateUserByIdApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
+  return { mutate, mutateAsync, ...rest };
 };
 
 // Flexible: supports both activate (true) and deactivate (false)
@@ -111,12 +114,11 @@ export const useSetUserActivation = () => {
 
   return { mutate, mutateAsync, ...rest };
 };
-// Assuming you have an API endpoint to activate a user
 
 // All committees hooks
 
 export const useCreateCommittee = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createCommittee"],
     mutationFn: (committeeData) => createCommitteeApi(committeeData as any),
     onSuccess: () => {
@@ -124,11 +126,11 @@ export const useCreateCommittee = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useCreateUser = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createUser"],
     mutationFn: (userData) => createUser(userData as any),
     onSuccess: () => {
@@ -136,11 +138,11 @@ export const useCreateUser = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useDeleteCommittee = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["deleteCommittee"],
     mutationFn: (id: number) => deleteCommitteeApi(id),
     onSuccess: () => {
@@ -148,11 +150,11 @@ export const useDeleteCommittee = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useUpdateCommittee = (id: number) => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["updateCommittee", id],
     mutationFn: (committeeData) => updateCommitteeApi(id, committeeData as any),
     onSuccess: () => {
@@ -160,7 +162,7 @@ export const useUpdateCommittee = (id: number) => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useGetCommittee = (id: number) => {
@@ -175,15 +177,15 @@ export const useGetCommittee = (id: number) => {
 };
 
 export const useUpdateUser = (id: number) => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["updateUser", id],
     mutationFn: (userData: any) => updateUserById(id, userData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users", "user"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 // Articles hooks
@@ -212,7 +214,7 @@ export const useGetArticle = (id: number) => {
 };
 
 export const useCreateArticle = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createArticle"],
     mutationFn: (articleData: any) => createArticle(articleData),
     onSuccess: () => {
@@ -220,11 +222,11 @@ export const useCreateArticle = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useUpdateArticle = (id: number) => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["updateArticle", id],
     mutationFn: (articleData: any) => updateArticleApi(id, articleData),
     onSuccess: () => {
@@ -232,11 +234,11 @@ export const useUpdateArticle = (id: number) => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useDeleteArticle = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["deleteArticle"],
     mutationFn: (id: number) => deleteArticleApi(id),
     onSuccess: () => {
@@ -244,7 +246,7 @@ export const useDeleteArticle = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useGetArticleSubsection = (id: number) => {
@@ -273,7 +275,7 @@ export const useAllCategories = () => {
 };
 
 export const useCreateCategory = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createCategory"],
     mutationFn: (categoryData: any) => createCategory(categoryData),
     onSuccess: () => {
@@ -281,11 +283,11 @@ export const useCreateCategory = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useUpdateCategory = (id: number) => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["updateCategory", id],
     mutationFn: (categoryData: any) => updateCategoryApi(id, categoryData),
     onSuccess: () => {
@@ -293,11 +295,11 @@ export const useUpdateCategory = (id: number) => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useDeleteCategory = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["deleteCategory"],
     mutationFn: (id: number) => deleteCategoryApi(id),
     onSuccess: () => {
@@ -305,13 +307,13 @@ export const useDeleteCategory = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 // Subsections hooks
 
 export const useCreateSubsection = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createSubsection"],
     mutationFn: (subsectionData: any) => createSubsections(subsectionData),
     onSuccess: () => {
@@ -321,11 +323,11 @@ export const useCreateSubsection = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useUpdateSubsection = (id: number) => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["updateSubsection", id],
     mutationFn: (subsectionData: any) =>
       updateSubsectionsApi(id, subsectionData),
@@ -336,11 +338,11 @@ export const useUpdateSubsection = (id: number) => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useDeleteSubsection = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["deleteSubsection"],
     mutationFn: (id: number) => deleteSubsectionsApi(id),
     onSuccess: () => {
@@ -350,7 +352,7 @@ export const useDeleteSubsection = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 // Meetings hooks
@@ -415,7 +417,7 @@ export const useDeleteMeeting = () => {
 };
 
 export const useSubmitAttendance = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["submitAttendance"],
     mutationFn: (attendanceData: any) => apiSubmitAttendance(attendanceData),
     onSuccess: () => {
@@ -423,12 +425,12 @@ export const useSubmitAttendance = () => {
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 // Chatbot hook
 export const useChatbot = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["chatbot"],
     mutationFn: ({
       user_message,
@@ -439,30 +441,27 @@ export const useChatbot = () => {
     }) => sendChatMessage(user_message, chatHistory),
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useResetChat = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["resetChat"],
     mutationFn: () => {
       return resetChat();
     },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 export const useSendEmail = () => {
-  const { mutate, ...rest } = useMutation({
+  const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["send"],
     mutationFn: (emailData: any) => sendEmailApi(emailData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["send"] });
-    },
   });
 
-  return { mutate, ...rest };
+  return { mutate, mutateAsync, ...rest };
 };
 
 // Sponsor s hooks
@@ -480,7 +479,7 @@ export const useAllSponsors = () => {
 
 export const useCreateSponsor = () => {
   const { mutate, mutateAsync, ...rest } = useMutation({
-    mutationKey: ["createSponsor "],
+    mutationKey: ["createSponsor"],
     mutationFn: (data: any) => createSponsorApi(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sponsors"] });
@@ -495,7 +494,7 @@ export const useUpdateSponsor = () => {
     mutationKey: ["updateSponsor"],
     mutationFn: ({ id, data }: { id: number; data: any }) => updateSponsorApi(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
+      queryClient.invalidateQueries({ queryKey: ["sponsors"] });
     },
   });
 
@@ -504,10 +503,10 @@ export const useUpdateSponsor = () => {
 
 export const useDeleteSponsor = () => {
   const { mutate, mutateAsync, ...rest } = useMutation({
-    mutationKey: ["deleteSponsor "],
+    mutationKey: ["deleteSponsor"],
     mutationFn: (id: number) => deleteSponsorApi(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
+      queryClient.invalidateQueries({ queryKey: ["sponsors"] });
     },
   });
 

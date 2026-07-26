@@ -6,45 +6,35 @@ interface IProps {
 }
 
 const ChatMessage = ({ sender, text }: IProps) => {
-  const theme =
-    sender == "bot"
-      ? {
-          className: "text-div-bot",
-          photoBg: "bg-[#4460EF]",
-          textColor: "text-[#707073]",
-          textBg: "bg-[#ECEFFD]",
-          boxPostion: "left-0",
-          photoPosition: "left-0",
-          rowDiv: "flex-row",
-          textPosition: "left-12",
-        }
-      : {
-          className: "text-div-me",
-          photoBg: "bg-[#4460EF]",
-          textColor: "text-[#FEFEFF]",
-          textBg: "bg-[#4460EF]",
-          boxPostion: "left-20",
-          photoPosition: "right-0",
-          rowDiv: "flex-row-reverse",
-          textPosition: "left-0",
-        };
+  const isBot = sender === "bot";
+
   return (
-    <div className={`w-[82%] min-h-25 relative flex flex-col mt-3  ${theme.boxPostion}`}>
-      <p
-        className={`relative ${theme.textPosition} ${theme.textColor} h-fit w-70 ${theme.textBg} text-wrap rounded-lg p-2 mb-15 ${theme.className}`}
-      >
-        {text}
-      </p>
-      <div
-        className={`absolute bottom-0 ${theme.photoPosition} flex space-x-2 ${theme.rowDiv}`}
-      >
-        <div
-          className={` flex justify-center items-center w-13 h-13 rounded-full ${theme.photoBg} `}
-        >
-          <img className="w-9 h-9" src={"/public/chatbot.png"} alt="" />
+    <div
+      className={`w-full flex items-end gap-2 my-3 ${
+        isBot ? "justify-start" : "justify-end"
+      }`}
+    >
+      {isBot && (
+        <div className="w-8 h-8 rounded-full bg-[#4460EF] flex justify-center items-center shrink-0 overflow-hidden shadow-sm">
+          <img className="w-6 h-6 object-contain" src="/chatbot.png" alt="Bot Avatar" />
         </div>
-        <p className="text-[12px] text-[#707073]">8:12pm</p>
+      )}
+
+      <div
+        className={`max-w-[78%] p-3.5 rounded-2xl text-sm font-medium leading-relaxed shadow-sm ${
+          isBot
+            ? "bg-[#F1F4FE] text-[#1E1E2F] rounded-bl-none border border-[#E2E8F0]"
+            : "bg-[#4460EF] text-white rounded-br-none"
+        }`}
+      >
+        <p className="whitespace-pre-wrap break-words">{text}</p>
       </div>
+
+      {!isBot && (
+        <div className="w-8 h-8 rounded-full bg-[#5A10A5] text-white font-bold text-xs flex justify-center items-center shrink-0 shadow-sm">
+          You
+        </div>
+      )}
     </div>
   );
 };

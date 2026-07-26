@@ -12,11 +12,12 @@ interface IProps {
 
 const CommitteesSwipper = ({ data }: IProps) => {
   return (
-    <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] px-2 md:px-10 py-8 overflow-hidden bg-white">
+    <div className="relative w-full px-2 md:px-12 py-8 bg-transparent">
       <style>{`
         .committees-swiper {
-          overflow: visible !important;
+          overflow: hidden !important;
           width: 100% !important;
+          padding: 12px 4px !important;
         }
         .committees-swiper .swiper-wrapper {
           align-items: stretch;
@@ -26,19 +27,31 @@ const CommitteesSwipper = ({ data }: IProps) => {
           display: flex;
         }
         .swiper-button-next, .swiper-button-prev {
-          background-color: #F1F5F9;
+          background-color: #FFFFFF;
           width: 44px;
           height: 44px;
           border-radius: 50%;
           color: #1E1E2F;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+          border: 1px solid #E2E8F0;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          transition: all 0.2s ease-in-out;
         }
         .swiper-button-next:after, .swiper-button-prev:after {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 800;
+          color: #1E1E2F;
         }
         .swiper-button-next:hover, .swiper-button-prev:hover {
-          background-color: #E2E8F0;
+          background-color: #F8F9FF;
+          border-color: #5A10A5;
+          color: #5A10A5;
+          transform: scale(1.05);
+        }
+        .swiper-button-prev {
+          left: 0px !important;
+        }
+        .swiper-button-next {
+          right: 0px !important;
         }
       `}</style>
 

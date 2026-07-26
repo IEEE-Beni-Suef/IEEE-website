@@ -255,7 +255,7 @@ export default function HeroSection() {
               onClick={() => handleSlideChange(i)}
               className={`rounded-full transition-all duration-300 ${
                 i === slideIndex
-                  ? "w-8 h-2 bg-blue-400"
+                  ? "w-8 h-2 bg-[#5A10A5]"
                   : "w-2 h-2 bg-white/40 hover:bg-white/70"
               }`}
               aria-label={`Go to slide ${i + 1}`}
@@ -290,7 +290,7 @@ export default function HeroSection() {
                     {/* Title Animation */}
                     <motion.h1
                       variants={titleVariants}
-                      className="text-5xl md:text-4xl lg:text-7xl font-bold leading-tight text-white max-w-4xl block"
+                      className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight text-white max-w-4xl block"
                     >
                       <HighlightedTitle title={currentSlide.title} />
                     </motion.h1>
@@ -314,7 +314,7 @@ export default function HeroSection() {
               >
                 <Link
                   to="/events"
-                  className="bg-white hover:bg-[var(--color-primary-normal)] text-black font-semibold px-8 py-3 rounded-lg transition-all hover:text-white duration-300 hover:shadow-lg hover:shadow-blue-600/50 hover:-translate-y-1 active:translate-y-0"
+                  className="bg-white hover:bg-[var(--color-primary-normal)] text-black font-semibold px-8 py-3 rounded-full transition-all hover:text-white duration-300 hover:shadow-lg hover:shadow-purple-900/30 hover:-translate-y-1 active:translate-y-0"
                 >
                   Explore Events
                 </Link>
@@ -333,7 +333,7 @@ export default function HeroSection() {
                   className="relative w-[450px] h-[480px] xl:w-[500px] xl:h-[530px]"
                 >
                   {/* Big Image */}
-                  <div className="absolute top-2/5 left-0 w-2/3 h-2/3 rounded-[2.5rem] overflow-hidden shadow-2xl border-[3px] border-amber-400/80 z-10">
+                  <div className="absolute top-2/5 left-0 w-2/3 h-2/3 rounded-[2.5rem] overflow-hidden shadow-2xl border-[3px] border-[#CCB5E3]/80 z-10">
                     <img
                       src={HERO_IMAGES[bigImageIdx]}
                       alt="Hero showcase"

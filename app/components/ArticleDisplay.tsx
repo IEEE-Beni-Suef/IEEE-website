@@ -9,7 +9,7 @@ export function ArticleDisplay({ article }: ArticleDisplayProps) {
   return (
     <Link
       to={`/article/${article.id}`}
-      className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+      className="block bg-white rounded-2xl border border-[#BABBBF] hover:border-[#707073] shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
     >
       <div className="aspect-video overflow-hidden">
         <img
@@ -20,11 +20,11 @@ export function ArticleDisplay({ article }: ArticleDisplayProps) {
       </div>
       <div className="p-6">
         <div className="flex items-center gap-2 mb-3">
-          <span className="inline-block px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+          <span className="inline-block px-3 py-1 text-xs font-semibold bg-[#EFE7F6] text-[#5A10A5] rounded-full">
             {article.categoryName}
           </span>
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="text-xl font-bold text-[#000640] mb-2 line-clamp-2">
           {article.title}
         </h3>
         <p className="text-gray-600 text-sm line-clamp-3 mb-4">

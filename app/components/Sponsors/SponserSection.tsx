@@ -9,8 +9,8 @@ const SponsorsSection = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-5 p-5">
-        {Array.from({ length: 8 }, (_, idx) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-2">
+        {Array.from({ length: 4 }, (_, idx) => (
           <SponsersSkeleton key={idx} />
         ))}
       </div>
@@ -27,14 +27,13 @@ const SponsorsSection = () => {
     );
   }
 
-  // ✅ Empty array → show "no data" message
   if (!sponsors || sponsors.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
-        <Building2 className="w-16 h-16 text-gray-300" />
-        <h3 className="text-xl font-semibold text-gray-500">No Sponsors Yet</h3>
-        <p className="text-gray-400 text-sm max-w-sm">
-          There are no sponsors available at the moment. Check back soon!
+      <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
+        <Building2 className="w-12 h-12 text-[#CCB5E3]" />
+        <h3 className="text-lg font-semibold text-[#000640]">No Sponsors Found</h3>
+        <p className="text-gray-500 text-sm max-w-sm">
+          There are currently no sponsors available in the database.
         </p>
       </div>
     );
@@ -42,11 +41,7 @@ const SponsorsSection = () => {
 
   return (
     <div
-      className={`${
-        sponsors.length > 3
-          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          : "flex flex-wrap justify-center items-center"
-      } gap-x-5 gap-y-5 p-5`}
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-2 justify-items-center"
     >
       {sponsors.map((sponsor: ISponsorCard) => (
         <SponsorCard
@@ -54,7 +49,7 @@ const SponsorsSection = () => {
           id={sponsor.id}
           description={sponsor.description ?? ""}
           img={sponsor.img}
-          title={sponsor.name}
+          title={sponsor.title || sponsor.name || ""}
         />
       ))}
     </div>

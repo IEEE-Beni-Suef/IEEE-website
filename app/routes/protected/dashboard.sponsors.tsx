@@ -98,7 +98,7 @@ const SponsorsManagement = () => {
                     id={sponsor.id}
                     description={sponsor.description}
                     img={sponsor.img}
-                    title={sponsor.title}
+                    title={sponsor.title || sponsor.name || ""}
                     onEdit={() => handleOpenEditModal(sponsor)}
                     onDelete={() => handleDelete(sponsor.id)}
                   />

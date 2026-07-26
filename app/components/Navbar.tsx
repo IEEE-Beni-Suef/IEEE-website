@@ -16,6 +16,7 @@ import {
   LogOut,
   LayoutDashboard,
   LogIn,
+  UserPlus,
 } from "lucide-react";
 import Logo from "./ui/Logo";
 
@@ -69,53 +70,106 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // Logo color: light on dark hero, dark on all other backgrounds
+  const isHomePage = location.pathname === "/";
+  const logoColor =
+    isHomePage && !isScrolled
+      ? "#EFE7F6"  // light primary — sits over dark Hero image
+      : "#0E2C5E"; // tertiary dark — sits over light/glass backgrounds
+
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 duration-300 bg-transparent`}
-      initial={{ y: -80, opacity: 0 }}
-      animate={introReady ? { y: 0, opacity: 1 } : { y: -80, opacity: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="fixed top-0 left-0 right-0 z-50"
+      initial={{ y: "-100%", opacity: 0 }}
+      animate={
+        introReady
+          ? {
+              y: 0,
+              opacity: 1,
+              backgroundColor: "rgba(0, 0, 0, 0)",
+              backdropFilter: "none",
+              borderBottom: "none",
+              boxShadow: "none",
+            }
+          : { y: "-100%", opacity: 0 }
+      }
+      transition={{
+        y: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+        opacity: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+        backgroundColor: { duration: 0.4, ease: "easeInOut" },
+        backdropFilter: { duration: 0.4, ease: "easeInOut" },
+        borderBottom: { duration: 0.4, ease: "easeInOut" },
+        boxShadow: { duration: 0.4, ease: "easeInOut" },
+      }}
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <figure className="h-20 p-3">
-              <Logo />
+            <figure className="h-[105px] p-3">
+              <Logo color={logoColor} />
             </figure>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <motion.div
+            className="hidden md:flex items-center space-x-1"
+            variants={{
+              visible: { transition: { staggerChildren: 0.07, delayChildren: 0.25 } },
+              hidden: {},
+            }}
+            initial="hidden"
+            animate={introReady ? "visible" : "hidden"}
+          >
             {currentNavItems.map((item) => {
               const Icon = item.icon;
               return (
-                <Link
+                <motion.div
                   key={item.path}
-                  to={item.path}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                    isActive(item.path)
-                      ? "text-white bg-[var(--color-primary-normal)]"
-                      : "text-black hover:bg-[var(--color-primary-normal)]"
-                  }`}
+                  variants={{
+                    hidden: { opacity: 0, y: -12 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } },
+                  }}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
+                  <Link
+                    to={item.path}
+                    className={`nav-item-hover flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
+                      isActive(item.path)
+                        ? "text-white bg-[var(--color-primary-normal)]"
+                        : isHomePage && !isScrolled
+                        ? "text-[#EFE7F6]"
+                        : "text-[#000640]"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
-          {/* Right Side Actions (no theme toggle, only auth button) */}
-          <div className="flex items-center space-x-3">
+          {/* Right Side Actions */}
+          <div className="flex items-center space-x-2">
             {!isMounted || !isAuthenticated ? (
-              <Link
-                to="/login"
-                className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200 shadow"
-              >
-                <LogIn className="w-4 h-4" />
-                <span>Sign In</span>
-              </Link>
+              <>
+                {/* Sign Up — outlined ghost */}
+                <Link
+                  to="/register"
+                  className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-lg border-2 border-[var(--color-primary-light)] text-[var(--color-primary-light)] hover:bg-[var(--color-primary-light)] hover:text-[var(--color-primary-normal)] transition-colors duration-200"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>Sign Up</span>
+                </Link>
+                {/* Sign In — filled primary */}
+                <Link
+                  to="/login"
+                  className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200 shadow"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Sign In</span>
+                </Link>
+              </>
             ) : (
               <button
                 onClick={handleLogout}
@@ -163,24 +217,36 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            {/* Mobile auth button */}
-            <div className="pt-3 border-t border-gray-200">
+            {/* Mobile auth buttons */}
+            <div className="pt-3 border-t border-gray-200 space-y-2">
               {!isMounted || !isAuthenticated ? (
-                <Link
-                  to="/login"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
-                >
-                  <LogIn className="w-4 h-4" />
-                  <span>Sign In</span>
-                </Link>
+                <>
+                  {/* Sign Up — outlined */}
+                  <Link
+                    to="/register"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center space-x-2 w-full px-4 py-2 border-2 border-[var(--color-primary-normal)] text-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-light)] transition-colors duration-200"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>Sign Up</span>
+                  </Link>
+                  {/* Sign In — filled */}
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-[var(--color-primary-normal)] text-white rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    <span>Sign In</span>
+                  </Link>
+                </>
               ) : (
                 <button
                   onClick={() => {
                     handleLogout();
                     setIsMenuOpen(false);
                   }}
-                  className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-600 transition-colors duration-200"
+                  className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Log out</span>
