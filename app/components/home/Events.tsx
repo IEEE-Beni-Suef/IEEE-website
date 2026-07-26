@@ -50,7 +50,7 @@ export default function Events() {
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className="mx-auto max-w-4xl space-y-6 text-center"
                 >
-                    <h1 className="text-4xl md:text-5xl font-bold text-[#000640]">
+                    <h1 className="text-4xl md:text-5xl lg:text-[50px] font-extrabold text-[#000640]">
                         Our Events & <span className="text-[#5A10A5]">Activities</span>
                     </h1>
                     <p className="text-[#293A8F] leading-relaxed text-lg max-w-2xl mx-auto">

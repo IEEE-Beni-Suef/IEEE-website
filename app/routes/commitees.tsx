@@ -38,7 +38,7 @@ const Commitees = () => {
         </div>
 
         {/* Section Heading */}
-        <h2 className="font-extrabold text-4xl md:text-5xl text-[#000640] text-center leading-tight">
+        <h2 className="font-extrabold text-4xl md:text-5xl lg:text-[50px] text-[#000640] text-center leading-tight">
           Explore Our <span className="text-[#5A10A5]">Committees</span>
         </h2>
 

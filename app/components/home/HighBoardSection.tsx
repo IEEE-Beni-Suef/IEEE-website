@@ -131,7 +131,7 @@ export const HighBoardSection: React.FC = () => {
       <div className="max-w-6xl w-full relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#0f172a] mb-4">
+          <h2 className="text-4xl md:text-5xl lg:text-[50px] font-extrabold text-[#0f172a] mb-4">
             Meet Our <span className="text-[#5138ed]">High Board</span>
           </h2>
           <p className="text-[#1e3a8a] text-sm md:text-base leading-relaxed">

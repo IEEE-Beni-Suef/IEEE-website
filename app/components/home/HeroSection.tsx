@@ -290,7 +290,7 @@ export default function HeroSection() {
                     {/* Title Animation */}
                     <motion.h1
                       variants={titleVariants}
-                      className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight text-white max-w-4xl block"
+                      className="text-4xl md:text-5xl lg:text-5xl xl:text-7xl font-extrabold leading-tight text-white max-w-4xl block"
                     >
                       <HighlightedTitle title={currentSlide.title} />
                     </motion.h1>

@@ -29,7 +29,7 @@ const Sponsers = () => {
         </div>
 
         {/* Section Heading */}
-        <h2 className="font-extrabold text-4xl md:text-5xl text-[#000640] text-center leading-tight">
+        <h2 className="font-extrabold text-4xl md:text-5xl lg:text-[50px] text-[#000640] text-center leading-tight">
           Our <span className="text-[#5A10A5]">Sponsors & Partners</span>
         </h2>
 
