@@ -493,7 +493,8 @@ export const useCreateSponsor = () => {
 export const useUpdateSponsor = () => {
   const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["updateSponsor"],
-    mutationFn: ({ id, data }: { id: number; data: any }) => updateSponsorApi(id, data),
+    mutationFn: ({ id, data }: { id: number; data: any }) =>
+      updateSponsorApi(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sponsor s"] });
     },
@@ -524,4 +525,128 @@ export const useAllEvents = () => {
   });
 
   return { data, ...rest };
+};
+
+// ============================================================
+// Dashboard Hooks
+// ============================================================
+
+import {
+  getDashboardStats,
+  getRecentActivities,
+  getMembers,
+  addUser,
+  createMeeting,
+  createEvent,
+  updateMember,
+  approveMember,
+  rejectMember,
+  getUpcomingEvents,
+} from "~/lib/api";
+import type {
+  CreateUserData,
+  CreateMeetingData,
+  CreateArticleData,
+  CreateEventData,
+  UpdateMemberData,
+} from "~/types/dashboard";
+
+export const useDashboardStats = () => {
+  return useQuery({
+    queryKey: ["dashboardStats"],
+    queryFn: getDashboardStats,
+    staleTime: 5 * 60 * 1000,
+  });
+};
+
+export const useRecentActivities = () => {
+  return useQuery({
+    queryKey: ["recentActivities"],
+    queryFn: getRecentActivities,
+    staleTime: 2 * 60 * 1000,
+  });
+};
+
+export const useMembers = () => {
+  return useQuery({
+    queryKey: ["dashboardMembers"],
+    queryFn: getMembers,
+    staleTime: 5 * 60 * 1000,
+  });
+};
+
+export const useUpcomingEvents = () => {
+  return useQuery({
+    queryKey: ["dashboardUpcomingEvents"],
+    queryFn: getUpcomingEvents,
+    staleTime: 5 * 60 * 1000,
+  });
+};
+
+export const useAddUserMutation = () => {
+  return useMutation({
+    mutationFn: (data: CreateUserData) => addUser(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardMembers"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+    },
+  });
+};
+
+export const useCreateMeetingMutation = () => {
+  return useMutation({
+    mutationFn: (data: CreateMeetingData) => createMeeting(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+      queryClient.invalidateQueries({ queryKey: ["recentActivities"] });
+    },
+  });
+};
+
+export const useCreateArticleMutation = () => {
+  return useMutation({
+    mutationFn: (data: CreateArticleData) => createArticle(data as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recentActivities"] });
+    },
+  });
+};
+
+export const useCreateEventMutation = () => {
+  return useMutation({
+    mutationFn: (data: CreateEventData) => createEvent(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardUpcomingEvents"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+    },
+  });
+};
+
+export const useUpdateMemberMutation = () => {
+  return useMutation({
+    mutationFn: (data: UpdateMemberData) => updateMember(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardMembers"] });
+    },
+  });
+};
+
+export const useApproveMemberMutation = () => {
+  return useMutation({
+    mutationFn: (id: number) => approveMember(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardMembers"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+    },
+  });
+};
+
+export const useRejectMemberMutation = () => {
+  return useMutation({
+    mutationFn: (id: number) => rejectMember(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardMembers"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+    },
+  });
 };

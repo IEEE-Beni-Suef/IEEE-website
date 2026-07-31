@@ -17,7 +17,9 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
   const { isDark } = useTheme();
 
   return (
-    <div className={`h-screen transition-colors duration-200 ${isDark ? "bg-[#0B0F19] text-white" : "bg-[#F8FAFC] text-[#000640]"}`}>
+    <div
+      className={`h-screen transition-colors duration-200 ${isDark ? "bg-[#0B0F19] text-white" : "bg-[#F8FAFC] text-[#000640]"}`}
+    >
       <div className="flex h-full">
         {/* Desktop Sidebar */}
         <aside className="block h-full lg:w-73">{sidebar}</aside>
@@ -27,13 +29,13 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
           <div className="flex-1 overflow-y-auto">
             <div className="h-full p-0 sm:py-6 sm:px-1 py-0">
               <div className="h-full overflow-y-auto">
-                <div className="lg:px-6">
-                  <div className="mb-4">
+                <div className="lg:px-12">
+                  <div className="mb-4 ">
                     <DashboardNavbar
                       onNotificationClick={() => setShowNotificationModal(true)}
                     />
                   </div>
-                  {children || <Outlet />}
+                  <div className="px-4 lg:px-0">{children || <Outlet />}</div>
                 </div>
               </div>
             </div>
