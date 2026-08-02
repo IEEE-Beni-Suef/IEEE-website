@@ -24,7 +24,7 @@ const CommitteeCard = ({ committee }: IProps) => {
   const finalImageUrl = imageError || !imageUrl ? DEFAULT_IMAGE : imageUrl;
 
   return (
-    <div className="flex flex-col bg-white rounded-2xl p-4 border border-gray-200 h-[460px] w-full shadow-sm hover:shadow-md transition-shadow duration-300">
+    <div className="flex flex-col bg-white rounded-2xl p-4 border  border-[#4460EF] h-[460px] w-full duration-300">
       {/* Image Container */}
       <div className="w-full h-52 rounded-xl overflow-hidden shrink-0 bg-gray-100">
         <img
