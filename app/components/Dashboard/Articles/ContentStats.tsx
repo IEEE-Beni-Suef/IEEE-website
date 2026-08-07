@@ -1,88 +1,96 @@
 import React from "react";
-import { FileText, FolderOpen, Tag, Eye, Calendar } from "lucide-react";
+import {
+  FileText,
+  CheckCircle2,
+  Edit3,
+  Clock,
+  Eye,
+  TrendingUp,
+} from "lucide-react";
+import { ArticleStatsBox } from "./ArticleStatsBox";
 
 interface ContentStatsProps {
   totalArticles: number;
-  totalCategories: number;
+  publishedCount?: number;
+  draftsCount?: number;
+  scheduledCount?: number;
+  totalViews?: string;
+  engagementRate?: string;
 }
 
 export function ContentStats({
   totalArticles,
-  totalCategories,
+  publishedCount = 6,
+  draftsCount = 2,
+  scheduledCount = 3,
+  totalViews = "33.6K",
+  engagementRate = "87%",
 }: ContentStatsProps) {
+  const stats = [
+    {
+      label: "TOTAL ARTICLES",
+      value: totalArticles || 12,
+      subtext: "12 total created",
+      icon: <FileText className="w-5 h-5" />,
+      iconBg: "#EDE5F8",
+      iconColor: "#5A10A5",
+    },
+    {
+      label: "PUBLISHED",
+      value: publishedCount,
+      subtext: "50% of total",
+      icon: <CheckCircle2 className="w-5 h-5" />,
+      iconBg: "#E7EAEF",
+      iconColor: "#0E2C5E",
+    },
+    {
+      label: "DRAFTS",
+      value: draftsCount,
+      subtext: "pending review",
+      icon: <Edit3 className="w-5 h-5" />,
+      iconBg: "#FEF3C7",
+      iconColor: "#D97706",
+    },
+    {
+      label: "SCHEDULED",
+      value: scheduledCount,
+      subtext: "upcoming releases",
+      icon: <Clock className="w-5 h-5" />,
+      iconBg: "#E8ECFD",
+      iconColor: "#4460EF",
+    },
+    {
+      label: "TOTAL VIEWS",
+      value: totalViews,
+      subtext: "2.5k this month",
+      icon: <Eye className="w-5 h-5" />,
+      iconBg: "#E0E7FF",
+      iconColor: "#0E2C5E",
+    },
+    {
+      label: "ENGAGEMENT RATE",
+      value: engagementRate,
+      subtext: "+ 2% from last mo",
+      icon: <TrendingUp className="w-5 h-5" />,
+      iconBg: "#DCFCE7",
+      iconColor: "#009E2B",
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-              <FileText className="w-4 h-4 text-blue-600" />
-            </div>
-          </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">
-              Total Articles
-            </p>
-            <p className="text-2xl font-semibold text-gray-900">
-              {totalArticles}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-              <Tag className="w-4 h-4 text-green-600" />
-            </div>
-          </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">
-              Categories
-            </p>
-            <p className="text-2xl font-semibold text-gray-900">
-              {totalCategories}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Eye className="w-4 h-4 text-purple-600" />
-            </div>
-          </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">
-              Published
-            </p>
-            <p className="text-2xl font-semibold text-gray-900">
-              {totalArticles}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <Calendar className="w-4 h-4 text-yellow-600" />
-            </div>
-          </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">
-              This Month
-            </p>
-            <p className="text-2xl font-semibold text-gray-900">
-              {totalArticles}
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
+      {stats.map((stat, idx) => (
+        <ArticleStatsBox
+          key={idx}
+          label={stat.label}
+          value={stat.value}
+          subtext={stat.subtext}
+          icon={stat.icon}
+          iconBg={stat.iconBg}
+          iconColor={stat.iconColor}
+        />
+      ))}
     </div>
   );
 }
+
