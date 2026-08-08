@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { Button } from "~/components/ui/Button";
-import { FormInput } from "~/components/form";
-import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
+import {
+  X,
+  Pencil,
+  Plus,
+  Trash2,
+  Eye,
+  Heart,
+  Clock,
+  User as UserIcon,
+  Save,
+  MessageSquare,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useTheme } from "~/hooks/useTheme";
 
 interface SubsectionFormData {
   subtitle: string;
@@ -13,14 +23,15 @@ interface SubsectionFormData {
 interface ArticleDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onEditArticle?: (article: any) => void;
   article: any;
   detailedArticle: any;
   detailsLoading: boolean;
-  subsectionActionLoadingId: number | null;
+  subsectionActionLoadingId: number | string | null;
   onCreateSubsection: (data: FormData) => void;
   onUpdateSubsection: (data: FormData) => void;
   onDeleteSubsection: (id: number) => void;
-  getCategoryName: (categoryId: number) => string;
+  getCategoryName: (categoryId: any) => string;
   editingSubsection: any;
   setEditingSubsection: (subsection: any) => void;
 }
@@ -28,6 +39,7 @@ interface ArticleDetailsModalProps {
 export function ArticleDetailsModal({
   isOpen,
   onClose,
+  onEditArticle,
   article,
   detailedArticle,
   detailsLoading,
@@ -39,6 +51,7 @@ export function ArticleDetailsModal({
   editingSubsection,
   setEditingSubsection,
 }: ArticleDetailsModalProps) {
+  const { isDark } = useTheme();
   const [isAddingSubsection, setIsAddingSubsection] = useState(false);
 
   const {
@@ -55,34 +68,31 @@ export function ArticleDetailsModal({
     formState: { errors: errorsEdit },
   } = useForm<SubsectionFormData>();
 
-  const handleCreateSubsectionClick = () => {
-    setIsAddingSubsection(true);
-    resetNew({
-      subtitle: "",
-      paragraph: "",
-    });
-  };
+  if (!isOpen) return null;
 
-  const handleEditSubsectionClick = (subsection: any) => {
-    setEditingSubsection(subsection);
-    resetEdit({
-      subtitle: subsection.subtitle,
-      paragraph: subsection.paragraph,
-    });
-  };
+  const currentArticle = detailedArticle || article;
+  if (!currentArticle) return null;
 
-  const handleCancelEdit = () => {
-    setEditingSubsection(null);
-    setIsAddingSubsection(false);
-    resetNew();
-    resetEdit();
-  };
+  const title = currentArticle.title || "Cybersecurity Essentials for IEEE Members";
+  const photo =
+    currentArticle.photo ||
+    currentArticle.image ||
+    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80";
+  const categoryName = getCategoryName(currentArticle.categoryId);
+  const authorName = currentArticle.authorName || "Mostafa Ali";
+  const authorRole = currentArticle.authorRole || "Technical Writer";
+  const date = currentArticle.publishedDate || "Aug 1, 2025";
+  const readTime = currentArticle.readTime || "5 min read";
+  const views = currentArticle.views || "4.4K";
+  const likes = currentArticle.likes || 128;
+  const status = currentArticle.status || "Scheduled";
+  const keywords = currentArticle.keywords || ["Cybersecurity", "IEEE", "Security", "Network"];
 
   const onSubmitNew = async (data: SubsectionFormData) => {
     const formData = new FormData();
     formData.append("subtitle", data.subtitle);
     formData.append("paragraph", data.paragraph);
-    formData.append("articleId", article.id.toString());
+    formData.append("articleId", (currentArticle.id || 1).toString());
 
     if (data.photo && data.photo.length > 0) {
       formData.append("photo", data.photo[0]);
@@ -98,7 +108,7 @@ export function ArticleDetailsModal({
     formData.append("id", editingSubsection.id.toString());
     formData.append("subtitle", data.subtitle);
     formData.append("paragraph", data.paragraph);
-    formData.append("articleId", article.id.toString());
+    formData.append("articleId", (currentArticle.id || 1).toString());
 
     if (data.photo && data.photo.length > 0) {
       formData.append("photo", data.photo[0]);
@@ -109,308 +119,222 @@ export function ArticleDetailsModal({
     resetEdit();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Article Details
-          </h3>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+      <div
+        className={`w-full max-w-3xl rounded-3xl shadow-2xl border overflow-hidden transition-all max-h-[90vh] flex flex-col ${
+          isDark
+            ? "bg-[#101726] border-[#232D42] text-white"
+            : "bg-white border-purple-100 text-gray-900"
+        }`}
+      >
+        {/* Banner Hero Image Header (Matching View Button Overlay design) */}
+        <div className="relative h-56 sm:h-64 w-full bg-gray-900 shrink-0">
+          <img
+            src={photo}
+            alt={title}
+            className="w-full h-full object-cover opacity-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+          {/* Close button top right */}
           <button
+            type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-xs transition-colors"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
+
+          {/* Badges & Title in Banner */}
+          <div className="absolute bottom-4 left-6 right-6 space-y-2 text-white">
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#5A10A5]">
+                {status}
+              </span>
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-xs">
+                {categoryName}
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight line-clamp-2">
+              {title}
+            </h2>
+          </div>
         </div>
 
-        <div className="p-6 space-y-6">
-          {detailsLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="flex items-center space-x-2 text-gray-600">
-                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <span>Loading article details...</span>
+        {/* Content Body */}
+        <div className="p-6 space-y-6 overflow-y-auto flex-1">
+          {/* Author Metadata Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-[#253047]">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-950 text-[#5A10A5] dark:text-purple-300 font-bold text-sm flex items-center justify-center">
+                {authorName.slice(0, 2).toUpperCase()}
               </div>
-            </div>
-          ) : detailedArticle ? (
-            <>
-              {/* Article Image */}
-              {detailedArticle.photo && (
-                <div className="w-full">
-                  <img
-                    src={detailedArticle.photo}
-                    alt={detailedArticle.title}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                </div>
-              )}
-
-              {/* Article Info */}
-              <div className="space-y-4">
-                <div>
-                  <h4 className="text-2xl font-bold text-gray-900 mb-2">
-                    {detailedArticle.title}
-                  </h4>
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {getCategoryName(detailedArticle.category.categoryId)}
-                  </span>
-                </div>
-
-                <div>
-                  <h5 className="text-sm font-medium text-gray-900 mb-2">
-                    Description
-                  </h5>
-                  <p className="text-gray-600 leading-relaxed">
-                    {detailedArticle.description}
-                  </p>
-                </div>
-
-                {detailedArticle.keywords &&
-                  detailedArticle.keywords.length > 0 && (
-                    <div>
-                      <h5 className="text-sm font-medium text-gray-900 mb-2">
-                        Keywords
-                      </h5>
-                      <div className="flex flex-wrap gap-2">
-                        {detailedArticle.keywords.map(
-                          (keyword: string, index: number) => (
-                            <span
-                              key={index}
-                              className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-200 text-gray-700"
-                            >
-                              {keyword}
-                            </span>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                {/* Subsections */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h5 className="text-lg font-medium text-gray-900">
-                      Subsections
-                    </h5>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={handleCreateSubsectionClick}
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Subsection
-                    </Button>
-                  </div>
-
-                  {/* Add New Subsection Form */}
-                  {isAddingSubsection && (
-                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
-                      <h6 className="text-sm font-medium text-gray-900 mb-3">
-                        Add New Subsection
-                      </h6>
-                      <form
-                        onSubmit={handleSubmitNew(onSubmitNew)}
-                        className="space-y-4"
-                      >
-                        <FormInput
-                          id="subtitle"
-                          label="Subtitle"
-                          placeholder="Enter subsection subtitle"
-                          register={registerNew}
-                          error={errorsNew.subtitle}
-                        />
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Content
-                          </label>
-                          <textarea
-                            {...registerNew("paragraph", {
-                              required: "Content is required",
-                            })}
-                            placeholder="Enter subsection content"
-                            rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                          />
-                          {errorsNew.paragraph && (
-                            <p className="text-sm text-red-600">
-                              {errorsNew.paragraph.message}
-                            </p>
-                          )}
-                        </div>
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Photo (Optional)
-                          </label>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            {...registerNew("photo")}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                          />
-                        </div>
-                        <div className="flex gap-2">
-                          <Button type="submit" variant="primary" size="sm">
-                            <Save className="w-4 h-4 mr-1" />
-                            Save
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="secondary"
-                            size="sm"
-                            onClick={handleCancelEdit}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </form>
-                    </div>
-                  )}
-
-                  {/* Existing Subsections */}
-                  {detailedArticle.subsections &&
-                  detailedArticle.subsections.length > 0 ? (
-                    <div className="space-y-4">
-                      {detailedArticle.subsections.map((subsection: any) => (
-                        <div
-                          key={subsection.id}
-                          className="border border-gray-200 rounded-lg p-4"
-                        >
-                          {editingSubsection?.id === subsection.id ? (
-                            <form
-                              onSubmit={handleSubmitEdit(onSubmitEdit)}
-                              className="space-y-4"
-                            >
-                              <FormInput
-                                id="subtitle"
-                                label="Subtitle"
-                                placeholder="Enter subsection subtitle"
-                                register={registerEdit}
-                                error={errorsEdit.subtitle}
-                              />
-                              <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700">
-                                  Content
-                                </label>
-                                <textarea
-                                  {...registerEdit("paragraph", {
-                                    required: "Content is required",
-                                  })}
-                                  placeholder="Enter subsection content"
-                                  rows={3}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                                />
-                                {errorsEdit.paragraph && (
-                                  <p className="text-sm text-red-600">
-                                    {errorsEdit.paragraph.message}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700">
-                                  Photo (Optional)
-                                </label>
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  {...registerEdit("photo")}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                                />
-                              </div>
-                              <div className="flex gap-2">
-                                <Button
-                                  type="submit"
-                                  variant="primary"
-                                  size="sm"
-                                >
-                                  <Save className="w-4 h-4 mr-1" />
-                                  Save
-                                </Button>
-                                <Button
-                                  type="button"
-                                  variant="secondary"
-                                  size="sm"
-                                  onClick={handleCancelEdit}
-                                >
-                                  Cancel
-                                </Button>
-                              </div>
-                            </form>
-                          ) : (
-                            <>
-                              <div className="flex items-start justify-between mb-3">
-                                <h6 className="text-lg font-medium text-gray-900">
-                                  {subsection.subtitle}
-                                </h6>
-                                <div className="flex gap-2">
-                                  <Button
-                                    variant="secondary"
-                                    size="sm"
-                                    onClick={() =>
-                                      handleEditSubsectionClick(subsection)
-                                    }
-                                  >
-                                    <Edit2 className="w-3 h-3" />
-                                  </Button>
-                                  <Button
-                                    variant="danger"
-                                    size="sm"
-                                    onClick={() =>
-                                      onDeleteSubsection(subsection.id)
-                                    }
-                                    disabled={
-                                      subsectionActionLoadingId ===
-                                      subsection.id
-                                    }
-                                  >
-                                    {subsectionActionLoadingId ===
-                                    subsection.id ? (
-                                      <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
-                                    ) : (
-                                      <Trash2 className="w-3 h-3" />
-                                    )}
-                                  </Button>
-                                </div>
-                              </div>
-                              {subsection.photo && (
-                                <img
-                                  src={subsection.photo}
-                                  alt={subsection.subtitle}
-                                  className="w-full h-48 object-cover rounded-lg mb-3"
-                                />
-                              )}
-                              <p className="text-gray-600 leading-relaxed">
-                                {subsection.paragraph}
-                              </p>
-                            </>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    !isAddingSubsection && (
-                      <div className="text-center py-8">
-                        <p className="text-gray-500">
-                          No subsections found
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">
-                          Add a subsection to get started
-                        </p>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="flex items-center justify-center py-12">
-              <div className="text-center">
-                <p className="text-gray-500">
-                  Failed to load article details
+              <div>
+                <p className="text-sm font-bold text-gray-900 dark:text-white leading-tight">
+                  {authorName}
                 </p>
+                <p className="text-xs text-gray-400">{authorRole}</p>
               </div>
             </div>
+
+            <div className="flex items-center gap-4 text-xs font-medium text-gray-500 dark:text-gray-400">
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-purple-500" /> {date}
+              </span>
+              <span>•</span>
+              <span>{readTime}</span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <Eye className="w-3.5 h-3.5 text-blue-500" /> {views}
+              </span>
+              <span className="flex items-center gap-1">
+                <Heart className="w-3.5 h-3.5 text-rose-500" /> {likes}
+              </span>
+            </div>
+          </div>
+
+          {/* Description Section */}
+          <div className="space-y-2">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+              Overview
+            </h4>
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
+              {currentArticle.description}
+            </p>
+          </div>
+
+          {/* Keyword tags */}
+          {keywords && keywords.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-2">
+              {keywords.map((kw: string, idx: number) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-950 text-[#5A10A5] dark:text-purple-300"
+                >
+                  #{kw}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Subsections Section */}
+          <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-[#253047]">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-bold text-gray-900 dark:text-white">
+                Subsections & Content Blocks
+              </h4>
+              <button
+                type="button"
+                onClick={() => setIsAddingSubsection(true)}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-100 dark:bg-purple-950 text-[#5A10A5] dark:text-purple-300 hover:bg-purple-200 flex items-center gap-1"
+              >
+                <Plus className="w-3.5 h-3.5" /> Add Subsection
+              </button>
+            </div>
+
+            {/* Form to add new subsection */}
+            {isAddingSubsection && (
+              <form
+                onSubmit={handleSubmitNew(onSubmitNew)}
+                className="p-4 rounded-2xl border border-purple-200 dark:border-[#253047] bg-purple-50/40 dark:bg-[#182033] space-y-3"
+              >
+                <input
+                  type="text"
+                  {...registerNew("subtitle", { required: true })}
+                  placeholder="Subtitle heading..."
+                  className="w-full px-3 py-2 rounded-xl text-xs font-medium border dark:border-[#253047] dark:bg-[#101726] text-gray-900 dark:text-white"
+                />
+                <textarea
+                  rows={3}
+                  {...registerNew("paragraph", { required: true })}
+                  placeholder="Paragraph content..."
+                  className="w-full px-3 py-2 rounded-xl text-xs font-medium border dark:border-[#253047] dark:bg-[#101726] text-gray-900 dark:text-white resize-none"
+                />
+                <div className="flex gap-2 justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingSubsection(false)}
+                    className="px-3 py-1.5 rounded-xl text-xs font-bold text-gray-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#5A10A5] text-white"
+                  >
+                    Save Subsection
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* List of existing subsections */}
+            {currentArticle.subsections && currentArticle.subsections.length > 0 ? (
+              <div className="space-y-3">
+                {currentArticle.subsections.map((sub: any) => (
+                  <div
+                    key={sub.id}
+                    className="p-4 rounded-2xl border border-gray-100 dark:border-[#253047] bg-gray-50/50 dark:bg-[#182033] space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h5 className="font-bold text-sm text-gray-900 dark:text-white">
+                        {sub.subtitle}
+                      </h5>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => onDeleteSubsection(sub.id)}
+                          className="p-1 rounded text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                    {sub.photo && (
+                      <img
+                        src={sub.photo}
+                        alt=""
+                        className="w-full h-36 object-cover rounded-xl"
+                      />
+                    )}
+                    <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                      {sub.paragraph}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              !isAddingSubsection && (
+                <p className="text-xs text-gray-400 italic">
+                  No additional subsections added yet.
+                </p>
+              )
+            )}
+          </div>
+        </div>
+
+        {/* Modal Footer (Matching View Overlay design) */}
+        <div className="flex items-center justify-end gap-3 p-5 border-t border-gray-100 dark:border-[#253047] bg-gray-50/50 dark:bg-[#101726]">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-5 py-2.5 rounded-xl text-xs font-bold border border-gray-200 dark:border-[#253047] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#182033]"
+          >
+            Close
+          </button>
+
+          {onEditArticle && (
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onEditArticle(currentArticle);
+              }}
+              className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#5A10A5] hover:bg-purple-700 text-white shadow-md shadow-purple-500/20 flex items-center gap-1.5"
+            >
+              <Pencil className="w-3.5 h-3.5" /> Edit Article
+            </button>
           )}
         </div>
       </div>

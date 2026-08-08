@@ -25,6 +25,8 @@ import { CalendarViewModal } from "~/components/Meetings/CalendarViewModal";
 import { DeleteConfirmModal } from "~/components/Meetings/DeleteConfirmModal";
 import { SuccessModal } from "~/components/Meetings/SuccessModal";
 import type { Meeting } from "~/types";
+import MeetingStatsCard from "~/components/Meetings/MeetingStatsCard";
+import MeetingBox from "~/components/Meetings/MeetingBox";
 
 export default function DashboardMeetings() {
   const { isDark } = useTheme();
@@ -38,7 +40,9 @@ export default function DashboardMeetings() {
   // Modals state
   const [isNewMeetingOpen, setIsNewMeetingOpen] = useState(false);
   const [isCalendarViewOpen, setIsCalendarViewOpen] = useState(false);
-  const [deletingMeetingId, setDeletingMeetingId] = useState<number | null>(null);
+  const [deletingMeetingId, setDeletingMeetingId] = useState<number | null>(
+    null,
+  );
   const [successModal, setSuccessModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -48,7 +52,8 @@ export default function DashboardMeetings() {
   // Filters state
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("All Statuses");
-  const [selectedCommittee, setSelectedCommittee] = useState<string>("All Committees");
+  const [selectedCommittee, setSelectedCommittee] =
+    useState<string>("All Committees");
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>("Date");
 
   // Default fallback meetings if backend returns empty or null
@@ -149,9 +154,15 @@ export default function DashboardMeetings() {
 
   // Stats calculation
   const totalMeetingsCount = meetingsList.length;
-  const upcomingCount = meetingsList.filter((m) => m.type === "Upcoming").length;
-  const completedCount = meetingsList.filter((m) => m.type === "Completed").length;
-  const cancelledCount = meetingsList.filter((m) => m.type === "Cancelled").length;
+  const upcomingCount = meetingsList.filter(
+    (m) => m.type === "Upcoming",
+  ).length;
+  const completedCount = meetingsList.filter(
+    (m) => m.type === "Completed",
+  ).length;
+  const cancelledCount = meetingsList.filter(
+    (m) => m.type === "Cancelled",
+  ).length;
 
   // Handle Reset Filters
   const handleResetFilters = () => {
@@ -221,14 +232,18 @@ export default function DashboardMeetings() {
   const showEmptyState = isError || filteredMeetings.length === 0;
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="p-3 space-y-6 pb-12">
       {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className={`text-2xl md:text-3xl font-bold ${isDark ? "text-white" : "text-[#000640]"}`}>
+          <h1
+            className={`text-2xl md:text-3xl font-bold ${isDark ? "text-white" : "text-[#000640]"}`}
+          >
             Meetings
           </h1>
-          <p className={`text-xs md:text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+          <p
+            className={`text-xs md:text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
+          >
             Manage IEEE meetings, attendance and schedules.
           </p>
         </div>
@@ -236,7 +251,7 @@ export default function DashboardMeetings() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsCalendarViewOpen(true)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold border transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-[20px] text-xs md:text-sm font-semibold border transition-all ${
               isDark
                 ? "bg-[#161D2F] border-[#253047] text-white hover:bg-[#1E2738]"
                 : "bg-white border-gray-200 text-[#000640] hover:bg-gray-50 shadow-xs"
@@ -247,10 +262,10 @@ export default function DashboardMeetings() {
           </button>
 
           <button
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold border transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold  transition-all ${
               isDark
-                ? "bg-[#161D2F] border-[#253047] text-white hover:bg-[#1E2738]"
-                : "bg-white border-gray-200 text-[#000640] hover:bg-gray-50 shadow-xs"
+                ? "bg-[#161D2F]  border border-[#253047] text-white hover:bg-[#1E2738]"
+                : "bg-transparent  text-[#6C757D] hover:bg-gray-50 "
             }`}
           >
             <Upload className="w-4 h-4 text-gray-500" />
@@ -259,7 +274,7 @@ export default function DashboardMeetings() {
 
           <button
             onClick={() => setIsNewMeetingOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-white bg-[#5A10A5] hover:bg-[#4A0D88] transition-colors shadow-md shadow-purple-500/20"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-[20px] text-xs md:text-sm font-semibold text-white bg-[#5A10A5] hover:bg-[#4A0D88] transition-colors shadow-md shadow-purple-500/20"
           >
             <Plus className="w-4 h-4" />
             New Meeting
@@ -270,82 +285,46 @@ export default function DashboardMeetings() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Meetings */}
-        <div
-          className={`p-5 rounded-2xl border transition-all ${
-            isDark ? "bg-[#101726] border-[#232D42] text-white" : "bg-white border-[#EEF0FF] text-[#000640] shadow-xs"
-          }`}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              TOTAL MEETINGS
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-[#F3E8FF] dark:bg-[#231A38] text-[#5A10A5] dark:text-[#A78BFA] flex items-center justify-center">
-              <CalendarIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold mb-1">{totalMeetingsCount}</div>
-          <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>All time</div>
-        </div>
-
-        {/* Upcoming */}
-        <div
-          className={`p-5 rounded-2xl border transition-all ${
-            isDark ? "bg-[#101726] border-[#232D42] text-white" : "bg-white border-[#EEF0FF] text-[#000640] shadow-xs"
-          }`}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              UPCOMING
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-[#DCFCE7] dark:bg-[#153422] text-[#166534] dark:text-[#4ADE80] flex items-center justify-center">
-              <Clock className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold mb-1">{upcomingCount}</div>
-          <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>Next meeting Jul 22</div>
-        </div>
-
-        {/* Completed */}
-        <div
-          className={`p-5 rounded-2xl border transition-all ${
-            isDark ? "bg-[#101726] border-[#232D42] text-white" : "bg-white border-[#EEF0FF] text-[#000640] shadow-xs"
-          }`}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              COMPLETED
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-[#DBEAFE] dark:bg-[#162744] text-[#1E40AF] dark:text-[#60A5FA] flex items-center justify-center">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold mb-1">{completedCount}</div>
-          <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>This year</div>
-        </div>
-
-        {/* Average Attendance */}
-        <div
-          className={`p-5 rounded-2xl border transition-all ${
-            isDark ? "bg-[#101726] border-[#232D42] text-white" : "bg-white border-[#EEF0FF] text-[#000640] shadow-xs"
-          }`}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              AVERAGE ATTENDANCE
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-[#F3E8FF] dark:bg-[#231A38] text-[#5A10A5] dark:text-[#A78BFA] flex items-center justify-center">
-              <TrendingUp className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold mb-1">89%</div>
-          <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>+6% from last month</div>
-        </div>
+        <MeetingStatsCard
+          Icon={<CalendarIcon className="w-5 h-5" color="#5A10A5" />}
+          iconBackground="#EDE5F8"
+          isDark={isDark}
+          number={totalMeetingsCount}
+          subText="All time"
+          text="TOTAL MEETINGS"
+        />
+        <MeetingStatsCard
+          Icon={<Clock className="w-5 h-5" color="#09800F" />}
+          iconBackground="#E2F5E3"
+          isDark={isDark}
+          number={upcomingCount}
+          subText="All time"
+          text="UPCOMING"
+        />
+        <MeetingStatsCard
+          Icon={<CheckCircle2 className="w-5 h-5" color="#4460EF" />}
+          iconBackground="#E6EAFD"
+          isDark={isDark}
+          number={completedCount}
+          subText="This year"
+          text="COMPLETED"
+        />
+        <MeetingStatsCard
+          Icon={<TrendingUp className="w-5 h-5" color="#5A10A5" />}
+          iconBackground="#EDE5F8"
+          isDark={isDark}
+          number={89}
+          subText="+6% from last month"
+          text="AVERAGE ATTENDANCE"
+        />
       </div>
 
       {/* Search and Filters Bar */}
       <div
-        className={`p-4 rounded-2xl border flex flex-col md:flex-row items-center justify-between gap-3 ${
-          isDark ? "bg-[#101726] border-[#232D42]" : "bg-white border-[#EEF0FF] shadow-xs"
+        className={`p-4 rounded-2xl border flex flex-col md:flex-row items-center justify-between gap-3 shadow-[0px_1px_4px_0px_#0006400F] ${
+          isDark
+            ? "bg-[#3F296F] border-[#6F8BFF]"
+            : "bg-white border-[#C5CEFA] "
         }`}
       >
         {/* Search Input */}
@@ -358,8 +337,8 @@ export default function DashboardMeetings() {
             placeholder="Search meetings..."
             className={`w-full pl-10 pr-4 py-2 rounded-xl text-sm outline-none border transition-all ${
               isDark
-                ? "bg-[#182033] border-[#263148] text-white focus:border-[#7C3AED]"
-                : "bg-[#F3F4F6] border-transparent text-[#000640] focus:bg-white focus:border-[#5A10A5]"
+                ? "bg-[#F1F3FF] border-[#6F8BFF] text-[#575858] "
+                : "bg-[#ECEFFD] border-[#C5CEFA] text-[#6C757D] "
             }`}
           />
         </div>
@@ -372,7 +351,7 @@ export default function DashboardMeetings() {
             onChange={(e) => setSelectedStatus(e.target.value)}
             className={`px-3.5 py-2 rounded-xl text-sm font-medium outline-none border transition-all ${
               isDark
-                ? "bg-[#182033] border-[#263148] text-white"
+                ? "bg-[#FFFFFF] border-[#263148] text-[#000640]"
                 : "bg-white border-gray-200 text-[#000640]"
             }`}
           >
@@ -388,7 +367,7 @@ export default function DashboardMeetings() {
             onChange={(e) => setSelectedCommittee(e.target.value)}
             className={`px-3.5 py-2 rounded-xl text-sm font-medium outline-none border transition-all ${
               isDark
-                ? "bg-[#182033] border-[#263148] text-white"
+                ? "bg-[#FFFFFF] border-[#263148] text-[#000640]"
                 : "bg-white border-gray-200 text-[#000640]"
             }`}
           >
@@ -406,7 +385,7 @@ export default function DashboardMeetings() {
             onChange={(e) => setSelectedDateFilter(e.target.value)}
             className={`px-3.5 py-2 rounded-xl text-sm font-medium outline-none border transition-all ${
               isDark
-                ? "bg-[#182033] border-[#263148] text-white"
+                ? "bg-[#FFFFFF] border-[#263148] text-[#000640]"
                 : "bg-white border-gray-200 text-[#000640]"
             }`}
           >
@@ -420,11 +399,11 @@ export default function DashboardMeetings() {
             onClick={handleResetFilters}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${
               isDark
-                ? "border-[#263148] text-[#A78BFA] hover:bg-[#182033]"
-                : "border-[#E9D5FF] text-[#5A10A5] hover:bg-[#F5F0FF]"
+                ? "bg-[#FFFFFF] border-[#263148] text-[#8B5CF6]"
+                : "bg-[#EFE7F6] border-[#E9D5FF] text-[##5A10A5]"
             }`}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5" color="#5A10A5" />
             Reset
           </button>
         </div>
@@ -434,7 +413,9 @@ export default function DashboardMeetings() {
       {showEmptyState ? (
         /* Photo 2: Empty / Error State */
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <h2 className={`text-2xl md:text-3xl font-bold mb-6 ${isDark ? "text-white" : "text-[#000640]"}`}>
+          <h2
+            className={`text-2xl md:text-3xl font-bold mb-6 ${isDark ? "text-white" : "text-[#000640]"}`}
+          >
             No Results Found !!
           </h2>
           <img
@@ -447,121 +428,161 @@ export default function DashboardMeetings() {
         /* Meetings List */
         <div className="space-y-4">
           {/* Results Summary Bar */}
-          <div className="flex items-center justify-between text-xs md:text-sm font-semibold">
-            <span className={isDark ? "text-gray-300" : "text-[#000640]"}>
-              Showing {filteredMeetings.length} meetings
+          <div className="flex items-center justify-between text-[11px] md:text-sm font-semibold">
+            <span className={isDark ? "text-[#FEFFFF]" : "text-[#6C757D]"}>
+              Showing{" "}
+              <span
+                className={
+                  isDark ? "text-[#F8FAFC]" : "text-[#000640] font-bold"
+                }
+              >
+                {filteredMeetings.length}
+              </span>
+              meetings
             </span>
-            <div className="flex items-center gap-3">
-              <span className="text-[#16A34A]">{upcomingCount} Upcoming</span>
-              <span className="text-gray-400">·</span>
-              <span className="text-[#2563EB]">{completedCount} Completed</span>
-              <span className="text-gray-400">·</span>
-              <span className="text-[#DC2626]">{cancelledCount} Cancelled</span>
+            <div className="flex items-center gap-1 md:gap-3">
+              <span className="text-[#16A34A] text-[11px] md:text-sm font-medium">
+                {upcomingCount} Upcoming
+              </span>
+              <span className="text-gray-400 text-[11px] md:text-sm font-medium">
+                ·
+              </span>
+              <span className="text-[#2563EB] text-[11px] md:text-sm font-medium">
+                {completedCount} Completed
+              </span>
+              <span className="text-gray-400 text-[11px] md:text-sm font-medium">
+                ·
+              </span>
+              <span className="text-[#DC2626] text-[11px] md:text-sm font-medium">
+                {cancelledCount} Cancelled
+              </span>
             </div>
           </div>
 
           {/* Cards List */}
           <div className="space-y-4">
-            {filteredMeetings.map((meeting) => {
+            {filteredMeetings.map((meeting: Meeting) => {
               const isUpcoming = meeting.type === "Upcoming";
               const isCompleted = meeting.type === "Completed";
               const isCancelled = meeting.type === "Cancelled";
 
               return (
-                <div
+                <MeetingBox
+                  setDeletingMeetingId={setDeletingMeetingId}
+                  getCommitteeName={getCommitteeName}
+                  isCompleted={isCompleted}
+                  isUpcoming={isUpcoming}
+                  isDark={isDark}
+                  meeting={meeting}
                   key={meeting.id}
-                  className={`p-5 md:p-6 rounded-2xl border transition-all hover:shadow-md ${
-                    isDark
-                      ? "bg-[#101726] border-[#232D42] text-white"
-                      : "bg-white border-[#EEF0FF] text-[#000640]"
-                  }`}
-                >
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-3">
-                    <div className="flex items-start gap-4">
-                      {/* Badge Icon */}
-                      <div
-                        className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 mt-0.5 ${
-                          isDark ? "bg-[#1A2238] text-[#A78BFA]" : "bg-[#F3E8FF] text-[#5A10A5]"
-                        }`}
-                      >
-                        <CalendarIcon className="w-6 h-6" />
-                      </div>
+                />
+                // <div
+                //   key={meeting.id}
+                //   className={`p-5 md:p-6 rounded-2xl border transition-all hover:shadow-md ${
+                //     isDark
+                //       ? "bg-[#101726] border-[#232D42] text-white"
+                //       : "bg-red-700 border-[#EEF0FF] text-[#000640]"
+                //   }`}
+                // >
+                //   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-3">
+                //     <div className="flex items-start gap-4">
+                //       {/* Badge Icon */}
+                //       <div
+                //         className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 mt-0.5 ${
+                //           isDark
+                //             ? "bg-[#1A2238] text-[#A78BFA]"
+                //             : "bg-[#F3E8FF] text-[#5A10A5]"
+                //         }`}
+                //       >
+                //         <CalendarIcon className="w-6 h-6" />
+                //       </div>
 
-                      <div className="space-y-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-base md:text-lg font-bold">
-                            {meeting.title}
-                          </h3>
-                          <span
-                            className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                              isDark ? "bg-[#1E2738] text-purple-300" : "bg-[#F3E8FF] text-[#5A10A5]"
-                            }`}
-                          >
-                            {getCommitteeName(meeting.committeeId)}
-                          </span>
-                        </div>
+                //       <div className="space-y-1">
+                //         <div className="flex flex-wrap items-center gap-2">
+                //           <h3 className="text-base md:text-lg font-bold">
+                //             {meeting.title}
+                //           </h3>
+                //           <span
+                //             className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                //               isDark
+                //                 ? "bg-[#1E2738] text-purple-300"
+                //                 : "bg-[#F3E8FF] text-[#5A10A5]"
+                //             }`}
+                //           >
+                //             {getCommitteeName(meeting.committeeId)}
+                //           </span>
+                //         </div>
 
-                        <p className={`text-xs md:text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                          {meeting.description}
-                        </p>
-                      </div>
-                    </div>
+                //         <p
+                //           className={`text-xs md:text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}
+                //         >
+                //           {meeting.description}
+                //         </p>
+                //       </div>
+                //     </div>
 
-                    {/* Status Pill & Delete Button */}
-                    <div className="flex items-center justify-between lg:justify-end gap-3">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          isUpcoming
-                            ? "bg-[#DCFCE7] text-[#166534]"
-                            : isCompleted
-                            ? "bg-[#DBEAFE] text-[#1E40AF]"
-                            : "bg-[#FEE2E2] text-[#991B1B]"
-                        }`}
-                      >
-                        {meeting.type || "Upcoming"}
-                      </span>
+                //     {/* Status Pill & Delete Button */}
+                //     <div className="flex items-center justify-between lg:justify-end gap-3">
+                //       <span
+                //         className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                //           isUpcoming
+                //             ? "bg-[#DCFCE7] text-[#166534]"
+                //             : isCompleted
+                //               ? "bg-[#DBEAFE] text-[#1E40AF]"
+                //               : "bg-[#FEE2E2] text-[#991B1B]"
+                //         }`}
+                //       >
+                //         {meeting.type || "Upcoming"}
+                //       </span>
 
-                      <button
-                        onClick={() => setDeletingMeetingId(meeting.id)}
-                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white bg-[#DC2626] hover:bg-[#B91C1C] transition-colors shadow-xs"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                        Delete
-                      </button>
-                    </div>
-                  </div>
+                //       <button
+                //         onClick={() => setDeletingMeetingId(meeting.id)}
+                //         className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white bg-[#DC2626] hover:bg-[#B91C1C] transition-colors shadow-xs"
+                //       >
+                //         <Trash2 className="w-3.5 h-3.5" />
+                //         Delete
+                //       </button>
+                //     </div>
+                //   </div>
 
-                  {/* Meeting Details Footer */}
-                  <div className="pt-3 border-t border-gray-200/10 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
-                    <div className="flex flex-wrap items-center gap-4 text-gray-500 dark:text-gray-400">
-                      <div className="flex items-center gap-1.5">
-                        <CalendarIcon className="w-3.5 h-3.5 text-gray-400" />
-                        <span>Jul 22, 2025</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-gray-400" />
-                        <span>10:00 AM - 11:30 AM</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-3 h-3 text-center leading-none text-gray-400">📍</span>
-                        <span>Room A-204, Main Campus</span>
-                      </div>
-                    </div>
+                //   {/* Meeting Details Footer */}
+                //   <div className="pt-3 border-t border-gray-200/10 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+                //     <div className="flex flex-wrap items-center gap-4 text-gray-500 dark:text-gray-400">
+                //       <div className="flex items-center gap-1.5">
+                //         <CalendarIcon className="w-3.5 h-3.5 text-gray-400" />
+                //         <span>Jul 22, 2025</span>
+                //       </div>
+                //       <div className="flex items-center gap-1.5">
+                //         <Clock className="w-3.5 h-3.5 text-gray-400" />
+                //         <span>10:00 AM - 11:30 AM</span>
+                //       </div>
+                //       <div className="flex items-center gap-1.5">
+                //         <span className="w-3 h-3 text-center leading-none text-gray-400">
+                //           📍
+                //         </span>
+                //         <span>Room A-204, Main Campus</span>
+                //       </div>
+                //     </div>
 
-                    {/* Attendance Progress */}
-                    <div className="flex items-center gap-3 w-full md:w-64">
-                      <span className={`text-xs font-semibold shrink-0 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                        👥 22 / 30
-                      </span>
-                      <div className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                        <div className="h-full bg-[#5A10A5] rounded-full" style={{ width: "89%" }} />
-                      </div>
-                      <span className="text-xs font-bold text-[#5A10A5] dark:text-purple-400 shrink-0">
-                        89%
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                //     {/* Attendance Progress */}
+                //     <div className="flex items-center gap-3 w-full md:w-64">
+                //       <span
+                //         className={`text-xs font-semibold shrink-0 ${isDark ? "text-gray-300" : "text-gray-600"}`}
+                //       >
+                //         👥 22 / 30
+                //       </span>
+                //       <div className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                //         <div
+                //           className="h-full bg-[#5A10A5] rounded-full"
+                //           style={{ width: "89%" }}
+                //         />
+                //       </div>
+                //       <span className="text-xs font-bold text-[#5A10A5] dark:text-purple-400 shrink-0">
+                //         89%
+                //       </span>
+                //     </div>
+                //   </div>
+                // </div>
               );
             })}
           </div>
@@ -569,14 +590,20 @@ export default function DashboardMeetings() {
           {/* Pagination Footer */}
           <div
             className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs md:text-sm ${
-              isDark ? "bg-[#101726] border-[#232D42]" : "bg-white border-[#EEF0FF] shadow-xs"
+              isDark
+                ? "bg-[#101726] border-[#232D42]"
+                : "bg-white border-[#EEF0FF] shadow-xs"
             }`}
           >
             <div className="flex items-center gap-2">
-              <span className={isDark ? "text-gray-400" : "text-gray-500"}>Rows per page</span>
+              <span className={isDark ? "text-gray-400" : "text-gray-500"}>
+                Rows per page
+              </span>
               <select
                 className={`px-2 py-1 rounded-lg border outline-none ${
-                  isDark ? "bg-[#182033] border-[#263148] text-white" : "bg-white border-gray-200 text-gray-700"
+                  isDark
+                    ? "bg-[#182033] border-[#263148] text-white"
+                    : "bg-white border-gray-200 text-gray-700"
                 }`}
               >
                 <option value="5">5</option>
@@ -589,7 +616,9 @@ export default function DashboardMeetings() {
             <div className="flex items-center gap-1">
               <button
                 className={`px-2.5 py-1 rounded-lg flex items-center gap-1 ${
-                  isDark ? "hover:bg-[#182033] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                  isDark
+                    ? "hover:bg-[#182033] text-gray-400"
+                    : "hover:bg-gray-100 text-gray-600"
                 }`}
               >
                 ‹ Previous
@@ -597,28 +626,40 @@ export default function DashboardMeetings() {
               <button className="w-7 h-7 rounded-lg bg-[#5A10A5] text-white font-bold flex items-center justify-center">
                 1
               </button>
-              <button className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}>
+              <button
+                className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}
+              >
                 2
               </button>
-              <button className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}>
+              <button
+                className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}
+              >
                 3
               </button>
-              <button className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}>
+              <button
+                className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}
+              >
                 4
               </button>
-              <button className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}>
+              <button
+                className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? "text-gray-400 hover:bg-[#182033]" : "text-gray-600 hover:bg-gray-100"}`}
+              >
                 5
               </button>
               <button
                 className={`px-2.5 py-1 rounded-lg flex items-center gap-1 ${
-                  isDark ? "hover:bg-[#182033] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                  isDark
+                    ? "hover:bg-[#182033] text-gray-400"
+                    : "hover:bg-gray-100 text-gray-600"
                 }`}
               >
                 Next ›
               </button>
             </div>
 
-            <span className={isDark ? "text-gray-400" : "text-gray-500"}>Page 1 of 5</span>
+            <span className={isDark ? "text-gray-400" : "text-gray-500"}>
+              Page 1 of 5
+            </span>
           </div>
         </div>
       )}

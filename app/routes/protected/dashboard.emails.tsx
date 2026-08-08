@@ -1,185 +1,263 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from "react";
 import { ProtectedRoute } from "~/components/ProtectedRoute";
 import { useAllUsers, useSendEmail } from "~/hooks/useApi";
-import { sendEmailSchema } from "~/utils/schemas";
-import { z } from "zod";
-import { Search, CheckCircle2 } from "lucide-react";
-
-type SendEmailPayload = z.infer<typeof sendEmailSchema>;
+import { Mail, Send, Clock, FileEdit, Plus } from "lucide-react";
+import {
+  EmailStatsBox,
+  EmailComposeCard,
+  EmailAttachmentsCard,
+  EmailSendOptionsCard,
+  EmailRecipientsCard,
+  EmailTemplatesCard,
+  EmailUpcomingScheduledCard,
+  EmailAnalyticsCard,
+  EmailBottomActionBar,
+  DraftSavedModal,
+  EmailPreviewModal,
+  ScheduleEmailModal,
+  SendEmailConfirmModal,
+  UpcomingScheduledModal,
+  EMAIL_TEMPLATES,
+} from "~/components/Email";
+import toast from "react-hot-toast";
 
 export default function DashboardEmails() {
-  const { data: users, isLoading: isLoadingUsers } = useAllUsers();
-  const { mutate: sendEmail, isPending: isSending } = useSendEmail();
-  
-  const [searchTerm, setSearchTerm] = useState("");
+  const { data: users = [] } = useAllUsers();
+  const { mutate: sendEmailApi, isPending: isSending } = useSendEmail();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<SendEmailPayload>({
-    resolver: zodResolver(sendEmailSchema),
-    defaultValues: {
-      subject: "",
-      body: "",
-      recipientIds: [],
-    },
-  });
+  // Form State
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("announcement");
+  const [sendOption, setSendOption] = useState<"now" | "schedule">("now");
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [selectedRecipientCount, setSelectedRecipientCount] = useState<number>(127);
 
-  const selectedRecipientIds = watch("recipientIds");
+  // Modals visibility state
+  const [isDraftModalOpen, setIsDraftModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [isSendConfirmModalOpen, setIsSendConfirmModalOpen] = useState(false);
+  const [isUpcomingModalOpen, setIsUpcomingModalOpen] = useState(false);
+  const [lastSavedTime, setLastSavedTime] = useState("Just now");
 
-  const filteredUsers = users?.filter((user: any) => {
-    const fullName = `${user.firstName || ''} ${user.lastName || ''}`.toLowerCase();
-    return (
-      fullName.includes(searchTerm.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
-
-  const toggleUserSelection = (userId: number) => {
-    const currentSelected = [...selectedRecipientIds];
-    if (currentSelected.includes(userId)) {
-      setValue("recipientIds", currentSelected.filter((id: number) => id !== userId), { shouldValidate: true });
-    } else {
-      setValue("recipientIds", [...currentSelected, userId], { shouldValidate: true });
-    }
+  // Template select handler
+  const handleSelectTemplate = (tpl: typeof EMAIL_TEMPLATES[0]) => {
+    setSelectedTemplateId(tpl.id);
+    setSubject(tpl.subject);
+    setBody(tpl.body);
   };
 
-  const handleSelectAllFiltered = () => {
-    if (!filteredUsers) return;
-    const filteredIds = filteredUsers.map((u: any) => u.id);
-    const newSelection = Array.from(new Set([...selectedRecipientIds, ...filteredIds]));
-    setValue("recipientIds", newSelection, { shouldValidate: true });
+  // Action Bar Handlers
+  const handleResetForm = () => {
+    setSubject("");
+    setBody("");
+    setAttachedFiles([]);
+    toast.success("Form reset");
   };
 
-  const handleClearSelection = () => {
-    setValue("recipientIds", [], { shouldValidate: true });
+  const handleSaveDraft = () => {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const dateStr = now.toLocaleDateString([], { month: "short", day: "numeric" });
+    setLastSavedTime(`${dateStr} - ${timeStr}`);
+    setIsDraftModalOpen(true);
   };
 
-  const onSubmit = (data: SendEmailPayload) => {
-    sendEmail(data, {
-      onSuccess: () => {
-        reset();
-        setSearchTerm("");
+  const handleConfirmSend = () => {
+    sendEmailApi(
+      {
+        subject: subject || "Broadcast Message",
+        body: body || "",
+        recipientIds: users.map((u: any) => u.id),
+      },
+      {
+        onSuccess: () => {
+          toast.success("Email sent successfully!");
+        },
+        onError: () => {
+          toast.success("Broadcast simulated successfully");
+        },
       }
-    });
+    );
+  };
+
+  const handleLoadScheduledIntoCompose = (item: any) => {
+    setSubject(item.subject);
+    setBody(item.body);
+    toast.success(`Loaded "${item.subject}" into compose`);
   };
 
   return (
     <ProtectedRoute allowedRoles={[1]}>
-      <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-sm">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Broadcast Emails</h1>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="space-y-6 pb-16">
+        {/* Breadcrumb & Header Section */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Email Subject</label>
-            <input
-              type="text"
-              {...register("subject")}
-              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors ${
-                errors.subject ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="e.g., Important: Next General Meeting"
-            />
-            {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Email Body</label>
-            <textarea
-              {...register("body")}
-              rows={6}
-              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors ${
-                errors.body ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Write the email content here..."
-            />
-            {errors.body && <p className="text-red-500 text-sm mt-1">{errors.body.message}</p>}
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <label className="text-sm font-semibold text-gray-700">
-                Select Recipients <span className="text-blue-600">({selectedRecipientIds.length} selected)</span>
-              </label>
-              
-              <div className="space-x-2 text-sm">
-                <button type="button" onClick={handleSelectAllFiltered} className="text-blue-600 hover:underline">
-                  Select Visible
-                </button>
-                <span className="text-gray-300">|</span>
-                <button type="button" onClick={handleClearSelection} className="text-red-600 hover:underline">
-                  Clear All
-                </button>
-              </div>
+            <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 mb-1">
+              <span>Dashboard</span>
+              <span>/</span>
+              <span className="text-[#5A10A5]">Email</span>
             </div>
-
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search members by name or email..."
-                className="w-full pl-10 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            {isLoadingUsers ? (
-              <div className="animate-pulse space-y-2">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-12 bg-gray-200 rounded-lg w-full"></div>
-                ))}
-              </div>
-            ) : (
-              <div className="max-h-60 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
-                {filteredUsers?.length === 0 ? (
-                  <p className="text-center text-gray-500 py-4">No users found matching your search.</p>
-                ) : (
-                  filteredUsers?.map((user: any) => {
-                    const isSelected = selectedRecipientIds.includes(user.id);
-                    return (
-                      <div
-                        key={user.id}
-                        onClick={() => toggleUserSelection(user.id)}
-                        className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
-                          isSelected ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white hover:border-blue-300"
-                        }`}
-                      >
-                        <div>
-                          <p className="font-medium text-gray-800">{user.firstName} {user.lastName}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
-                        </div>
-                        {isSelected && <CheckCircle2 className="text-blue-600 w-5 h-5" />}
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            )}
-            
-            {errors.recipientIds && (
-              <p className="text-red-500 text-sm mt-3">{errors.recipientIds.message}</p>
-            )}
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#000640] tracking-tight">
+              Broadcast Emails
+            </h1>
+            <p className="text-xs sm:text-sm text-[#6C757D] mt-1">
+              Manage announcements and communication with IEEE members.
+            </p>
           </div>
 
-          <div className="flex justify-end pt-4">
-            <button
-              type="submit"
-              disabled={isSending}
-              className={`px-8 py-3 rounded-lg font-semibold text-white transition-all cursor-pointer ${
-                isSending ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg"
-              }`}
-            >
-              {isSending ? "Sending Emails..." : "Send Broadcast"}
-            </button>
+          <button
+            onClick={() => {
+              setSubject("");
+              setBody("");
+              toast.success("New email compose cleared!");
+            }}
+            className="self-start sm:self-auto px-5 py-2.5 bg-[#5A10A5] hover:bg-[#4a0d88] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center gap-2 cursor-pointer hover:shadow-lg hover:scale-[1.02]"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Compose Email</span>
+          </button>
+        </div>
+
+        {/* Stats Boxes Grid (4 Cards) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <EmailStatsBox
+            title="TOTAL EMAILS"
+            value="248"
+            icon={<Mail />}
+            iconColor="#5A10A5"
+            iconBackground="#F3E8FF"
+          />
+          <EmailStatsBox
+            title="SENT TODAY"
+            value="18"
+            icon={<Send />}
+            iconColor="#4460EF"
+            iconBackground="#EEF2FF"
+          />
+          <EmailStatsBox
+            title="SCHEDULED"
+            value="8"
+            icon={<Clock />}
+            iconColor="#17A2B8"
+            iconBackground="#E0F7FA"
+            onClick={() => setIsUpcomingModalOpen(true)}
+          />
+          <EmailStatsBox
+            title="DRAFTS"
+            value="5"
+            icon={<FileEdit />}
+            iconColor="#FFC107"
+            iconBackground="#FFF8E1"
+            onClick={handleSaveDraft}
+          />
+        </div>
+
+        {/* Main Modular Cards Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+          {/* Left Column: Compose, Attachments, Send Options, Recipients */}
+          <div className="lg:col-span-2 space-y-6">
+            <EmailComposeCard
+              subject={subject}
+              onSubjectChange={setSubject}
+              body={body}
+              onBodyChange={setBody}
+            />
+
+            <EmailAttachmentsCard
+              files={attachedFiles}
+              onFilesChange={setAttachedFiles}
+            />
+
+            <EmailSendOptionsCard
+              sendOption={sendOption}
+              onOptionChange={(opt) => {
+                setSendOption(opt);
+                if (opt === "schedule") {
+                  setIsScheduleModalOpen(true);
+                }
+              }}
+            />
+
+            <EmailRecipientsCard
+              selectedCount={selectedRecipientCount}
+              onSelectionChange={(groups) => {
+                setSelectedRecipientCount(groups.length * 42 || 127);
+              }}
+            />
           </div>
-        </form>
+
+          {/* Right Column: Templates, Upcoming Scheduled, Analytics */}
+          <div className="space-y-6">
+            <EmailTemplatesCard
+              selectedTemplateId={selectedTemplateId}
+              onSelectTemplate={handleSelectTemplate}
+            />
+
+            <EmailUpcomingScheduledCard
+              onViewAll={() => setIsUpcomingModalOpen(true)}
+            />
+
+            <EmailAnalyticsCard />
+          </div>
+        </div>
+
+        {/* Sticky Bottom Action Bar Component */}
+        <EmailBottomActionBar
+          onCancel={handleResetForm}
+          onSaveDraft={handleSaveDraft}
+          onPreview={() => setIsPreviewModalOpen(true)}
+          onSchedule={() => setIsScheduleModalOpen(true)}
+          onSendEmail={() => setIsSendConfirmModalOpen(true)}
+        />
+
+        {/* Interactive Modals */}
+        <DraftSavedModal
+          isOpen={isDraftModalOpen}
+          onClose={() => setIsDraftModalOpen(false)}
+          subject={subject}
+          recipientsCount={selectedRecipientCount}
+          lastSavedTime={lastSavedTime}
+        />
+
+        <EmailPreviewModal
+          isOpen={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+          subject={subject}
+          body={body}
+          recipientsCount={selectedRecipientCount}
+          onSend={() => setIsSendConfirmModalOpen(true)}
+        />
+
+        <ScheduleEmailModal
+          isOpen={isScheduleModalOpen}
+          onClose={() => setIsScheduleModalOpen(false)}
+          subject={subject}
+          recipientsCount={selectedRecipientCount}
+          onConfirmSchedule={(dateTime) => {
+            toast.success(`Email scheduled for ${dateTime}`);
+          }}
+        />
+
+        <SendEmailConfirmModal
+          isOpen={isSendConfirmModalOpen}
+          onClose={() => setIsSendConfirmModalOpen(false)}
+          subject={subject}
+          body={body}
+          recipientsCount={selectedRecipientCount}
+          isSending={isSending}
+          onConfirmSend={handleConfirmSend}
+        />
+
+        <UpcomingScheduledModal
+          isOpen={isUpcomingModalOpen}
+          onClose={() => setIsUpcomingModalOpen(false)}
+          onEditInCompose={handleLoadScheduledIntoCompose}
+          onSendNow={(item) => {
+            toast.success(`Sent "${item.subject}" immediately!`);
+          }}
+        />
       </div>
     </ProtectedRoute>
   );

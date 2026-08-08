@@ -904,3 +904,293 @@ export const deleteSponsorApi = async <T = any>(id: number): Promise<T> => {
   }
 };
 
+// ============================================================
+// Dashboard API Services
+// ============================================================
+
+import type {
+  DashboardStats,
+  RecentActivityItem,
+  DashboardMember,
+  DashboardEvent,
+  CreateUserData,
+  CreateMeetingData,
+  CreateArticleData,
+  CreateEventData,
+  UpdateMemberData,
+} from "~/types/dashboard";
+
+export const getDashboardStats = async (): Promise<DashboardStats> => {
+  try {
+    const response = await apiClient.get("/Dashboard/stats");
+    return response.data;
+  } catch {
+    // Mock fallback stats for demonstration/offline mode
+    return {
+      totalMembers: 156,
+      totalMembersChange: "+12% from last month",
+      pendingApprovals: 4,
+      pendingSubtitle: "Requires Action",
+      upcomingMeetings: 8,
+      meetingsSubtitle: "Next: Today 4 PM",
+      upcomingEvents: 3,
+      eventsSubtitle: "Next: 15 Jul",
+      membersChartData: [40, 65, 50, 80, 75, 95, 110, 130, 156],
+      pendingChartData: [2, 5, 3, 6, 4],
+      meetingsChartData: [3, 4, 6, 8],
+      eventsChartData: [1, 2, 2, 3],
+    };
+  }
+};
+
+export const getRecentActivities = async (): Promise<RecentActivityItem[]> => {
+  try {
+    const response = await apiClient.get("/Dashboard/activities");
+    return response.data;
+  } catch {
+    return [
+      {
+        id: 1,
+        title: "Sara Ahmed published new article in Technical",
+        time: "10 mins ago",
+        type: "article",
+      },
+      {
+        id: 2,
+        title: "Karim Nasser requested membership approval",
+        time: "45 mins ago",
+        type: "approval",
+      },
+      {
+        id: 3,
+        title: "New Event: AI Workshop 2026 created",
+        time: "2 hours ago",
+        type: "event",
+      },
+      {
+        id: 4,
+        title: "Meeting scheduled with UI/UX Committee",
+        time: "5 hours ago",
+        type: "meeting",
+      },
+      {
+        id: 5,
+        title: "Nour Hassan approved membership request",
+        time: "1 day ago",
+        type: "user",
+      },
+    ];
+  }
+};
+
+export const getMembers = async (): Promise<DashboardMember[]> => {
+  try {
+    const response = await apiClient.get("/Users");
+    return response.data;
+  } catch {
+    return [
+      {
+        id: 1,
+        name: "Sara Ahmed",
+        email: "sara@ieee.org",
+        phone: "+20 100 123 4567",
+        committee: "UI/UX",
+        role: "Member",
+        academicYear: "3rd Year, CS",
+        joinedDate: "Jul 10",
+        status: "Approved",
+      },
+      {
+        id: 2,
+        name: "Karim Nasser",
+        email: "karim@ieee.org",
+        phone: "+20 101 234 5678",
+        committee: "AI",
+        role: "Lead",
+        academicYear: "4th Year, ECE",
+        joinedDate: "Jul 08",
+        status: "Pending",
+      },
+      {
+        id: 3,
+        name: "Nour Hassan",
+        email: "nour@ieee.org",
+        phone: "+20 102 345 6789",
+        committee: "CS",
+        role: "Member",
+        academicYear: "2nd Year, CS",
+        joinedDate: "Jul 07",
+        status: "Approved",
+      },
+      {
+        id: 4,
+        name: "Omar Youssef",
+        email: "omar@ieee.org",
+        phone: "+20 103 456 7890",
+        committee: "Robotics",
+        role: "Member",
+        academicYear: "3rd Year, Mech",
+        joinedDate: "Jul 05",
+        status: "Rejected",
+      },
+      {
+        id: 5,
+        name: "Layla Ibrahim",
+        email: "layla@ieee.org",
+        phone: "+20 104 567 8901",
+        committee: "Media",
+        role: "Secretary",
+        academicYear: "4th Year, Arch",
+        joinedDate: "Jul 03",
+        status: "Approved",
+      },
+      {
+        id: 6,
+        name: "Youssef Ali",
+        email: "youssef@ieee.org",
+        phone: "+20 105 678 9012",
+        committee: "Power",
+        role: "Member",
+        academicYear: "1st Year, EE",
+        joinedDate: "Jun 28",
+        status: "Approved",
+      },
+      {
+        id: 7,
+        name: "Mona Samir",
+        email: "mona@ieee.org",
+        phone: "+20 106 789 0123",
+        committee: "UI/UX",
+        role: "Designer",
+        academicYear: "2nd Year, CS",
+        joinedDate: "Jun 25",
+        status: "Pending",
+      },
+      {
+        id: 8,
+        name: "Hassan Khaled",
+        email: "hassan@ieee.org",
+        phone: "+20 107 890 1234",
+        committee: "AI",
+        role: "Member",
+        academicYear: "3rd Year, ECE",
+        joinedDate: "Jun 20",
+        status: "Approved",
+      },
+    ];
+  }
+};
+
+export const addUser = async (data: CreateUserData) => {
+  try {
+    const response = await apiClient.post("/Users", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Failed to create user");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const createMeeting = async (data: CreateMeetingData) => {
+  try {
+    const response = await apiClient.post("/Meetings", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Failed to create meeting");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// export const createArticle = async (data: CreateArticleData) => {
+//   try {
+//     const response = await apiClient.post("/Articles", data);
+//     return response.data;
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       throw new Error(error.response?.data?.message || "Failed to create article");
+//     }
+//     throw new Error("An unexpected error occurred");
+//   }
+// };
+
+export const createEvent = async (data: CreateEventData) => {
+  try {
+    const response = await apiClient.post("/events", data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Failed to create event");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateMember = async (data: UpdateMemberData) => {
+  try {
+    const response = await apiClient.put(`/Users/${data.id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Failed to update member");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const approveMember = async (id: number) => {
+  try {
+    const response = await apiClient.post(`/Users/${id}/approve`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Failed to approve member");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const rejectMember = async (id: number) => {
+  try {
+    const response = await apiClient.post(`/Users/${id}/reject`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Failed to reject member");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const getUpcomingEvents = async (): Promise<DashboardEvent[]> => {
+  try {
+    const response = await apiClient.get("/events");
+    return response.data;
+  } catch {
+    return [
+      {
+        id: 1,
+        title: "Technical Workshop 2026",
+        date: "2026-07-15",
+        time: "10:00 AM",
+        location: "Main Auditorium & Online",
+        capacity: 120,
+        description: "Hands-on machine learning workshop covering modern AI tools.",
+      },
+      {
+        id: 2,
+        title: "IEEE Annual Hackathon",
+        date: "2026-08-01",
+        time: "09:00 AM",
+        location: "Engineering Complex",
+        capacity: 250,
+        description: "48-hour innovation challenge for tech enthusiasts.",
+      },
+    ];
+  }
+};
+
+

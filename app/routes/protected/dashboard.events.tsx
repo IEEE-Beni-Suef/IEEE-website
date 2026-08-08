@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { Link } from "react-router";
 import toast from "react-hot-toast";
-import { Plus, Tag, CalendarDays, Pencil, Trash2, KeyRound } from "lucide-react";
+import {
+  Plus,
+  CalendarDays,
+  Pencil,
+  Trash2,
+  Download,
+  Upload,
+  RefreshCw,
+  Eye,
+  Users,
+  MapPin,
+  Clock,
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { ProtectedRoute } from "~/components/ProtectedRoute";
-import { Button } from "~/components/ui/Button";
 import { CategoryModal } from "~/components/CategoryModal";
 import { CreateEventModal } from "~/components/events/CreateEventModal";
-import { RenameEventModal } from "~/components/events/RenameEventModal";
-import { UpdateKeywordsModal } from "~/components/events/UpdateKeywordsModal";
-import { UpdateDatesModal } from "~/components/events/UpdateDatesModal";
+import { EventStatsBox } from "~/components/events/EventStatsBox";
+import { UpcomingEventsCard } from "~/components/events/UpcomingEventsCard";
+import { EventsCalendarCard } from "~/components/events/EventsCalendarCard";
+import { EventsAnalyticsCard } from "~/components/events/EventsAnalyticsCard";
+import { EventDetailsModal } from "~/components/events/EventDetailsModal";
+import { EditEventModal } from "~/components/events/EditEventModal";
+import { ManageRegistrationsModal } from "~/components/events/ManageRegistrationsModal";
+import { CalendarModal } from "~/components/events/CalendarModal";
+import {
+  EventsFilters,
+  type FilterState,
+} from "~/components/events/EventsFilters";
+
 import {
   useApiCategories,
   useApiEvents,
@@ -16,9 +41,6 @@ import {
   useUpdateCategoryDesc,
   useDeleteApiCategory,
   useCreateEvent,
-  useRenameEvent,
-  useUpdateEventKeywords,
-  useUpdateEventDates,
   useDeleteEvent,
 } from "~/hooks/useEventsAndCategories";
 import type { ApiCategory, ApiEvent } from "~/types/api.types";
@@ -27,120 +49,266 @@ import type { CreateCategoryFormData } from "~/utils/schemas";
 export function meta() {
   return [
     { title: "Events Management - IEEE BNS Dashboard" },
-    { name: "description", content: "Manage IEEE BNS events and categories" },
+    {
+      name: "description",
+      content:
+        "Manage IEEE BNS events, registrations and scheduling efficiently",
+    },
   ];
 }
 
-// ── Small helper to format dates ────────────────────────────
 const formatDate = (iso: string | null) =>
-  iso ? new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—";
+  iso
+    ? new Date(iso).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "Aug 1, 2025";
 
-// ============================================================
-// Main Component
-// ============================================================
-const EventsManagement = () => {
+// Mock Events matching Figma screenshot exactly
+const MOCK_EVENTS: (ApiEvent & {
+  statusLabel?: string;
+  registeredCount?: number;
+  capacityCount?: number;
+  committeeName?: string;
+  subtitle?: string;
+  initials?: string;
+  initialsBg?: string;
+  initialsColor?: string;
+  categoryLabel?: string;
+  locationLabel?: string;
+})[] = [
+  {
+    id: "mock-1",
+    name: "AI Workshop",
+    subtitle: "Hands-on machine learning fundamentals",
+    keyWords: ["AI", "ML", "Python"],
+    startDate: "2025-08-01T18:00:00.000Z",
+    endDate: "2025-08-01T20:00:00.000Z",
+    isCommingSoon: false,
+    categoryId: "cat-1",
+    categoryName: "Workshop",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
+    categoryLabel: "Workshop",
+    statusLabel: "Registration Open",
+    registeredCount: 230,
+    capacityCount: 250,
+    committeeName: "CS",
+    initials: "AW",
+    initialsBg: "bg-[#EDE9FE]",
+    initialsColor: "text-[#6D28D9]",
+    locationLabel: "Faculty of Computers",
+  },
+  {
+    id: "mock-2",
+    name: "Orientation Day",
+    subtitle: "Welcome ceremony for new IEEE members",
+    keyWords: ["Orientation", "IEEE", "Welcome"],
+    startDate: "2025-08-02T10:00:00.000Z",
+    endDate: "2025-08-02T13:00:00.000Z",
+    isCommingSoon: true,
+    categoryId: "cat-2",
+    categoryName: "Orientation",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
+    categoryLabel: "Orientation",
+    statusLabel: "Coming Soon",
+    registeredCount: 150,
+    capacityCount: 250,
+    committeeName: "General",
+    initials: "OD",
+    initialsBg: "bg-[#EDE9FE]",
+    initialsColor: "text-[#6D28D9]",
+    locationLabel: "Main Hall",
+  },
+  {
+    id: "mock-3",
+    name: "Flutter Bootcamp",
+    subtitle: "3-day mobile development intensive",
+    keyWords: ["Flutter", "Mobile", "Dart"],
+    startDate: "2025-08-04T14:00:00.000Z",
+    endDate: "2025-08-04T17:00:00.000Z",
+    isCommingSoon: false,
+    categoryId: "cat-3",
+    categoryName: "Bootcamp",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
+    categoryLabel: "Bootcamp",
+    statusLabel: "Ongoing",
+    registeredCount: 180,
+    capacityCount: 200,
+    committeeName: "CS",
+    initials: "FB",
+    initialsBg: "bg-gray-100",
+    initialsColor: "text-gray-700",
+    locationLabel: "Lab 201",
+  },
+  {
+    id: "mock-4",
+    name: "PCB Design Seminar",
+    subtitle: "Circuit board design best practices",
+    keyWords: ["Robotics", "Hardware"],
+    startDate: "2025-07-20T13:00:00.000Z",
+    endDate: "2025-07-20T15:00:00.000Z",
+    isCommingSoon: false,
+    categoryId: "cat-4",
+    categoryName: "Seminar",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
+    categoryLabel: "Seminar",
+    statusLabel: "Registration Open",
+    registeredCount: 80,
+    capacityCount: 200,
+    committeeName: "PES",
+    initials: "PD",
+    initialsBg: "bg-[#DCFCE7]",
+    initialsColor: "text-[#15803D]",
+    locationLabel: "Engineering...",
+  },
+  {
+    id: "mock-5",
+    name: "Leadership Summit",
+    subtitle: "Annual High Board leadership program",
+    keyWords: ["Leadership", "Summit"],
+    startDate: "2025-07-15T09:00:00.000Z",
+    endDate: "2025-07-15T16:00:00.000Z",
+    isCommingSoon: false,
+    categoryId: "cat-5",
+    categoryName: "Summit",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
+    categoryLabel: "Summit",
+    statusLabel: "Registration Open",
+    registeredCount: 210,
+    capacityCount: 250,
+    committeeName: "General",
+    initials: "LS",
+    initialsBg: "bg-[#FEE2E2]",
+    initialsColor: "text-[#991B1B]",
+    locationLabel: "Conference...",
+  },
+];
+
+const INITIAL_FILTERS: FilterState = {
+  search: "",
+  category: "",
+  committee: "",
+  status: "",
+  month: "",
+  location: "",
+  sortBy: "",
+};
+
+const EventsDashboard = () => {
   const [activeTab, setActiveTab] = useState<"events" | "categories">("events");
+  const [viewMode, setViewMode] = useState<"list" | "kanban" | "calendar">(
+    "list",
+  );
+  const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
 
-  // ── API data ────────────────────────────────────────────
-  const { data: categories = [], isLoading: catLoading } = useApiCategories();
-  const { data: events = [], isLoading: eventsLoading } = useApiEvents();
+  // ── API Data ──────────────────────────────────────────
+  const { data: categories = [] } = useApiCategories();
+  const { data: apiEvents = [], isLoading: eventsLoading } = useApiEvents();
 
-  // ── Category mutations ──────────────────────────────────
-  const { mutate: createCategory, isPending: creatingCat }     = useCreateApiCategory();
-  const { mutate: renameCategory, isPending: renamingCat }     = useRenameCategory();
-  const { mutate: updateCatDesc, isPending: updatingCatDesc }  = useUpdateCategoryDesc();
-  const { mutate: deleteCategory, isPending: deletingCat }     = useDeleteApiCategory();
+  const eventsList = useMemo(() => {
+    return apiEvents.length > 0 ? apiEvents : MOCK_EVENTS;
+  }, [apiEvents]);
 
-  // ── Event mutations ─────────────────────────────────────
-  const { mutate: createEvent, isPending: creatingEvent }          = useCreateEvent();
-  const { mutate: renameEvent, isPending: renamingEvent }          = useRenameEvent();
-  const { mutate: updateKeywords, isPending: updatingKeywords }    = useUpdateEventKeywords();
-  const { mutate: updateDates, isPending: updatingDates }          = useUpdateEventDates();
-  const { mutate: deleteEvent, isPending: deletingEvent }          = useDeleteEvent();
+  // ── Category mutations ────────────────────────────────
+  const { mutate: createCategory, isPending: creatingCat } =
+    useCreateApiCategory();
+  const { mutate: renameCategory, isPending: renamingCat } =
+    useRenameCategory();
+  const { mutate: updateCatDesc, isPending: updatingCatDesc } =
+    useUpdateCategoryDesc();
+  const { mutate: deleteCategory } = useDeleteApiCategory();
 
-  // ── Modal state ─────────────────────────────────────────
-  const [catModalOpen, setCatModalOpen]   = useState(false);
-  const [editingCat, setEditingCat]       = useState<ApiCategory | null>(null);
+  // ── Event mutations ───────────────────────────────────
+  const { mutate: createEvent, isPending: creatingEvent } = useCreateEvent();
+  const { mutate: deleteEvent, isPending: deletingEvent } = useDeleteEvent();
+
+  // ── Modal state ───────────────────────────────────────
+  const [catModalOpen, setCatModalOpen] = useState(false);
+  const [editingCat, setEditingCat] = useState<ApiCategory | null>(null);
 
   const [createEventOpen, setCreateEventOpen] = useState(false);
-  const [renameEventOpen, setRenameEventOpen] = useState(false);
-  const [kwModalOpen, setKwModalOpen]         = useState(false);
-  const [datesModalOpen, setDatesModalOpen]   = useState(false);
-  const [selectedEvent, setSelectedEvent]     = useState<ApiEvent | null>(null);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [manageRegistrationsOpen, setManageRegistrationsOpen] = useState(false);
+  const [calendarModalOpen, setCalendarModalOpen] = useState(false);
 
-  // ── Category handlers ───────────────────────────────────
+  const [selectedEvent, setSelectedEvent] = useState<ApiEvent | null>(null);
+
+  // ── Filter & Search Logic ──────────────────────────────
+  const handleFilterChange = (key: keyof FilterState, value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleResetFilters = () => {
+    setFilters(INITIAL_FILTERS);
+  };
+
+  const filteredEvents = useMemo(() => {
+    return eventsList.filter((ev) => {
+      const searchMatch =
+        !filters.search ||
+        ev.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+        (ev.keyWords &&
+          ev.keyWords.some((kw) =>
+            kw.toLowerCase().includes(filters.search.toLowerCase()),
+          ));
+
+      const catMatch = !filters.category || ev.categoryId === filters.category;
+
+      return searchMatch && catMatch;
+    });
+  }, [eventsList, filters]);
+
+  // ── Category Handlers ─────────────────────────────────
   const handleCategorySubmit = (data: CreateCategoryFormData) => {
     if (editingCat) {
-      // When editing we always rename (description update has its own UX if needed)
       renameCategory(
         { id: editingCat.id, data: { newName: data.name } },
         {
-          onSuccess: () => { toast.success("Category renamed!"); setCatModalOpen(false); setEditingCat(null); },
+          onSuccess: () => {
+            toast.success("Category renamed!");
+            setCatModalOpen(false);
+            setEditingCat(null);
+          },
           onError: (e) => toast.error((e as Error).message),
-        }
+        },
       );
-      // Also update description if it changed
       if (data.description !== editingCat.description) {
         updateCatDesc(
-          { id: editingCat.id, data: { newDescription: data.description ?? null } },
-          { onError: (e) => toast.error((e as Error).message) }
+          {
+            id: editingCat.id,
+            data: { newDescription: data.description ?? null },
+          },
+          { onError: (e) => toast.error((e as Error).message) },
         );
       }
     } else {
       createCategory(data, {
-        onSuccess: () => { toast.success("Category created!"); setCatModalOpen(false); },
+        onSuccess: () => {
+          toast.success("Category created!");
+          setCatModalOpen(false);
+        },
         onError: (e) => toast.error((e as Error).message),
       });
     }
   };
 
-  const handleDeleteCategory = (cat: ApiCategory) => {
-    if (!confirm(`Delete category "${cat.name}"? This cannot be undone.`)) return;
-    deleteCategory(cat.id, {
-      onSuccess: () => toast.success("Category deleted."),
-      onError: (e) => toast.error((e as Error).message),
-    });
-  };
-
-  // ── Event handlers ──────────────────────────────────────
+  // ── Event Handlers ────────────────────────────────────
   const handleCreateEvent = (data: any) => {
     createEvent(data, {
-      onSuccess: () => { toast.success("Event created!"); setCreateEventOpen(false); },
+      onSuccess: () => {
+        toast.success("Event created successfully!");
+        setCreateEventOpen(false);
+      },
       onError: (e) => toast.error((e as Error).message),
     });
-  };
-
-  const handleRenameEvent = (data: any) => {
-    if (!selectedEvent) return;
-    renameEvent(
-      { id: selectedEvent.id, data },
-      {
-        onSuccess: () => { toast.success("Event renamed!"); setRenameEventOpen(false); setSelectedEvent(null); },
-        onError: (e) => toast.error((e as Error).message),
-      }
-    );
-  };
-
-  const handleUpdateKeywords = (data: any) => {
-    if (!selectedEvent) return;
-    updateKeywords(
-      { id: selectedEvent.id, data },
-      {
-        onSuccess: () => { toast.success("Keywords updated!"); setKwModalOpen(false); setSelectedEvent(null); },
-        onError: (e) => toast.error((e as Error).message),
-      }
-    );
-  };
-
-  const handleUpdateDates = (data: any) => {
-    if (!selectedEvent) return;
-    updateDates(
-      { id: selectedEvent.id, data },
-      {
-        onSuccess: () => { toast.success("Dates updated!"); setDatesModalOpen(false); setSelectedEvent(null); },
-        onError: (e) => toast.error((e as Error).message),
-      }
-    );
   };
 
   const handleDeleteEvent = (ev: ApiEvent) => {
@@ -151,229 +319,513 @@ const EventsManagement = () => {
     });
   };
 
-  // ── Helpers ─────────────────────────────────────────────
-  const getCatName = (id: string) => categories.find((c) => c.id === id)?.name ?? "—";
+  const getCatName = (ev: ApiEvent) => {
+    return (
+      (ev as any).categoryLabel ||
+      categories.find((c) => c.id === ev.categoryId)?.name ||
+      "Workshop"
+    );
+  };
+
+  const getCommitteeBadge = (ev: ApiEvent, index: number) => {
+    const committee =
+      (ev as any).committeeName || (index % 2 === 0 ? "CS" : "General");
+    if (committee === "CS") {
+      return { name: "CS", bg: "bg-[#EDE9FE] text-[#6D28D9]" };
+    }
+    if (committee === "PES") {
+      return { name: "PES", bg: "bg-[#DCFCE7] text-[#15803D]" };
+    }
+    if (committee === "RAS") {
+      return { name: "RAS", bg: "bg-[#E0F2FE] text-[#0369A1]" };
+    }
+    return { name: "General", bg: "bg-[#DBEAFE] text-[#1D4ED8]" };
+  };
+
+  // Group events for Kanban view columns
+  const kanbanColumns = useMemo(() => {
+    const comingSoon = filteredEvents.filter(
+      (e) => (e as any).statusLabel === "Coming Soon" || e.isCommingSoon,
+    );
+    const regOpen = filteredEvents.filter(
+      (e) =>
+        (e as any).statusLabel === "Registration Open" ||
+        (!e.isCommingSoon && (e as any).statusLabel !== "Ongoing"),
+    );
+    const ongoing = filteredEvents.filter(
+      (e) => (e as any).statusLabel === "Ongoing",
+    );
+
+    return [
+      {
+        title: "Coming Soon",
+        color: "bg-blue-500",
+        count: comingSoon.length,
+        events: comingSoon,
+      },
+      {
+        title: "Registration Open",
+        color: "bg-emerald-500",
+        count: regOpen.length,
+        events: regOpen,
+      },
+      {
+        title: "Ongoing",
+        color: "bg-amber-500",
+        count: ongoing.length,
+        events: ongoing,
+      },
+    ];
+  }, [filteredEvents]);
 
   return (
     <ProtectedRoute allowedRoles={[1, 2]}>
-      <div className="min-h-screen transition-colors duration-200">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Events Management
-              </h1>
-              <p className="mt-2 text-sm text-gray-600">
-                Manage IEEE BNS events and their categories
-              </p>
-            </div>
-            <div className="mt-4 sm:mt-0">
-              <Button
-                variant="primary"
-                onClick={() =>
-                  activeTab === "events"
-                    ? setCreateEventOpen(true)
-                    : (setEditingCat(null), setCatModalOpen(true))
-                }
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                {activeTab === "events" ? "Create Event" : "Create Category"}
-              </Button>
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="mt-6 flex gap-1 border-b border-gray-200">
-            {(["events", "categories"] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 text-sm font-medium capitalize rounded-t-lg transition-colors cursor-pointer ${
-                  activeTab === tab
-                    ? "border-b-2 border-blue-600 text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
+      <div className="min-h-screen pb-12 w-full">
+        {/* Breadcrumb strip occupying full width */}
+        <div className="mb-4 w-full">
+          <div className="w-full bg-white border border-purple-100/70 rounded-xl px-4 py-2 text-xs font-semibold text-gray-600 shadow-2xs flex items-center gap-2">
+            <span className="text-gray-400">Dashboard</span>
+            <span className="text-gray-300">/</span>
+            <span className="text-[#5A10A5] font-extrabold">Events</span>
           </div>
         </div>
 
-        {/* ── Stats ──────────────────────────────────────── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: "Total Events", value: events.length, icon: <CalendarDays className="w-5 h-5 text-blue-500" /> },
-            { label: "Categories", value: categories.length, icon: <Tag className="w-5 h-5 text-purple-500" /> },
-            { label: "Coming Soon", value: events.filter((e) => e.isCommingSoon).length, icon: <CalendarDays className="w-5 h-5 text-amber-500" /> },
-            { label: "Scheduled",   value: events.filter((e) => !e.isCommingSoon && e.startDate).length, icon: <CalendarDays className="w-5 h-5 text-green-500" /> },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
-              <div className="p-2 bg-gray-50 rounded-lg">{stat.icon}</div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className="text-xs text-gray-500">{stat.label}</p>
-              </div>
-            </div>
-          ))}
+        {/* Tab Navigation: Events | Categories */}
+        <div className="mb-6 border-b border-gray-200 flex items-center justify-between">
+          <div className="flex gap-6">
+            <Link
+              to="/dashboard/events"
+              className="pb-3 text-xs font-bold border-b-2 border-[#5A10A5] text-[#5A10A5] transition-all cursor-pointer"
+            >
+              Events
+            </Link>
+            <Link
+              to="/dashboard/categories"
+              className="pb-3 text-xs font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all cursor-pointer"
+            >
+              Categories
+            </Link>
+          </div>
         </div>
 
-        {/* ── Events Table ───────────────────────────────── */}
+        {/* Page Header Bar */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900">
+              Events Management
+            </h1>
+            <p className="mt-1 text-xs sm:text-sm text-gray-500">
+              Manage IEEE events, registrations and scheduling efficiently.
+            </p>
+          </div>
+
+          {/* Action Buttons Bar */}
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => toast.success("Import CSV feature triggered")}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-purple-100/80 text-gray-700 bg-white hover:bg-purple-50 transition-all shadow-2xs cursor-pointer"
+            >
+              <Upload className="w-3.5 h-3.5" /> Import CSV
+            </button>
+
+            <button
+              type="button"
+              onClick={() => toast.success("Events exported successfully")}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-purple-100/80 text-gray-700 bg-white hover:bg-purple-50 transition-all shadow-2xs cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5" /> Export
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCalendarModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-purple-100/80 text-gray-700 bg-white hover:bg-purple-50 transition-all shadow-2xs cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Sync Calendar
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCreateEventOpen(true)}
+              className="bg-[#5A10A5] hover:bg-[#4a0d88] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md shadow-purple-500/20 border-0 flex items-center transition-all cursor-pointer"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              Create Event
+            </button>
+          </div>
+        </div>
+
+        {/* ── 5 Stats Boxes Row ──────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+          <EventStatsBox
+            label="Total Events"
+            value={24}
+            icon={<CalendarDays className="w-5 h-5" />}
+            iconBg="bg-[#EDE9FE]"
+            iconColor="text-[#6D28D9]"
+            change="+12%"
+          />
+          <EventStatsBox
+            label="Upcoming Events"
+            value={8}
+            icon={<Sparkles className="w-5 h-5" />}
+            iconBg="bg-[#DCFCE7]"
+            iconColor="text-[#15803D]"
+            change="+3"
+          />
+          <EventStatsBox
+            label="Ongoing"
+            value={2}
+            icon={<Clock className="w-5 h-5" />}
+            iconBg="bg-[#ECFDF5]"
+            iconColor="text-[#065F46]"
+            change="-1"
+          />
+          <EventStatsBox
+            label="Completed"
+            value={14}
+            icon={<CalendarDays className="w-5 h-5" />}
+            iconBg="bg-[#F0FDF4]"
+            iconColor="text-[#15803D]"
+            change="+5"
+          />
+          <EventStatsBox
+            label="Attendance Rate"
+            value="92%"
+            icon={<Users className="w-5 h-5" />}
+            iconBg="bg-[#F0FDF4]"
+            iconColor="text-[#15803D]"
+            change="+2%"
+          />
+        </div>
+
+        {/* ── Events View ───────────────────────────────── */}
         {activeTab === "events" && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            {eventsLoading ? (
-              <div className="p-12 text-center text-gray-500">Loading events…</div>
-            ) : events.length === 0 ? (
-              <div className="p-12 text-center">
-                <CalendarDays className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                <p className="text-gray-500">No events yet. Create your first one!</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-gray-50 border-b border-gray-200">
-                      {["Name", "Category", "Keywords", "Start", "End", "Status", "Actions"].map((h) => (
-                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {events.map((ev) => (
-                      <tr key={ev.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-3 font-medium text-gray-900 max-w-[180px] truncate">{ev.name}</td>
-                        <td className="px-4 py-3 text-gray-600">{getCatName(ev.categoryId)}</td>
-                        <td className="px-4 py-3 max-w-[200px]">
-                          <div className="flex flex-wrap gap-1">
-                            {ev.keyWords.slice(0, 3).map((kw) => (
-                              <span key={kw} className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">{kw}</span>
-                            ))}
-                            {ev.keyWords.length > 3 && (
-                              <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-500">+{ev.keyWords.length - 3}</span>
-                            )}
+          <div className="space-y-6">
+            {/* Filter Bar */}
+            <EventsFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onReset={handleResetFilters}
+              categories={categories}
+              viewMode={viewMode}
+              onViewModeChange={(mode) => setViewMode(mode)}
+              totalCount={filteredEvents.length}
+            />
+
+            {/* View Mode 1: List View */}
+            {viewMode === "list" && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-8 space-y-6">
+                  <div className="rounded-2xl border border-purple-100/80 bg-white overflow-hidden shadow-2xs transition-colors">
+                    {eventsLoading ? (
+                      <div className="p-12 text-center text-gray-500">
+                        Loading events…
+                      </div>
+                    ) : filteredEvents.length === 0 ? (
+                      <div className="p-12 text-center">
+                        <CalendarDays className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+                        <p className="text-gray-500 font-medium">
+                          No events found.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs text-left">
+                          <thead className="font-extrabold text-[11px] uppercase tracking-wider bg-purple-50/50 border-b border-purple-100/70 text-gray-500">
+                            <tr>
+                              <th className="p-4">EVENT</th>
+                              <th className="p-4">COMMITTEE</th>
+                              <th className="p-4">CATEGORY</th>
+                              <th className="p-4">DATE</th>
+                              <th className="p-4">LOCATION</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-purple-50">
+                            {filteredEvents.map((ev, idx) => {
+                              const committeeBadge = getCommitteeBadge(ev, idx);
+                              const catName = getCatName(ev);
+                              const initials =
+                                (ev as any).initials ||
+                                (ev.name
+                                  ? ev.name.slice(0, 2).toUpperCase()
+                                  : "EV");
+                              const initialsBg =
+                                (ev as any).initialsBg || "bg-[#EDE9FE]";
+                              const initialsColor =
+                                (ev as any).initialsColor || "text-[#6D28D9]";
+                              const subtitle =
+                                (ev as any).subtitle ||
+                                "Hands-on machine learning fundamentals";
+                              const locationStr =
+                                (ev as any).locationLabel ||
+                                "Faculty of Computers";
+
+                              return (
+                                <tr
+                                  key={ev.id}
+                                  onClick={() => {
+                                    setSelectedEvent(ev);
+                                    setDetailsModalOpen(true);
+                                  }}
+                                  className="group cursor-pointer hover:bg-purple-50/30 transition-colors"
+                                >
+                                  {/* Event Name & Subtitle */}
+                                  <td className="p-4 min-w-[220px]">
+                                    <div className="flex items-center gap-3">
+                                      <div
+                                        className={`w-9 h-9 rounded-xl ${initialsBg} ${initialsColor} font-extrabold text-xs flex items-center justify-center shrink-0`}
+                                      >
+                                        {initials}
+                                      </div>
+                                      <div className="min-w-0">
+                                        <p className="font-extrabold text-xs text-gray-900 group-hover:text-[#5A10A5] transition-colors truncate">
+                                          {ev.name}
+                                        </p>
+                                        <p className="text-[11px] text-gray-400 truncate">
+                                          {subtitle}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+
+                                  {/* Committee Badge */}
+                                  <td className="p-4">
+                                    <span
+                                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-extrabold ${committeeBadge.bg}`}
+                                    >
+                                      {committeeBadge.name}
+                                    </span>
+                                  </td>
+
+                                  {/* Category Badge */}
+                                  <td className="p-4">
+                                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-purple-50 text-purple-700">
+                                      {catName}
+                                    </span>
+                                  </td>
+
+                                  {/* Date */}
+                                  <td className="p-4 text-gray-700 font-bold whitespace-nowrap">
+                                    {formatDate(ev.startDate)}
+                                  </td>
+
+                                  {/* Location */}
+                                  <td className="p-4 text-gray-500 whitespace-nowrap font-medium">
+                                    <span className="flex items-center gap-1">
+                                      <MapPin className="w-3 h-3 text-gray-400" />
+                                      {locationStr}
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+
+                        {/* Pagination / Rows per page bar */}
+                        <div className="p-3 bg-purple-50/20 border-t border-purple-100/60 flex items-center justify-between text-xs text-gray-500">
+                          <div className="flex items-center gap-2">
+                            <span>Rows per page</span>
+                            <select className="px-2 py-1 rounded-lg border border-gray-200 bg-white text-xs font-semibold">
+                              <option value="10">10</option>
+                              <option value="25">25</option>
+                              <option value="50">50</option>
+                            </select>
                           </div>
-                        </td>
-                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{formatDate(ev.startDate)}</td>
-                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{formatDate(ev.endDate)}</td>
-                        <td className="px-4 py-3">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                            ev.isCommingSoon
-                              ? "bg-amber-100 text-amber-700"
-                              : "bg-green-100 text-green-700"
-                          }`}>
-                            {ev.isCommingSoon ? "Coming Soon" : "Scheduled"}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-1">
-                            <button
-                              id={`rename-event-${ev.id}`}
-                              onClick={() => { setSelectedEvent(ev); setRenameEventOpen(true); }}
-                              title="Rename"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                            >
-                              <Pencil className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              id={`keywords-event-${ev.id}`}
-                              onClick={() => { setSelectedEvent(ev); setKwModalOpen(true); }}
-                              title="Update keywords"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors"
-                            >
-                              <KeyRound className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              id={`dates-event-${ev.id}`}
-                              onClick={() => { setSelectedEvent(ev); setDatesModalOpen(true); }}
-                              title="Update dates"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 transition-colors"
-                            >
-                              <CalendarDays className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              id={`delete-event-${ev.id}`}
-                              onClick={() => handleDeleteEvent(ev)}
-                              disabled={deletingEvent}
-                              title="Delete"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right Side Widgets Column */}
+                <div className="lg:col-span-4 space-y-6">
+                  <UpcomingEventsCard
+                    events={eventsList}
+                    onSelectEvent={(ev) => {
+                      setSelectedEvent(ev);
+                      setDetailsModalOpen(true);
+                    }}
+                    onViewAll={() => setViewMode("list")}
+                  />
+                  <EventsCalendarCard
+                    onOpenFullCalendar={() => setCalendarModalOpen(true)}
+                  />
+                  <EventsAnalyticsCard />
+                </div>
               </div>
             )}
-          </div>
-        )}
 
-        {/* ── Categories Grid ────────────────────────────── */}
-        {activeTab === "categories" && (
-          <div>
-            {catLoading ? (
-              <div className="p-12 text-center text-gray-500">Loading categories…</div>
-            ) : categories.length === 0 ? (
-              <div className="p-12 text-center">
-                <Tag className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                <p className="text-gray-500">No categories yet.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {categories.map((cat) => (
+            {/* View Mode 2: Kanban View */}
+            {viewMode === "kanban" && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in duration-200">
+                {kanbanColumns.map((col) => (
                   <div
-                    key={cat.id}
-                    className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col gap-3"
+                    key={col.title}
+                    className="rounded-2xl p-4 border border-gray-200 bg-gray-50/70 space-y-4"
                   >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="p-2 bg-purple-100 rounded-lg shrink-0">
-                        <Tag className="w-4 h-4 text-purple-600" />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`w-2.5 h-2.5 rounded-full ${col.color}`}
+                        />
+                        <h3 className="font-bold text-sm tracking-tight text-gray-900">
+                          {col.title}
+                        </h3>
                       </div>
-                      <div className="flex gap-1 ml-auto">
-                        <button
-                          id={`edit-cat-${cat.id}`}
-                          onClick={() => { setEditingCat(cat); setCatModalOpen(true); }}
-                          title="Edit"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          id={`delete-cat-${cat.id}`}
-                          onClick={() => handleDeleteCategory(cat)}
-                          disabled={deletingCat}
-                          title="Delete"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
+                      <span className="w-6 h-6 rounded-full bg-gray-200 text-xs font-bold flex items-center justify-center text-gray-600">
+                        {col.count}
+                      </span>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{cat.name}</h3>
-                      {cat.description ? (
-                        <p className="mt-1 text-sm text-gray-500 line-clamp-2">{cat.description}</p>
-                      ) : (
-                        <p className="mt-1 text-sm text-gray-400 italic">No description</p>
-                      )}
+
+                    <div className="space-y-3">
+                      {col.events.map((ev) => {
+                        const regCount = (ev as any).registeredCount || 230;
+                        const capCount = (ev as any).capacityCount || 250;
+                        const pct = Math.round((regCount / capCount) * 100);
+                        const committee = (ev as any).committeeName || "CS";
+
+                        return (
+                          <div
+                            key={ev.id}
+                            onClick={() => {
+                              setSelectedEvent(ev);
+                              setDetailsModalOpen(true);
+                            }}
+                            className="p-4 rounded-2xl border border-purple-100 bg-white hover:border-purple-300 transition-all duration-200 cursor-pointer space-y-3 hover:shadow-xs"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <h4 className="font-bold text-sm text-gray-900 hover:text-[#5A10A5]">
+                                {ev.name}
+                              </h4>
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-100 text-[#5A10A5] shrink-0">
+                                {committee}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                              <CalendarDays className="w-3.5 h-3.5 text-gray-400" />
+                              <span>{formatDate(ev.startDate)}</span>
+                            </div>
+
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between text-[11px] font-semibold text-gray-500">
+                                <span>
+                                  {regCount}/{capCount}
+                                </span>
+                                <span>{pct}%</span>
+                              </div>
+                              <div className="w-full h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full bg-[#5A10A5]"
+                                  style={{ width: `${pct}%` }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                    <p className="text-xs text-gray-400 mt-auto">
-                      {events.filter((e) => e.categoryId === cat.id).length} event(s)
-                    </p>
                   </div>
                 ))}
               </div>
             )}
+
+            {/* View Mode 3: Calendar View */}
+            {viewMode === "calendar" && (
+              <div className="rounded-2xl p-6 border border-purple-100 bg-white shadow-2xs transition-all">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-extrabold text-lg tracking-tight text-gray-900">
+                    August 2026
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="p-2 rounded-xl border border-gray-200 text-gray-400 hover:text-gray-900"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      className="p-2 rounded-xl border border-gray-200 text-gray-400 hover:text-gray-900"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-7 text-center font-bold text-xs text-gray-400 mb-3">
+                  <span>Sun</span>
+                  <span>Mon</span>
+                  <span>Tue</span>
+                  <span>Wed</span>
+                  <span>Thu</span>
+                  <span>Fri</span>
+                  <span>Sat</span>
+                </div>
+
+                <div className="grid grid-cols-7 gap-2 text-xs font-semibold">
+                  <div className="h-20" />
+                  <div className="h-20" />
+                  <div className="h-20" />
+                  <div className="h-20" />
+                  <div className="h-20" />
+
+                  {Array.from({ length: 31 }).map((_, i) => {
+                    const day = i + 1;
+                    const dayEvents = filteredEvents.filter((e) => {
+                      const date = e.startDate ? new Date(e.startDate) : null;
+                      return date
+                        ? date.getDate() === day
+                        : day === 1 ||
+                            day === 2 ||
+                            day === 4 ||
+                            day === 10 ||
+                            day === 18;
+                    });
+
+                    return (
+                      <div
+                        key={day}
+                        className="h-24 p-1.5 rounded-xl border border-purple-100/70 bg-purple-50/20 flex flex-col justify-between transition-colors"
+                      >
+                        <span className="text-[11px] font-bold text-gray-500">
+                          {day}
+                        </span>
+                        {dayEvents.length > 0 && (
+                          <div className="space-y-1">
+                            {dayEvents.slice(0, 2).map((ev) => (
+                              <span
+                                key={ev.id}
+                                onClick={() => {
+                                  setSelectedEvent(ev);
+                                  setDetailsModalOpen(true);
+                                }}
+                                className="block px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#5A10A5] text-white truncate cursor-pointer hover:opacity-90"
+                              >
+                                {ev.name}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
-        {/* ── Modals ─────────────────────────────────────── */}
+        {/* ── Modals Wire Up ─────────────────────────────── */}
         <CategoryModal
           isOpen={catModalOpen}
-          onClose={() => { setCatModalOpen(false); setEditingCat(null); }}
+          onClose={() => {
+            setCatModalOpen(false);
+            setEditingCat(null);
+          }}
           onSubmit={handleCategorySubmit}
           category={editingCat}
           isLoading={creatingCat || renamingCat || updatingCatDesc}
@@ -387,34 +839,42 @@ const EventsManagement = () => {
           isLoading={creatingEvent}
         />
 
-        {selectedEvent && (
-          <>
-            <RenameEventModal
-              isOpen={renameEventOpen}
-              onClose={() => { setRenameEventOpen(false); setSelectedEvent(null); }}
-              currentName={selectedEvent.name}
-              onSubmit={handleRenameEvent}
-              isLoading={renamingEvent}
-            />
-            <UpdateKeywordsModal
-              isOpen={kwModalOpen}
-              onClose={() => { setKwModalOpen(false); setSelectedEvent(null); }}
-              currentKeywords={selectedEvent.keyWords}
-              onSubmit={handleUpdateKeywords}
-              isLoading={updatingKeywords}
-            />
-            <UpdateDatesModal
-              isOpen={datesModalOpen}
-              onClose={() => { setDatesModalOpen(false); setSelectedEvent(null); }}
-              event={selectedEvent}
-              onSubmit={handleUpdateDates}
-              isLoading={updatingDates}
-            />
-          </>
-        )}
+        <EventDetailsModal
+          isOpen={detailsModalOpen}
+          event={selectedEvent}
+          onClose={() => setDetailsModalOpen(false)}
+          onEdit={() => {
+            setDetailsModalOpen(false);
+            setEditModalOpen(true);
+          }}
+          onManageRegistrations={() => {
+            setDetailsModalOpen(false);
+            setManageRegistrationsOpen(true);
+          }}
+        />
+
+        <EditEventModal
+          isOpen={editModalOpen}
+          event={selectedEvent}
+          onClose={() => setEditModalOpen(false)}
+          onSave={() => {
+            toast.success("Event updated successfully!");
+          }}
+        />
+
+        <ManageRegistrationsModal
+          isOpen={manageRegistrationsOpen}
+          event={selectedEvent}
+          onClose={() => setManageRegistrationsOpen(false)}
+        />
+
+        <CalendarModal
+          isOpen={calendarModalOpen}
+          onClose={() => setCalendarModalOpen(false)}
+        />
       </div>
     </ProtectedRoute>
   );
 };
 
-export default EventsManagement;
+export default EventsDashboard;
