@@ -56,75 +56,8 @@ export default function DashboardMeetings() {
     useState<string>("All Committees");
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>("Date");
 
-  // Default fallback meetings if backend returns empty or null
-  const defaultMeetings: Meeting[] = [
-    {
-      id: 1,
-      title: "Weekly Committee Meeting",
-      type: "Upcoming",
-      description:
-        "Weekly sync to review ongoing design tasks, share progress updates, and align on sprint deliverables.",
-      recap: "Time: 10:00 AM - 11:30 AM",
-      committeeId: 1,
-      headId: 1,
-      users: [],
-      createdAt: "2025-07-22",
-    },
-    {
-      id: 2,
-      title: "Project Kickoff Meeting",
-      type: "Completed",
-      description:
-        "Initial meeting to introduce the new autonomous navigation project, assign roles, and set milestones.",
-      recap: "Time: 02:00 PM - 03:30 PM",
-      committeeId: 2,
-      headId: 2,
-      users: [],
-      createdAt: "2025-07-18",
-    },
-    {
-      id: 3,
-      title: "Design System Review",
-      type: "Completed",
-      description:
-        "Reviewing the newly created component library, design tokens, and theme configurations.",
-      recap: "Time: 01:00 PM - 02:30 PM",
-      committeeId: 1,
-      headId: 1,
-      users: [],
-      createdAt: "2025-07-15",
-    },
-    {
-      id: 4,
-      title: "IEEE Annual Board Planning",
-      type: "Upcoming",
-      description:
-        "Strategic alignment meeting for the upcoming IEEE BSU annual conference and student events.",
-      recap: "Time: 04:00 PM - 05:30 PM",
-      committeeId: 3,
-      headId: 3,
-      users: [],
-      createdAt: "2025-07-28",
-    },
-    {
-      id: 5,
-      title: "Web Development Workshop Sync",
-      type: "Cancelled",
-      description:
-        "Coordination meeting for front-end workshop tutors and lab space allocation.",
-      recap: "Time: 11:00 AM - 12:00 PM",
-      committeeId: 4,
-      headId: 4,
-      users: [],
-      createdAt: "2025-07-12",
-    },
-  ];
-
   const meetingsList = useMemo(() => {
-    if (rawMeetings && rawMeetings.length > 0) {
-      return rawMeetings;
-    }
-    return defaultMeetings;
+    return rawMeetings || [];
   }, [rawMeetings]);
 
   // Filtered meetings
@@ -163,6 +96,23 @@ export default function DashboardMeetings() {
   const cancelledCount = meetingsList.filter(
     (m) => m.type === "Cancelled",
   ).length;
+
+  const averageAttendanceRate = useMemo(() => {
+    if (!meetingsList || meetingsList.length === 0) return 0;
+    const meetingsWithUsers = meetingsList.filter(
+      (m) => m.users && Array.isArray(m.users) && m.users.length > 0
+    );
+    if (meetingsWithUsers.length === 0) return 100;
+
+    const totalPct = meetingsWithUsers.reduce((acc, m) => {
+      const attendedCount = m.users.filter(
+        (u: any) => u.attended || u.isAttended || u.status === "attended"
+      ).length;
+      return acc + (attendedCount / m.users.length) * 100;
+    }, 0);
+
+    return Math.round(totalPct / meetingsWithUsers.length);
+  }, [meetingsList]);
 
   // Handle Reset Filters
   const handleResetFilters = () => {
@@ -313,8 +263,8 @@ export default function DashboardMeetings() {
           Icon={<TrendingUp className="w-5 h-5" color="#5A10A5" />}
           iconBackground="#EDE5F8"
           isDark={isDark}
-          number={89}
-          subText="+6% from last month"
+          number={averageAttendanceRate}
+          subText="System average"
           text="AVERAGE ATTENDANCE"
         />
       </div>

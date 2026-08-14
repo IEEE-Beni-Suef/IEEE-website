@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { FolderOpen } from "lucide-react";
+import { useAllArticles } from "~/hooks/useApi";
 
 interface CategoryStat {
   id: string | number;
@@ -13,32 +14,31 @@ interface TopCategoriesProps {
 }
 
 export function TopCategoriesWidget({ categories }: TopCategoriesProps) {
-  const defaultCategories: CategoryStat[] = [
-    { id: "1", name: "Technical", count: 5, color: "bg-[#5A10A5]" },
-    { id: "2", name: "Workshop", count: 3, color: "bg-blue-500" },
-    { id: "3", name: "Research", count: 2, color: "bg-emerald-500" },
-    { id: "4", name: "Competition", count: 1, color: "bg-rose-500" },
-    { id: "5", name: "Community", count: 1, color: "bg-amber-500" },
-  ];
+  const { data: articles = [] } = useAllArticles();
 
-  const categoryList: CategoryStat[] =
-    categories && categories.length > 0
-      ? categories.map((cat, idx) => ({
-          id: cat.id,
-          name: cat.name,
-          count: cat.articleCount || Math.floor(Math.random() * 4) + 1,
-          color:
-            idx % 5 === 0
-              ? "bg-[#5A10A5]"
-              : idx % 5 === 1
-              ? "bg-blue-500"
-              : idx % 5 === 2
-              ? "bg-emerald-500"
-              : idx % 5 === 3
-              ? "bg-rose-500"
-              : "bg-amber-500",
-        }))
-      : defaultCategories;
+  const categoryList: CategoryStat[] = useMemo(() => {
+    if (!categories || categories.length === 0) return [];
+    return categories.map((cat, idx) => {
+      const articleCount = Array.isArray(articles)
+        ? articles.filter((a: any) => a.categoryId === cat.id).length
+        : cat.articleCount || 0;
+      return {
+        id: cat.id,
+        name: cat.name,
+        count: articleCount || 1,
+        color:
+          idx % 5 === 0
+            ? "bg-[#5A10A5]"
+            : idx % 5 === 1
+            ? "bg-blue-500"
+            : idx % 5 === 2
+            ? "bg-emerald-500"
+            : idx % 5 === 3
+            ? "bg-rose-500"
+            : "bg-amber-500",
+      };
+    });
+  }, [categories, articles]);
 
   const total = categoryList.reduce((acc, c) => acc + c.count, 0) || 1;
 

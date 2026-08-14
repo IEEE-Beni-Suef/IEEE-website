@@ -285,7 +285,7 @@ export const DashboardCommitteeCard: React.FC<DashboardCommitteeCardProps> = ({
                 isDark ? "text-white" : "text-[#0D1B3E]"
               }`}
             >
-              {committee.memberCount ?? 42}
+              {committee.memberCount ?? 0}
             </p>
             <p className="text-[11px] text-[#64748B] font-medium">
               Members
@@ -303,7 +303,7 @@ export const DashboardCommitteeCard: React.FC<DashboardCommitteeCardProps> = ({
                 isDark ? "text-white" : "text-[#0D1B3E]"
               }`}
             >
-              {committee.tasksCount ?? 24}
+              {committee.tasksCount ?? 0}
             </p>
             <p className="text-[11px] text-[#64748B] font-medium">
               Tasks
@@ -321,7 +321,7 @@ export const DashboardCommitteeCard: React.FC<DashboardCommitteeCardProps> = ({
                 isDark ? "text-white" : "text-[#0D1B3E]"
               }`}
             >
-              {committee.meetingsCount ?? 8}
+              {committee.meetingsCount ?? 0}
             </p>
             <p className="text-[11px] text-[#64748B] font-medium">
               Meetings
@@ -355,14 +355,14 @@ export const DashboardCommitteeCard: React.FC<DashboardCommitteeCardProps> = ({
                   isDark ? "text-white" : "text-[#0D1B3E]"
                 }`}
               >
-                {committee.healthScore ?? 85}%
+                {committee.healthScore ?? 0}%
               </span>
             </div>
             <span
               className="text-[11px] font-bold block text-center mt-1"
               style={{ color: cardTheme.primary }}
             >
-              {committee.healthStatus || "Great"}
+              {committee.healthStatus || "Active"}
             </span>
           </div>
         </div>

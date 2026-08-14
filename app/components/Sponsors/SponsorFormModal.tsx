@@ -62,13 +62,14 @@ export function SponsorFormModal({
   const onFormSubmit = async (data: SponsorFormData) => {
     try {
       const formData = new FormData();
+      formData.append("name", data.title);
       formData.append("title", data.title);
       formData.append("description", data.description);
 
       if (selectedFile) {
-        // Appending as "img" since the interface expects "img", but backend may expect "photo" or "file". 
-        // We will use "photo" to be consistent with Article, but if it fails, we can adjust it.
         formData.append("photo", selectedFile);
+        formData.append("img", selectedFile);
+        formData.append("file", selectedFile);
       }
 
       await onSubmit(formData);

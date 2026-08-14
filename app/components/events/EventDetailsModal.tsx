@@ -44,25 +44,25 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
         day: "numeric",
         year: "numeric",
       })
-    : "Aug 1, 2025";
+    : "TBD";
 
   const timeStr = event.startDate
     ? new Date(event.startDate).toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
       })
-    : "6:00 PM";
+    : "TBD";
 
-  const registeredCount = 230;
-  const capacityCount = 250;
-  const fillPercentage = Math.round((registeredCount / capacityCount) * 100);
+  const isPast = event.endDate ? new Date(event.endDate) < new Date() : false;
+  const statusLabel = event.isCommingSoon ? "Coming Soon" : isPast ? "Completed" : "Registration Open";
+  const statusBg = event.isCommingSoon
+    ? "bg-amber-400/20 text-amber-300 border-amber-300/30"
+    : isPast
+    ? "bg-gray-400/20 text-gray-300 border-gray-300/30"
+    : "bg-emerald-400/20 text-emerald-300 border-emerald-300/30";
 
-  const agenda = [
-    { step: 1, title: "Introduction to ML" },
-    { step: 2, title: "Hands-on TensorFlow" },
-    { step: 3, title: "Model Deployment" },
-    { step: 4, title: "Q&A Session" },
-  ];
+  const categoryName = event.categoryName || (event.category ? event.category.name : "IEEE Event");
+  const keywords = event.keyWords || [];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-end bg-black/50 backdrop-blur-xs animate-in fade-in duration-200">
@@ -88,20 +88,19 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
             <div>
               <h2 className="text-xl font-bold tracking-tight">{event.name}</h2>
               <p className="text-xs text-purple-200 mt-0.5">
-                Hands-on machine learning fundamentals
+                IEEE BNS Event Details
               </p>
             </div>
           </div>
 
           {/* Status Badges */}
           <div className="flex items-center gap-2 mt-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-400/20 border border-emerald-300/30 text-emerald-300">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Registration Open
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusBg}`}>
+              <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
+              {statusLabel}
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 border border-white/20 text-purple-100">
-              <span className="w-2 h-2 rounded-full bg-purple-300" />
-              On Track
+              {categoryName}
             </span>
           </div>
         </div>
@@ -113,7 +112,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
             <div className="p-3.5 rounded-2xl border border-purple-100 bg-purple-50/40">
               <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
                 <Calendar className="w-3.5 h-3.5 text-[#5A10A5]" />
-                Date
+                Start Date
               </div>
               <p className="font-semibold text-sm text-gray-900">{dateStr}</p>
             </div>
@@ -126,90 +125,33 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
               <p className="font-semibold text-sm text-gray-900">{timeStr}</p>
             </div>
 
-            <div className="p-3.5 rounded-2xl border border-purple-100 bg-purple-50/40">
-              <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
-                <MapPin className="w-3.5 h-3.5 text-[#5A10A5]" />
-                Location
-              </div>
-              <p className="font-semibold text-sm text-gray-900 truncate">Faculty of Computers</p>
-            </div>
-
-            <div className="p-3.5 rounded-2xl border border-purple-100 bg-purple-50/40">
-              <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
-                <Building className="w-3.5 h-3.5 text-[#5A10A5]" />
-                Committee
-              </div>
-              <p className="font-semibold text-sm text-gray-900">CS</p>
-            </div>
-
-            <div className="p-3.5 rounded-2xl border border-purple-100 bg-purple-50/40">
+            <div className="p-3.5 rounded-2xl border border-purple-100 bg-purple-50/40 col-span-2">
               <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
                 <Tag className="w-3.5 h-3.5 text-[#5A10A5]" />
                 Category
               </div>
-              <p className="font-semibold text-sm text-gray-900">Workshop</p>
-            </div>
-
-            <div className="p-3.5 rounded-2xl border border-purple-100 bg-purple-50/40">
-              <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
-                <UserCheck className="w-3.5 h-3.5 text-[#5A10A5]" />
-                Speaker
-              </div>
-              <p className="font-semibold text-sm text-gray-900 truncate">Dr. Ahmed Hassan</p>
+              <p className="font-semibold text-sm text-gray-900">{categoryName}</p>
             </div>
           </div>
 
-          {/* Registration Progress Box */}
-          <div className="p-4 rounded-2xl border border-purple-100 bg-purple-50/40 space-y-2.5">
-            <div className="flex items-center justify-between text-xs font-semibold text-gray-500">
-              <span className="flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-[#5A10A5]" />
-                Registration Progress
-              </span>
-            </div>
-
-            <div className="flex items-baseline justify-between">
-              <span className="text-2xl font-bold text-gray-900">
-                {registeredCount}
-              </span>
-              <span className="text-xs font-medium text-gray-500">
-                / {capacityCount} seats
-              </span>
-            </div>
-
-            <div className="w-full h-3 rounded-full bg-gray-200 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-amber-400 transition-all duration-500"
-                style={{ width: `${fillPercentage}%` }}
-              />
-            </div>
-
-            <p className="text-xs text-gray-500 font-medium">
-              {fillPercentage}% capacity filled
-            </p>
-          </div>
-
-          {/* Agenda Section */}
-          <div className="space-y-3">
-            <h4 className="font-bold text-sm tracking-tight text-gray-900">
-              Agenda
-            </h4>
+          {/* Keywords / Tags Section */}
+          {keywords.length > 0 && (
             <div className="space-y-2">
-              {agenda.map((item) => (
-                <div
-                  key={item.step}
-                  className="p-3 rounded-xl border border-purple-100 bg-purple-50/30 flex items-center gap-3"
-                >
-                  <span className="w-6 h-6 rounded-full bg-purple-100 text-[#5A10A5] font-bold text-xs flex items-center justify-center shrink-0">
-                    {item.step}
+              <h4 className="font-bold text-xs uppercase tracking-wider text-gray-400">
+                Keywords & Topics
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {keywords.map((kw, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-[#5A10A5]"
+                  >
+                    #{kw}
                   </span>
-                  <span className="text-sm font-semibold text-gray-800">
-                    {item.title}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Footer Action Buttons */}

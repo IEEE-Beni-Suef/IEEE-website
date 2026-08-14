@@ -73,20 +73,20 @@ export function ArticleDetailsModal({
   const currentArticle = detailedArticle || article;
   if (!currentArticle) return null;
 
-  const title = currentArticle.title || "Cybersecurity Essentials for IEEE Members";
+  const title = currentArticle.title || "Untitled Article";
   const photo =
     currentArticle.photo ||
     currentArticle.image ||
     "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80";
   const categoryName = getCategoryName(currentArticle.categoryId);
-  const authorName = currentArticle.authorName || "Mostafa Ali";
-  const authorRole = currentArticle.authorRole || "Technical Writer";
-  const date = currentArticle.publishedDate || "Aug 1, 2025";
-  const readTime = currentArticle.readTime || "5 min read";
-  const views = currentArticle.views || "4.4K";
-  const likes = currentArticle.likes || 128;
-  const status = currentArticle.status || "Scheduled";
-  const keywords = currentArticle.keywords || ["Cybersecurity", "IEEE", "Security", "Network"];
+  const authorName = currentArticle.authorName || currentArticle.author?.name || "IEEE Member";
+  const authorRole = currentArticle.authorRole || "Author";
+  const date = currentArticle.publishedDate || (currentArticle.createdAt ? new Date(currentArticle.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent");
+  const readTime = currentArticle.readTime || "3 min read";
+  const views = currentArticle.views !== undefined && currentArticle.views !== null ? currentArticle.views : 0;
+  const likes = currentArticle.likes !== undefined && currentArticle.likes !== null ? currentArticle.likes : 0;
+  const status = currentArticle.status || "Published";
+  const keywords = currentArticle.keywords || [];
 
   const onSubmitNew = async (data: SubsectionFormData) => {
     const formData = new FormData();
@@ -120,7 +120,7 @@ export function ArticleDetailsModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
       <div
         className={`w-full max-w-3xl rounded-3xl shadow-2xl border overflow-hidden transition-all max-h-[90vh] flex flex-col ${
           isDark
@@ -128,20 +128,20 @@ export function ArticleDetailsModal({
             : "bg-white border-purple-100 text-gray-900"
         }`}
       >
-        {/* Banner Hero Image Header (Matching View Button Overlay design) */}
+        {/* Banner Hero Image Header */}
         <div className="relative h-56 sm:h-64 w-full bg-gray-900 shrink-0">
           <img
             src={photo}
             alt={title}
             className="w-full h-full object-cover opacity-90"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
           {/* Close button top right */}
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-xs transition-colors"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -149,14 +149,14 @@ export function ArticleDetailsModal({
           {/* Badges & Title in Banner */}
           <div className="absolute bottom-4 left-6 right-6 space-y-2 text-white">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#5A10A5]">
+              <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-[#5A10A5] text-white shadow-md">
                 {status}
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-xs">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
                 {categoryName}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight line-clamp-2">
+            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight line-clamp-2 text-white drop-shadow-md">
               {title}
             </h2>
           </div>
@@ -167,20 +167,20 @@ export function ArticleDetailsModal({
           {/* Author Metadata Bar */}
           <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-[#253047]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-950 text-[#5A10A5] dark:text-purple-300 font-bold text-sm flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-950 text-[#5A10A5] dark:text-purple-300 font-extrabold text-sm flex items-center justify-center border border-purple-200 dark:border-purple-800">
                 {authorName.slice(0, 2).toUpperCase()}
               </div>
               <div>
                 <p className="text-sm font-bold text-gray-900 dark:text-white leading-tight">
                   {authorName}
                 </p>
-                <p className="text-xs text-gray-400">{authorRole}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{authorRole}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-xs font-medium text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-4 text-xs font-semibold text-gray-600 dark:text-gray-300">
               <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-purple-500" /> {date}
+                <Clock className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> {date}
               </span>
               <span>•</span>
               <span>{readTime}</span>
@@ -194,12 +194,12 @@ export function ArticleDetailsModal({
             </div>
           </div>
 
-          {/* Description Section */}
-          <div className="space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+          {/* Description / Overview Box */}
+          <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-[#161F33] border border-purple-100/80 dark:border-[#253047] space-y-2">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#5A10A5] dark:text-purple-300">
               Overview
             </h4>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
+            <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-medium">
               {currentArticle.description}
             </p>
           </div>

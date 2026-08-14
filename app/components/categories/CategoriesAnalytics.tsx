@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { PieChart } from "lucide-react";
+import { useApiCategories, useApiEvents } from "~/hooks/useEventsAndCategories";
+
+const COLORS = ["#5A10A5", "#4460EF", "#D97706", "#059669", "#DC2626"];
 
 export function CategoriesAnalytics() {
-  const data = [
-    { label: "Workshop", count: 12, color: "#5A10A5" },
-    { label: "Competition", count: 8, color: "#4460EF" },
-    { label: "Seminar", count: 5, color: "#D97706" },
-    { label: "Bootcamp", count: 10, color: "#059669" },
-  ];
+  const { data: categories = [] } = useApiCategories();
+  const { data: events = [] } = useApiEvents();
+
+  const data = useMemo(() => {
+    if (!categories || categories.length === 0) return [];
+    return categories.map((cat: any, idx: number) => {
+      const catEventsCount = Array.isArray(events)
+        ? events.filter((ev: any) => ev.categoryId === cat.id).length
+        : 0;
+      return {
+        label: cat.name,
+        count: catEventsCount || 1,
+        color: COLORS[idx % COLORS.length],
+      };
+    });
+  }, [categories, events]);
+
+  const totalEvents = useMemo(() => {
+    return data.reduce((acc, curr) => acc + curr.count, 0) || 1;
+  }, [data]);
 
   return (
     <div className="bg-white border border-purple-100/80 rounded-2xl p-5 shadow-2xs space-y-4">
@@ -43,46 +60,22 @@ export function CategoriesAnalytics() {
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
-            {/* Workshop segment (35%) */}
-            <path
-              stroke="#5A10A5"
-              strokeWidth="4.5"
-              strokeDasharray="35, 100"
-              strokeDashoffset="0"
-              strokeLinecap="round"
-              fill="none"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-            {/* Bootcamp segment (28%) */}
-            <path
-              stroke="#059669"
-              strokeWidth="4.5"
-              strokeDasharray="28, 100"
-              strokeDashoffset="-37"
-              strokeLinecap="round"
-              fill="none"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-            {/* Competition segment (22%) */}
-            <path
-              stroke="#4460EF"
-              strokeWidth="4.5"
-              strokeDasharray="22, 100"
-              strokeDashoffset="-67"
-              strokeLinecap="round"
-              fill="none"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-            {/* Seminar segment (15%) */}
-            <path
-              stroke="#D97706"
-              strokeWidth="4.5"
-              strokeDasharray="13, 100"
-              strokeDashoffset="-90"
-              strokeLinecap="round"
-              fill="none"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
+            {data.map((item, idx) => {
+              const pct = totalEvents > 0 ? Math.round((item.count / totalEvents) * 100) : 0;
+              const prevSum = data.slice(0, idx).reduce((acc, curr) => acc + (totalEvents > 0 ? Math.round((curr.count / totalEvents) * 100) : 0), 0);
+              return (
+                <path
+                  key={idx}
+                  stroke={item.color}
+                  strokeWidth="4.5"
+                  strokeDasharray={`${pct}, 100`}
+                  strokeDashoffset={-prevSum}
+                  strokeLinecap="round"
+                  fill="none"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+              );
+            })}
           </svg>
         </div>
       </div>

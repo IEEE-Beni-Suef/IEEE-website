@@ -21,110 +21,6 @@ export function meta() {
   ];
 }
 
-const MOCK_TASKS: TaskItem[] = [
-  {
-    id: 1,
-    title: "Redesign IEEE Website Landing Page",
-    committee: "Web Team",
-    priority: "High",
-    status: "In Progress",
-    deadline: "Oct 25, 2023",
-    progress: 85,
-    assignees: [
-      {
-        name: "Omar Khaled",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-      },
-      {
-        name: "Nouran Ahmed",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
-      },
-      {
-        name: "Mostafa Ali",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
-      },
-      {
-        name: "Wael Youssef",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
-      },
-    ],
-    attachmentsCount: 3,
-    commentsCount: 5,
-  },
-  {
-    id: 2,
-    title: "UI/UX Design System Update",
-    committee: "UI/UX Design",
-    priority: "Medium",
-    status: "Review",
-    deadline: "Oct 28, 2023",
-    progress: 40,
-    assignees: [
-      {
-        name: "Sara Mohamed",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
-      },
-      {
-        name: "Tariq Helmy",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
-      },
-    ],
-    attachmentsCount: 12,
-    commentsCount: 8,
-  },
-  {
-    id: 3,
-    title: "Social Media Campaign for Event",
-    committee: "PR Team",
-    priority: "Low",
-    status: "Completed",
-    deadline: "Nov 02, 2023",
-    progress: 100,
-    assignees: [
-      {
-        name: "Mohammed Sharaf",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-      },
-    ],
-    attachmentsCount: 1,
-    commentsCount: 0,
-  },
-  {
-    id: 4,
-    title: "Robotics Workshop Preparation & Hardware Setup",
-    committee: "Robotics",
-    priority: "Medium",
-    status: "In Progress",
-    deadline: "Nov 05, 2023",
-    progress: 52,
-    assignees: [
-      {
-        name: "Wael Youssef",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
-      },
-    ],
-    attachmentsCount: 4,
-    commentsCount: 7,
-  },
-  {
-    id: 5,
-    title: "New Member Orientation Plan",
-    committee: "HR",
-    priority: "Low",
-    status: "To Do",
-    deadline: "Nov 12, 2023",
-    progress: 10,
-    assignees: [
-      {
-        name: "Sara Mohamed",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
-      },
-    ],
-    attachmentsCount: 1,
-    commentsCount: 2,
-  },
-];
-
 const INITIAL_FILTERS: TaskFilterState = {
   search: "",
   committee: "",
@@ -135,7 +31,7 @@ const INITIAL_FILTERS: TaskFilterState = {
 export function TasksManagementView() {
   const [viewMode, setViewMode] = useState<TaskViewMode>("list");
   const [filters, setFilters] = useState<TaskFilterState>(INITIAL_FILTERS);
-  const [tasksList, setTasksList] = useState<TaskItem[]>(MOCK_TASKS);
+  const [tasksList, setTasksList] = useState<TaskItem[]>([]);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);

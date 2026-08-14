@@ -1,24 +1,45 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CheckSquare, ArrowRight } from "lucide-react";
 import { useTheme } from "~/hooks/useTheme";
+import { useCommittees, useAllMeetings } from "~/hooks/useApi";
 
 interface TopCommitteesTasksWidgetProps {
   onViewFullReport: () => void;
 }
 
+const COLORS = ["#3B82F6", "#7C3AED", "#EA580C", "#0D9488", "#16A34A", "#DC2626"];
+
 export const TopCommitteesTasksWidget: React.FC<TopCommitteesTasksWidgetProps> = ({
   onViewFullReport,
 }) => {
   const { isDark } = useTheme();
+  const { data: committees = [] } = useCommittees();
+  const { data: meetings = [] } = useAllMeetings();
 
-  const tasksData = [
-    { name: "Web Committee", tasks: "24 Tasks", color: "#3B82F6", width: "100%" },
-    { name: "UI/UX Committee", tasks: "18 Tasks", color: "#7C3AED", width: "75%" },
-    { name: "PR Committee", tasks: "15 Tasks", color: "#EA580C", width: "62%" },
-    { name: "CS Committee", tasks: "14 Tasks", color: "#0D9488", width: "58%" },
-    { name: "HR Committee", tasks: "12 Tasks", color: "#16A34A", width: "50%" },
-    { name: "Robotics", tasks: "9 Tasks", color: "#DC2626", width: "37%" },
-  ];
+  const tasksData = useMemo(() => {
+    if (!committees || committees.length === 0) return [];
+
+    const list = committees.map((c: any, idx: number) => {
+      const committeeMeetings = Array.isArray(meetings)
+        ? meetings.filter((m: any) => m.committeeId === c.id).length
+        : 0;
+      const totalCount = committeeMeetings || c.memberCount || 1;
+      return {
+        name: c.name,
+        count: totalCount,
+        color: COLORS[idx % COLORS.length],
+      };
+    });
+
+    const maxCount = Math.max(...list.map((item) => item.count), 1);
+
+    return list.map((item) => ({
+      name: item.name,
+      tasks: `${item.count} Activity`,
+      color: item.color,
+      width: `${Math.round((item.count / maxCount) * 100)}%`,
+    }));
+  }, [committees, meetings]);
 
   return (
     <div

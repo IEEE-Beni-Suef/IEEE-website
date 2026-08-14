@@ -40,81 +40,6 @@ export function meta() {
   ];
 }
 
-const MOCK_CATEGORIES: CategoryItem[] = [
-  {
-    id: "cat-1",
-    name: "Workshop",
-    description: "Hands-on technical skill-building sessions with guided instruction and practice.",
-    status: "Active",
-    totalEvents: 12,
-    upcomingEvents: 3,
-    createdDate: "Jan 10, 2026",
-    lastUpdated: "2 days ago",
-    color: "#5A10A5",
-    bgColor: "#EEE3FA",
-  },
-  {
-    id: "cat-2",
-    name: "Bootcamp",
-    description: "Intensive multi-day training programs on specific technical domains.",
-    status: "Active",
-    totalEvents: 10,
-    upcomingEvents: 2,
-    createdDate: "Feb 20, 2026",
-    lastUpdated: "5 days ago",
-    color: "#059669",
-    bgColor: "#D1FAE5",
-  },
-  {
-    id: "cat-3",
-    name: "Competition",
-    description: "Competitive engineering and innovation challenges for IEEE members.",
-    status: "Active",
-    totalEvents: 8,
-    upcomingEvents: 2,
-    createdDate: "Jan 15, 2026",
-    lastUpdated: "1 week ago",
-    color: "#4460EF",
-    bgColor: "#E8ECFD",
-  },
-  {
-    id: "cat-4",
-    name: "Seminar",
-    description: "Expert-led informational talks and presentations on emerging technologies.",
-    status: "Active",
-    totalEvents: 5,
-    upcomingEvents: 1,
-    createdDate: "Feb 2, 2026",
-    lastUpdated: "3 days ago",
-    color: "#D97706",
-    bgColor: "#FEF3C7",
-  },
-  {
-    id: "cat-5",
-    name: "Orientation",
-    description: "Welcome ceremonies and onboarding for new IEEE student branch members.",
-    status: "Active",
-    totalEvents: 4,
-    upcomingEvents: 1,
-    createdDate: "Jan 08, 2026",
-    lastUpdated: "4 days ago",
-    color: "#DC2626",
-    bgColor: "#FEE2E2",
-  },
-  {
-    id: "cat-6",
-    name: "Summit",
-    description: "Annual high-level leadership and networking conference.",
-    status: "Hidden",
-    totalEvents: 2,
-    upcomingEvents: 0,
-    createdDate: "Nov 12, 2025",
-    lastUpdated: "1 month ago",
-    color: "#6B7280",
-    bgColor: "#F3F4F6",
-  },
-];
-
 const INITIAL_FILTERS: CategoryFilterState = {
   search: "",
   status: "",
@@ -127,8 +52,25 @@ export function CategoryManagementView() {
   // ── API Data ──────────────────────────────────────────
   const { data: apiCategories = [], isLoading: catLoading } = useApiCategories();
   const { mutate: createCategory, isPending: creatingCat } = useCreateApiCategory();
+  const { mutate: deleteCategory } = useDeleteApiCategory();
 
-  const [categoriesList, setCategoriesList] = useState<CategoryItem[]>(MOCK_CATEGORIES);
+  const categoriesList: CategoryItem[] = useMemo(() => {
+    if (apiCategories && Array.isArray(apiCategories) && apiCategories.length > 0) {
+      return apiCategories.map((cat: any) => ({
+        id: String(cat.id),
+        name: cat.name,
+        description: cat.description || "IEEE Event Category",
+        status: "Active",
+        totalEvents: 0,
+        upcomingEvents: 0,
+        createdDate: "Active",
+        lastUpdated: "Recently",
+        color: "#5A10A5",
+        bgColor: "#EEE3FA",
+      }));
+    }
+    return [];
+  }, [apiCategories]);
 
   // Modals state
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -164,63 +106,45 @@ export function CategoryManagementView() {
 
   // Handlers for category actions
   const handleCreateOrUpdateCategory = (data: any) => {
-    if (editingCategory) {
-      setCategoriesList((prev) =>
-        prev.map((c) =>
-          c.id === editingCategory.id
-            ? { ...c, name: data.name, description: data.description, status: data.status }
-            : c
-        )
-      );
-      toast.success("Category updated successfully!");
-      setAddModalOpen(false);
-      setEditingCategory(null);
-    } else {
-      const newCat: CategoryItem = {
-        id: `cat-${Date.now()}`,
-        name: data.name,
-        description: data.description || "IEEE Event Category",
-        status: data.status || "Active",
-        totalEvents: 0,
-        upcomingEvents: 0,
-        createdDate: "Just now",
-        lastUpdated: "Just now",
-        color: data.color || "#5A10A5",
-        bgColor: "#EEE3FA",
-      };
-      setCategoriesList((prev) => [newCat, ...prev]);
-      toast.success("New category created!");
-      setAddModalOpen(false);
-    }
+    createCategory(
+      { name: data.name, description: data.description },
+      {
+        onSuccess: () => {
+          toast.success("Category saved successfully!");
+          setAddModalOpen(false);
+          setEditingCategory(null);
+        },
+        onError: (err) => toast.error((err as Error).message),
+      }
+    );
   };
 
   const handleDuplicateCategory = (cat: CategoryItem) => {
-    const dup: CategoryItem = {
-      ...cat,
-      id: `cat-${Date.now()}`,
-      name: `${cat.name} (Copy)`,
-      totalEvents: 0,
-      upcomingEvents: 0,
-      createdDate: "Just now",
-      lastUpdated: "Just now",
-    };
-    setCategoriesList((prev) => [dup, ...prev]);
-    toast.success(`Duplicated category "${cat.name}"`);
-    setDuplicateModalOpen(false);
+    createCategory(
+      { name: `${cat.name} (Copy)`, description: cat.description },
+      {
+        onSuccess: () => {
+          toast.success(`Duplicated category "${cat.name}"`);
+          setDuplicateModalOpen(false);
+        },
+        onError: (err) => toast.error((err as Error).message),
+      }
+    );
   };
 
   const handleArchiveCategory = (cat: CategoryItem) => {
-    setCategoriesList((prev) =>
-      prev.map((c) => (c.id === cat.id ? { ...c, status: "Hidden" } : c))
-    );
     toast.success(`Archived category "${cat.name}"`);
     setArchiveModalOpen(false);
   };
 
   const handleDeleteCategory = (cat: CategoryItem) => {
-    setCategoriesList((prev) => prev.filter((c) => c.id !== cat.id));
-    toast.success(`Deleted category "${cat.name}"`);
-    setDeleteModalOpen(false);
+    deleteCategory(cat.id, {
+      onSuccess: () => {
+        toast.success(`Deleted category "${cat.name}"`);
+        setDeleteModalOpen(false);
+      },
+      onError: (err: Error) => toast.error(err.message),
+    });
   };
 
   const activeCount = categoriesList.filter((c) => c.status === "Active").length;
@@ -396,12 +320,12 @@ export function CategoryManagementView() {
           <MostUsedCategories />
           <NewestCategory />
           <CategoriesAnalytics />
-          <CategoryRecentActivity />
+          {/* <CategoryRecentActivity /> */}
         </div>
       </div>
 
       {/* Final Card: Category Usage (Bottom full-width) */}
-      <CategoryUsage />
+      {/* <CategoryUsage /> */}
 
       {/* Modals Wire Up */}
       <AddCategoryModal

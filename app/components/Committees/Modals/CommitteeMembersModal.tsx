@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { X, Search } from "lucide-react";
 import { useTheme } from "~/hooks/useTheme";
 import type { CommitteeData } from "../DashboardCommitteeCard";
+import { useAllUsers } from "~/hooks/useApi";
+import { getFullName, getInitials, getRoleName } from "~/utils/utile";
 
 interface CommitteeMembersModalProps {
   isOpen: boolean;
@@ -16,19 +18,32 @@ export const CommitteeMembersModal: React.FC<CommitteeMembersModalProps> = ({
 }) => {
   const { isDark } = useTheme();
   const [search, setSearch] = useState("");
+  const { data: allUsers } = useAllUsers();
 
   if (!isOpen || !committee) return null;
 
-  const mockMembers = [
-    { name: "Omar Khalil", role: "Committee Head", status: "Active", joined: "Joined Mar 2019", initials: "OK", color: "bg-blue-600" },
-    { name: "Ali Hassan", role: "Frontend Dev", status: "Active", joined: "Joined Sep 2021", initials: "AH", color: "bg-indigo-600" },
-    { name: "Dina Mostafa", role: "Backend Dev", status: "Active", joined: "Joined Jan 2022", initials: "DM", color: "bg-purple-600" },
-    { name: "Youssef Adel", role: "DevOps", status: "Active", joined: "Joined Mar 2022", initials: "YA", color: "bg-[#2563EB]" },
-    { name: "Salma Nabil", role: "Frontend Dev", status: "Active", joined: "Joined Oct 2022", initials: "SN", color: "bg-pink-600" },
-    { name: "Khaled Samy", role: "Full Stack", status: "Active", joined: "Joined Feb 2023", initials: "KS", color: "bg-cyan-600" },
-  ];
+  const committeeUsers = Array.isArray(allUsers)
+    ? allUsers.filter((u: any) =>
+        u.committeesId && Array.isArray(u.committeesId)
+          ? u.committeesId.includes(committee.id)
+          : true
+      )
+    : [];
 
-  const filtered = mockMembers.filter(m => m.name.toLowerCase().includes(search.toLowerCase()) || m.role.toLowerCase().includes(search.toLowerCase()));
+  const displayMembers = committeeUsers.map((u: any) => ({
+    name: getFullName(u),
+    role: getRoleName(u.roleId),
+    status: u.isActive ? "Active" : "Pending",
+    joined: u.email || "Member",
+    initials: getInitials(u),
+    color: u.isActive ? "bg-purple-600" : "bg-amber-600",
+  }));
+
+  const filtered = displayMembers.filter(
+    (m) =>
+      m.name.toLowerCase().includes(search.toLowerCase()) ||
+      m.role.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">

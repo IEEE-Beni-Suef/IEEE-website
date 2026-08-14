@@ -66,131 +66,6 @@ const formatDate = (iso: string | null) =>
       })
     : "Aug 1, 2025";
 
-// Mock Events matching Figma screenshot exactly
-const MOCK_EVENTS: (ApiEvent & {
-  statusLabel?: string;
-  registeredCount?: number;
-  capacityCount?: number;
-  committeeName?: string;
-  subtitle?: string;
-  initials?: string;
-  initialsBg?: string;
-  initialsColor?: string;
-  categoryLabel?: string;
-  locationLabel?: string;
-})[] = [
-  {
-    id: "mock-1",
-    name: "AI Workshop",
-    subtitle: "Hands-on machine learning fundamentals",
-    keyWords: ["AI", "ML", "Python"],
-    startDate: "2025-08-01T18:00:00.000Z",
-    endDate: "2025-08-01T20:00:00.000Z",
-    isCommingSoon: false,
-    categoryId: "cat-1",
-    categoryName: "Workshop",
-    createdAt: "2025-01-01T00:00:00.000Z",
-    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
-    categoryLabel: "Workshop",
-    statusLabel: "Registration Open",
-    registeredCount: 230,
-    capacityCount: 250,
-    committeeName: "CS",
-    initials: "AW",
-    initialsBg: "bg-[#EDE9FE]",
-    initialsColor: "text-[#6D28D9]",
-    locationLabel: "Faculty of Computers",
-  },
-  {
-    id: "mock-2",
-    name: "Orientation Day",
-    subtitle: "Welcome ceremony for new IEEE members",
-    keyWords: ["Orientation", "IEEE", "Welcome"],
-    startDate: "2025-08-02T10:00:00.000Z",
-    endDate: "2025-08-02T13:00:00.000Z",
-    isCommingSoon: true,
-    categoryId: "cat-2",
-    categoryName: "Orientation",
-    createdAt: "2025-01-01T00:00:00.000Z",
-    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
-    categoryLabel: "Orientation",
-    statusLabel: "Coming Soon",
-    registeredCount: 150,
-    capacityCount: 250,
-    committeeName: "General",
-    initials: "OD",
-    initialsBg: "bg-[#EDE9FE]",
-    initialsColor: "text-[#6D28D9]",
-    locationLabel: "Main Hall",
-  },
-  {
-    id: "mock-3",
-    name: "Flutter Bootcamp",
-    subtitle: "3-day mobile development intensive",
-    keyWords: ["Flutter", "Mobile", "Dart"],
-    startDate: "2025-08-04T14:00:00.000Z",
-    endDate: "2025-08-04T17:00:00.000Z",
-    isCommingSoon: false,
-    categoryId: "cat-3",
-    categoryName: "Bootcamp",
-    createdAt: "2025-01-01T00:00:00.000Z",
-    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
-    categoryLabel: "Bootcamp",
-    statusLabel: "Ongoing",
-    registeredCount: 180,
-    capacityCount: 200,
-    committeeName: "CS",
-    initials: "FB",
-    initialsBg: "bg-gray-100",
-    initialsColor: "text-gray-700",
-    locationLabel: "Lab 201",
-  },
-  {
-    id: "mock-4",
-    name: "PCB Design Seminar",
-    subtitle: "Circuit board design best practices",
-    keyWords: ["Robotics", "Hardware"],
-    startDate: "2025-07-20T13:00:00.000Z",
-    endDate: "2025-07-20T15:00:00.000Z",
-    isCommingSoon: false,
-    categoryId: "cat-4",
-    categoryName: "Seminar",
-    createdAt: "2025-01-01T00:00:00.000Z",
-    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
-    categoryLabel: "Seminar",
-    statusLabel: "Registration Open",
-    registeredCount: 80,
-    capacityCount: 200,
-    committeeName: "PES",
-    initials: "PD",
-    initialsBg: "bg-[#DCFCE7]",
-    initialsColor: "text-[#15803D]",
-    locationLabel: "Engineering...",
-  },
-  {
-    id: "mock-5",
-    name: "Leadership Summit",
-    subtitle: "Annual High Board leadership program",
-    keyWords: ["Leadership", "Summit"],
-    startDate: "2025-07-15T09:00:00.000Z",
-    endDate: "2025-07-15T16:00:00.000Z",
-    isCommingSoon: false,
-    categoryId: "cat-5",
-    categoryName: "Summit",
-    createdAt: "2025-01-01T00:00:00.000Z",
-    lastUpdatedAt: "2025-01-01T00:00:00.000Z",
-    categoryLabel: "Summit",
-    statusLabel: "Registration Open",
-    registeredCount: 210,
-    capacityCount: 250,
-    committeeName: "General",
-    initials: "LS",
-    initialsBg: "bg-[#FEE2E2]",
-    initialsColor: "text-[#991B1B]",
-    locationLabel: "Conference...",
-  },
-];
-
 const INITIAL_FILTERS: FilterState = {
   search: "",
   category: "",
@@ -213,7 +88,7 @@ const EventsDashboard = () => {
   const { data: apiEvents = [], isLoading: eventsLoading } = useApiEvents();
 
   const eventsList = useMemo(() => {
-    return apiEvents.length > 0 ? apiEvents : MOCK_EVENTS;
+    return apiEvents || [];
   }, [apiEvents]);
 
   // ── Category mutations ────────────────────────────────
@@ -460,43 +335,43 @@ const EventsDashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <EventStatsBox
             label="Total Events"
-            value={24}
+            value={eventsList.length}
             icon={<CalendarDays className="w-5 h-5" />}
             iconBg="bg-[#EDE9FE]"
             iconColor="text-[#6D28D9]"
-            change="+12%"
+            change="System total"
           />
           <EventStatsBox
             label="Upcoming Events"
-            value={8}
+            value={eventsList.filter((e) => e.isCommingSoon || !e.endDate || (e.startDate ? new Date(e.startDate) > new Date() : false)).length}
             icon={<Sparkles className="w-5 h-5" />}
             iconBg="bg-[#DCFCE7]"
             iconColor="text-[#15803D]"
-            change="+3"
+            change="Scheduled"
           />
           <EventStatsBox
             label="Ongoing"
-            value={2}
+            value={eventsList.filter((e) => !e.isCommingSoon && e.startDate && new Date(e.startDate) <= new Date() && (!e.endDate || new Date(e.endDate) >= new Date())).length}
             icon={<Clock className="w-5 h-5" />}
             iconBg="bg-[#ECFDF5]"
             iconColor="text-[#065F46]"
-            change="-1"
+            change="Active now"
           />
           <EventStatsBox
             label="Completed"
-            value={14}
+            value={eventsList.filter((e) => e.endDate ? new Date(e.endDate) < new Date() : false).length}
             icon={<CalendarDays className="w-5 h-5" />}
             iconBg="bg-[#F0FDF4]"
             iconColor="text-[#15803D]"
-            change="+5"
+            change="Past events"
           />
           <EventStatsBox
-            label="Attendance Rate"
-            value="92%"
+            label="Categories"
+            value={categories.length}
             icon={<Users className="w-5 h-5" />}
             iconBg="bg-[#F0FDF4]"
             iconColor="text-[#15803D]"
-            change="+2%"
+            change="Active categories"
           />
         </div>
 

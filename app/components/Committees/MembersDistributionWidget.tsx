@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { TrendingUp, ArrowRight } from "lucide-react";
 import { useTheme } from "~/hooks/useTheme";
+import { useCommittees, useAllUsers } from "~/hooks/useApi";
 
 interface MembersDistributionWidgetProps {
   onViewFullReport: () => void;
 }
 
+const COLORS = ["#2563EB", "#7F56D9", "#DC2626", "#16A34A", "#EA580C", "#0891B2", "#D97706"];
+
 export const MembersDistributionWidget: React.FC<MembersDistributionWidgetProps> = ({
   onViewFullReport,
 }) => {
   const { isDark } = useTheme();
+  const { data: committees = [] } = useCommittees();
+  const { data: allUsers = [] } = useAllUsers();
 
-  const data = [
-    { name: "Web", count: 42, color: "#2563EB" },
-    { name: "UI/UX", count: 38, color: "#7F56D9" },
-    { name: "Robotics", count: 45, color: "#DC2626" },
-    { name: "HR", count: 31, color: "#16A34A" },
-    { name: "PR", count: 29, color: "#EA580C" },
-    { name: "CS", count: 36, color: "#0891B2" },
-  ];
+  const data = useMemo(() => {
+    if (!committees || committees.length === 0) return [];
+    return committees.map((c: any, idx: number) => {
+      const userCount = Array.isArray(allUsers)
+        ? allUsers.filter((u: any) => u.committeesId && Array.isArray(u.committeesId) && u.committeesId.includes(c.id)).length
+        : c.memberCount || 0;
+      return {
+        name: c.name.replace(/committee/i, "").trim(),
+        count: userCount || c.memberCount || 1,
+        color: COLORS[idx % COLORS.length],
+      };
+    });
+  }, [committees, allUsers]);
+
+  const totalMembers = useMemo(() => {
+    return data.reduce((acc, item) => acc + item.count, 0);
+  }, [data]);
 
   return (
     <div
@@ -38,70 +52,27 @@ export const MembersDistributionWidget: React.FC<MembersDistributionWidgetProps>
         {/* Donut Chart SVG Container */}
         <div className="flex justify-center my-4 relative">
           <svg className="w-36 h-36 transform -rotate-90" viewBox="0 0 36 36">
-            <circle
-              cx="18"
-              cy="18"
-              r="14"
-              fill="transparent"
-              stroke="#2563EB"
-              strokeWidth="5"
-              strokeDasharray="21 79"
-              strokeDashoffset="0"
-            />
-            <circle
-              cx="18"
-              cy="18"
-              r="14"
-              fill="transparent"
-              stroke="#7F56D9"
-              strokeWidth="5"
-              strokeDasharray="18 82"
-              strokeDashoffset="-21"
-            />
-            <circle
-              cx="18"
-              cy="18"
-              r="14"
-              fill="transparent"
-              stroke="#DC2626"
-              strokeWidth="5"
-              strokeDasharray="21 79"
-              strokeDashoffset="-39"
-            />
-            <circle
-              cx="18"
-              cy="18"
-              r="14"
-              fill="transparent"
-              stroke="#16A34A"
-              strokeWidth="5"
-              strokeDasharray="15 85"
-              strokeDashoffset="-60"
-            />
-            <circle
-              cx="18"
-              cy="18"
-              r="14"
-              fill="transparent"
-              stroke="#EA580C"
-              strokeWidth="5"
-              strokeDasharray="13 87"
-              strokeDashoffset="-75"
-            />
-            <circle
-              cx="18"
-              cy="18"
-              r="14"
-              fill="transparent"
-              stroke="#0891B2"
-              strokeWidth="5"
-              strokeDasharray="17 83"
-              strokeDashoffset="-88"
-            />
+            {data.map((item, idx) => {
+              const pct = totalMembers > 0 ? (item.count / totalMembers) * 100 : 0;
+              const prevPctSum = data.slice(0, idx).reduce((acc, curr) => acc + (totalMembers > 0 ? (curr.count / totalMembers) * 100 : 0), 0);
+              return (
+                <circle
+                  key={idx}
+                  cx="18"
+                  cy="18"
+                  r="14"
+                  fill="transparent"
+                  stroke={item.color}
+                  strokeWidth="5"
+                  strokeDasharray={`${pct} ${100 - pct}`}
+                  strokeDashoffset={-prevPctSum}
+                />
+              );
+            })}
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-xs font-semibold text-gray-400">Total</span>
-            <span className="text-sm font-extrabold">221</span>
+            <span className="text-sm font-extrabold">{totalMembers}</span>
           </div>
         </div>
 
@@ -109,11 +80,11 @@ export const MembersDistributionWidget: React.FC<MembersDistributionWidgetProps>
         <div className="grid grid-cols-2 gap-2 text-xs mt-3">
           {data.map((item, idx) => (
             <div key={idx} className="flex items-center justify-between p-1.5 rounded-lg bg-gray-50 dark:bg-[#161F33]">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="font-medium text-gray-700 dark:text-gray-300">{item.name}</span>
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                <span className="font-medium text-gray-700 dark:text-gray-300 truncate">{item.name}</span>
               </div>
-              <span className="font-bold">{item.count}</span>
+              <span className="font-bold shrink-0 ml-1">{item.count}</span>
             </div>
           ))}
         </div>

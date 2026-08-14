@@ -868,12 +868,11 @@ export const getSponsorByIdApi = async (id: number): Promise<ISponsorCard> => {
 
 export const createSponsorApi = async <T = any>(data: any): Promise<T> => {
   try {
-    const config = data instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
-    const response = await apiClient.post("/Sponsors", data, config);
+    const response = await apiClient.post("/Sponsors", data);
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to create Sponsor");
+      throw new Error(error.response?.data?.message || error.response?.data || "Failed to create Sponsor");
     }
     throw new Error("An unexpected error occurred");
   }
@@ -881,12 +880,11 @@ export const createSponsorApi = async <T = any>(data: any): Promise<T> => {
 
 export const updateSponsorApi = async <T = any>(id: number, data: any): Promise<T> => {
   try {
-    const config = data instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
-    const response = await apiClient.put(`/Sponsors/${id}`, data, config);
+    const response = await apiClient.put(`/Sponsors/${id}`, data);
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message || "Failed to update Sponsor");
+      throw new Error(error.response?.data?.message || error.response?.data || "Failed to update Sponsor");
     }
     throw new Error("An unexpected error occurred");
   }

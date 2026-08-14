@@ -31,7 +31,8 @@ export default function DashboardEmails() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("announcement");
   const [sendOption, setSendOption] = useState<"now" | "schedule">("now");
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
-  const [selectedRecipientCount, setSelectedRecipientCount] = useState<number>(127);
+  const [selectedRecipientCount, setSelectedRecipientCount] = useState<number>(0);
+  const activeRecipientCount = selectedRecipientCount || users.length;
 
   // Modals visibility state
   const [isDraftModalOpen, setIsDraftModalOpen] = useState(false);
@@ -123,22 +124,22 @@ export default function DashboardEmails() {
         {/* Stats Boxes Grid (4 Cards) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <EmailStatsBox
-            title="TOTAL EMAILS"
-            value="248"
+            title="TOTAL RECIPIENTS"
+            value={users.length > 0 ? String(users.length) : "0"}
             icon={<Mail />}
             iconColor="#5A10A5"
             iconBackground="#F3E8FF"
           />
           <EmailStatsBox
-            title="SENT TODAY"
-            value="18"
+            title="ACTIVE MEMBERS"
+            value={users.length > 0 ? String(users.filter((u: any) => u.isActive).length) : "0"}
             icon={<Send />}
             iconColor="#4460EF"
             iconBackground="#EEF2FF"
           />
           <EmailStatsBox
             title="SCHEDULED"
-            value="8"
+            value="0"
             icon={<Clock />}
             iconColor="#17A2B8"
             iconBackground="#E0F7FA"
@@ -146,7 +147,7 @@ export default function DashboardEmails() {
           />
           <EmailStatsBox
             title="DRAFTS"
-            value="5"
+            value="0"
             icon={<FileEdit />}
             iconColor="#FFC107"
             iconBackground="#FFF8E1"
@@ -181,9 +182,9 @@ export default function DashboardEmails() {
             />
 
             <EmailRecipientsCard
-              selectedCount={selectedRecipientCount}
+              selectedCount={activeRecipientCount}
               onSelectionChange={(groups) => {
-                setSelectedRecipientCount(groups.length * 42 || 127);
+                setSelectedRecipientCount(groups.length > 0 ? groups.length * 15 : users.length);
               }}
             />
           </div>
@@ -217,7 +218,7 @@ export default function DashboardEmails() {
           isOpen={isDraftModalOpen}
           onClose={() => setIsDraftModalOpen(false)}
           subject={subject}
-          recipientsCount={selectedRecipientCount}
+          recipientsCount={activeRecipientCount}
           lastSavedTime={lastSavedTime}
         />
 
@@ -226,7 +227,7 @@ export default function DashboardEmails() {
           onClose={() => setIsPreviewModalOpen(false)}
           subject={subject}
           body={body}
-          recipientsCount={selectedRecipientCount}
+          recipientsCount={activeRecipientCount}
           onSend={() => setIsSendConfirmModalOpen(true)}
         />
 
@@ -234,7 +235,7 @@ export default function DashboardEmails() {
           isOpen={isScheduleModalOpen}
           onClose={() => setIsScheduleModalOpen(false)}
           subject={subject}
-          recipientsCount={selectedRecipientCount}
+          recipientsCount={activeRecipientCount}
           onConfirmSchedule={(dateTime) => {
             toast.success(`Email scheduled for ${dateTime}`);
           }}
@@ -245,7 +246,7 @@ export default function DashboardEmails() {
           onClose={() => setIsSendConfirmModalOpen(false)}
           subject={subject}
           body={body}
-          recipientsCount={selectedRecipientCount}
+          recipientsCount={activeRecipientCount}
           isSending={isSending}
           onConfirmSend={handleConfirmSend}
         />

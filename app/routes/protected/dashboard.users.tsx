@@ -227,18 +227,18 @@ export default function UsersManagement() {
           <UserStatsCard
             icon={<Users color="#5A10A5" size={20} />}
             iconBackground="#F3E8FF"
-            subText="↑ 2 this week"
+            subText="Registered members"
             subTextColor="#09800F"
             title="Total Members"
-            number={44}
+            number={data?.length || 0}
           />
           <UserStatsCard
             icon={<UserCheck color="#09800F" size={20} />}
             iconBackground="#09800F1A"
-            subText="↑ 5 active now"
+            subText="Active in system"
             subTextColor="#09800F"
             title="Active Members"
-            number={12}
+            number={data?.filter((u: any) => u.isActive).length || 0}
           />
           <UserStatsCard
             icon={<TriangleAlert color="#FFC107" size={20} />}
@@ -246,7 +246,7 @@ export default function UsersManagement() {
             subText="Requires your approval"
             subTextColor="#6C757D"
             title="Pending Approvals"
-            number={32}
+            number={data?.filter((u: any) => !u.isActive).length || 0}
             extraButtonText="review now"
             extraButtonBackground="#FEF3C7"
             extraButtonColor="#B45309"
@@ -255,10 +255,10 @@ export default function UsersManagement() {
           <UserStatsCard
             icon={<GraduationCap color="#5A10A5" size={20} />}
             iconBackground="#F3E8FF"
-            subText="Alumni all members"
+            subText="Inactive members"
             subTextColor="#6C757D"
-            title="Alumni"
-            number={15}
+            title="Inactive Members"
+            number={data?.filter((u: any) => !u.isActive).length || 0}
           />
         </div>
 
@@ -674,8 +674,17 @@ export default function UsersManagement() {
         <ApproveModal
           isOpen={showPendingApprovals}
           onClose={() => setShowPendingApprovals(false)}
-          members={pendingApprovalsData}
-          isLoading={false} // TODO: Replace with actual loading state from API
+          members={(data || [])
+            .filter((u: any) => !u.isActive)
+            .map((u: any) => ({
+              id: u.id,
+              name: getFullName(u),
+              role: getRoleName(u.roleId),
+              date: "Pending Approval",
+              status: "pending",
+              avatar: getInitials(u),
+            }))}
+          isLoading={isLoading}
         />
 
         {/* TODO: Success Notification Modal after user creation */}

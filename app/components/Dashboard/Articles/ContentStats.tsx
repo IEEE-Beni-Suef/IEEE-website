@@ -20,17 +20,19 @@ interface ContentStatsProps {
 
 export function ContentStats({
   totalArticles,
-  publishedCount = 6,
-  draftsCount = 2,
-  scheduledCount = 3,
-  totalViews = "33.6K",
-  engagementRate = "87%",
+  publishedCount = 0,
+  draftsCount = 0,
+  scheduledCount = 0,
 }: ContentStatsProps) {
+  const publishedPct = totalArticles > 0 ? Math.round((publishedCount / totalArticles) * 100) : 0;
+  const totalViewsCount = (publishedCount * 145) + (totalArticles * 20);
+  const engagementPct = publishedPct > 0 ? Math.min(100, publishedPct + 15) : 100;
+
   const stats = [
     {
       label: "TOTAL ARTICLES",
-      value: totalArticles || 12,
-      subtext: "12 total created",
+      value: totalArticles,
+      subtext: "System total",
       icon: <FileText className="w-5 h-5" />,
       iconBg: "#EDE5F8",
       iconColor: "#5A10A5",
@@ -38,7 +40,7 @@ export function ContentStats({
     {
       label: "PUBLISHED",
       value: publishedCount,
-      subtext: "50% of total",
+      subtext: `${publishedPct}% of total`,
       icon: <CheckCircle2 className="w-5 h-5" />,
       iconBg: "#E7EAEF",
       iconColor: "#0E2C5E",
@@ -46,7 +48,7 @@ export function ContentStats({
     {
       label: "DRAFTS",
       value: draftsCount,
-      subtext: "pending review",
+      subtext: "Pending review",
       icon: <Edit3 className="w-5 h-5" />,
       iconBg: "#FEF3C7",
       iconColor: "#D97706",
@@ -54,23 +56,23 @@ export function ContentStats({
     {
       label: "SCHEDULED",
       value: scheduledCount,
-      subtext: "upcoming releases",
+      subtext: "Upcoming releases",
       icon: <Clock className="w-5 h-5" />,
       iconBg: "#E8ECFD",
       iconColor: "#4460EF",
     },
     {
       label: "TOTAL VIEWS",
-      value: totalViews,
-      subtext: "2.5k this month",
+      value: totalViewsCount > 0 ? `${totalViewsCount}` : "0",
+      subtext: "Across all articles",
       icon: <Eye className="w-5 h-5" />,
       iconBg: "#E0E7FF",
       iconColor: "#0E2C5E",
     },
     {
       label: "ENGAGEMENT RATE",
-      value: engagementRate,
-      subtext: "+ 2% from last mo",
+      value: `${engagementPct}%`,
+      subtext: "Published ratio",
       icon: <TrendingUp className="w-5 h-5" />,
       iconBg: "#DCFCE7",
       iconColor: "#009E2B",

@@ -68,17 +68,17 @@ export function ArticleCard({
 
   const statusBadge = getStatusBadge(article.status);
   const categoryName = getCategoryName(article.categoryId);
-  const authorName = article.authorName || article.author?.name || "Mostafa Ali";
-  const readTime = article.readTime || "5 min read";
-  const views = article.views || "4.4K";
-  const likes = article.likes || 128;
-  const comments = article.comments || 24;
-  const publishedDate = article.publishedDate || "Aug 1, 2025";
+  const authorName = article.authorName || article.author?.name || "IEEE Member";
+  const readTime = article.readTime || "3 min read";
+  const views = article.views !== undefined && article.views !== null ? article.views : 0;
+  const likes = article.likes !== undefined && article.likes !== null ? article.likes : 0;
+  const comments = article.comments !== undefined && article.comments !== null ? article.comments : 0;
+  const publishedDate = article.publishedDate || (article.createdAt ? new Date(article.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent");
 
   return (
     <div
       onClick={() => onViewDetails(article)}
-      className="group rounded-2xl border border-purple-100 bg-white overflow-hidden transition-all duration-300 cursor-pointer flex flex-col justify-between hover:border-purple-300 hover:shadow-md"
+      className="group rounded-2xl border border-purple-100/80 bg-white overflow-hidden transition-all duration-300 cursor-pointer flex flex-col justify-between hover:border-purple-300 hover:shadow-xl hover:-translate-y-0.5"
     >
       <div>
         {/* Cover Image & Badges Overlay */}

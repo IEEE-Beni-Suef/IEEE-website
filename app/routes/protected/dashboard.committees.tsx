@@ -19,6 +19,7 @@ import {
   useCreateCommittee,
   useUpdateCommittee,
   useAllUsers,
+  useAllMeetings,
 } from "~/hooks/useApi";
 import type { Committee } from "~/types";
 
@@ -52,95 +53,13 @@ export function meta() {
   ];
 }
 
-const DEFAULT_COMMITTEES: CommitteeData[] = [
-  {
-    id: 1,
-    name: "Backend Committee",
-    description:
-      "Responsible for core server APIs, database schema design, and microservices architecture.",
-    headId: 101,
-    headName: "Omar Khalil",
-    headEmail: "omar@ieee-sb.org",
-    headPhone: "+20 100 123 4567",
-    viceHeadName: "Ramy Ahmed",
-    memberCount: 42,
-    tasksCount: 24,
-    meetingsCount: 8,
-    healthScore: 94,
-    healthStatus: "Excellent",
-    status: "Active",
-    recruitmentStatus: "Open",
-    location: "Faculty of Engineering, Lab 2",
-    foundedDate: "March 2019",
-  },
-  {
-    id: 2,
-    name: "UI/UX Committee",
-    description:
-      "Designing modern, accessible UI layouts, component libraries, and user experience flows.",
-    headId: 102,
-    headName: "Sara Ahmed",
-    headEmail: "sara@ieee-sb.org",
-    headPhone: "+20 101 234 5678",
-    viceHeadName: "Menna Mohammad",
-    memberCount: 42,
-    tasksCount: 24,
-    meetingsCount: 8,
-    healthScore: 92,
-    healthStatus: "Excellent",
-    status: "Active",
-    recruitmentStatus: "Open",
-    location: "Design Studio, Room 4",
-    foundedDate: "Jan 2020",
-  },
-  {
-    id: 3,
-    name: "Web Committee",
-    description:
-      "Responsible for building and maintaining all IEEE SB web platforms, member portal, and digital tools.",
-    headId: 103,
-    headName: "Omar Khalil",
-    headEmail: "omar@ieee-sb.org",
-    headPhone: "+20 100 123 4567",
-    viceHeadName: "Ali Hassan",
-    memberCount: 42,
-    tasksCount: 24,
-    meetingsCount: 8,
-    healthScore: 95,
-    healthStatus: "Excellent",
-    status: "Active",
-    recruitmentStatus: "Open",
-    location: "Faculty of Engineering, Lab 3",
-    foundedDate: "March 2019",
-  },
-  {
-    id: 4,
-    name: "Robotics Committee",
-    description:
-      "Building autonomous systems, microcontroller firmware, sensors, and robotics competitions.",
-    headId: 104,
-    headName: "Mohamed Sherif",
-    headEmail: "sherif@ieee-sb.org",
-    headPhone: "+20 102 345 6789",
-    viceHeadName: "Khaled Samy",
-    memberCount: 45,
-    tasksCount: 18,
-    meetingsCount: 6,
-    healthScore: 88,
-    healthStatus: "Good",
-    status: "Active",
-    recruitmentStatus: "Open",
-    location: "Robotics Lab",
-    foundedDate: "Sept 2018",
-  },
-];
-
 const CommitteesManagement = () => {
   const { isDark } = useTheme();
 
   // API Hooks
   const { data: rawCommittees, isLoading, isError, error } = useCommittees();
   const { data: allUsers } = useAllUsers();
+  const { data: allMeetings } = useAllMeetings();
   const { mutate: deleteCommittee } = useDeleteCommittee();
   const { mutate: createCommittee, isPending: isCreating } =
     useCreateCommittee();
@@ -188,7 +107,6 @@ const CommitteesManagement = () => {
   const committeesList: CommitteeData[] = useMemo(() => {
     if (Array.isArray(rawCommittees) && rawCommittees.length > 0) {
       return rawCommittees.map((item: any, idx: number) => {
-        const fallback = DEFAULT_COMMITTEES[idx % DEFAULT_COMMITTEES.length];
 
         let headName = item.headName;
         if (!headName && allUsers && Array.isArray(allUsers)) {
@@ -198,30 +116,50 @@ const CommitteesManagement = () => {
           }
         }
 
+        const realMembersCount = Array.isArray(allUsers)
+          ? allUsers.filter((u: any) => u.committeesId && Array.isArray(u.committeesId) && u.committeesId.includes(item.id)).length
+          : item.memberCount || 0;
+
+        const realMeetingsCount = Array.isArray(allMeetings)
+          ? allMeetings.filter((m: any) => m.committeeId === item.id).length
+          : 0;
+
+        const membersScore = Math.min(50, (realMembersCount || 1) * 10);
+        const meetingsScore = Math.min(30, (realMeetingsCount || 1) * 10);
+        const leadershipScore = headName ? 20 : 0;
+
+        const computedHealthScore = item.healthScore ?? (membersScore + meetingsScore + leadershipScore);
+        const computedHealthStatus = computedHealthScore >= 90
+          ? "Excellent"
+          : computedHealthScore >= 75
+          ? "Great"
+          : computedHealthScore >= 50
+          ? "Good"
+          : "Needs Attention";
+
         return {
           id: item.id,
           name: item.name,
-          description: item.description || fallback.description,
+          description: item.description || "IEEE BNS Committee",
           headId: item.headId,
-          headName: headName || fallback.headName,
-          headEmail: fallback.headEmail,
-          headPhone: fallback.headPhone,
-          viceHeadName: fallback.viceHeadName,
-          memberCount: item.memberCount ?? fallback.memberCount,
-          tasksCount: fallback.tasksCount,
-          meetingsCount: fallback.meetingsCount,
-          healthScore: fallback.healthScore,
-          healthStatus: fallback.healthStatus,
+          headName: headName || "Unassigned",
+          headEmail: item.headEmail || "",
+          headPhone: item.headPhone || "",
+          viceHeadName: item.viceHeadName || "Unassigned",
+          memberCount: realMembersCount,
+          tasksCount: item.tasksCount ?? realMeetingsCount,
+          meetingsCount: realMeetingsCount,
+          healthScore: computedHealthScore,
+          healthStatus: computedHealthStatus,
           status: "Active",
-          recruitmentStatus: fallback.recruitmentStatus,
-          location: fallback.location,
-          foundedDate: fallback.foundedDate,
-          imageUrl: item.imageUrl,
+          recruitmentStatus: item.recruitmentStatus || "Open",
+          location: item.location || "IEEE Hall",
+          foundedDate: item.foundedDate || "2024",
         };
       });
     }
-    return DEFAULT_COMMITTEES;
-  }, [rawCommittees, allUsers]);
+    return [];
+  }, [rawCommittees, allUsers, allMeetings]);
 
   // Filtered list based on search and selects
   const filteredCommittees = useMemo(() => {
@@ -350,38 +288,38 @@ const CommitteesManagement = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             <CommitteesStatsBox
               title="TOTAL COMMITTEES"
-              value={committeesList.length || 12}
+              value={committeesList.length}
               subtext="IEEE Committees"
               icon={<Layers className="w-5 h-5" color="#1F063A" />}
               iconBgColor="bg-[#EDE5F8]"
             />
             <CommitteesStatsBox
               title="TOTAL MEMBERS"
-              value="246"
+              value={allUsers && Array.isArray(allUsers) ? allUsers.length : committeesList.reduce((acc, c) => acc + (c.memberCount || 0), 0)}
               subtext="Total Members"
               icon={<Users className="w-5 h-5" color="#0E2C5E"/>}
-              iconBgColor="bg-[#E7EAEF] "
+              iconBgColor="bg-[#E7EAEF]"
             />
             <CommitteesStatsBox
               title="COMMITTEE HEADS"
-              value="12"
+              value={committeesList.filter((c) => c.headName || c.headId).length}
               subtext="Active Leaders"
               icon={<UserCheck className="w-5 h-5" color="#4460EF"/>}
-              iconBgColor="bg-[#E6EAFD] "
+              iconBgColor="bg-[#E6EAFD]"
             />
             <CommitteesStatsBox
               title="ACTIVE COMMITTEES"
-              value="11"
+              value={committeesList.filter((c) => c.status === "Active" || !c.status).length}
               subtext="Currently Active"
               icon={<TrendingUp className="w-5 h-5" color="#09800F"/>}
-              iconBgColor="bg-[#E2F5E3] "
+              iconBgColor="bg-[#E2F5E3]"
             />
             <CommitteesStatsBox
               title="RECRUITMENT OPEN"
-              value="4"
+              value={committeesList.filter((c) => c.recruitmentStatus === "Open" || !c.recruitmentStatus).length}
               subtext="Open Committees"
-              icon={<FilePlusIcon   className="w-5 h-5" color="#DC3545"/>}
-              iconBgColor="bg-[#DC35451A] "
+              icon={<FilePlusIcon className="w-5 h-5" color="#DC3545"/>}
+              iconBgColor="bg-[#DC35451A]"
             />
           </div>
         </div>

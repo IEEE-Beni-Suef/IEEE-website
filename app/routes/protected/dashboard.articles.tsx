@@ -55,128 +55,6 @@ export function meta() {
   ];
 }
 
-// Fallback Mock Articles matching Figma Component 102/103 & Article Page designs
-const MOCK_ARTICLES = [
-  {
-    id: 101,
-    title: "Cybersecurity Essentials for IEEE Members",
-    description:
-      "A practical guide to securing servers online - password hygiene, phishing prevention, and protecting IEEE research data. Draft undergo final editing.",
-    categoryId: 1,
-    category: { categoryId: 1, name: "Security" },
-    status: "Scheduled",
-    authorName: "Mostafa Ali",
-    authorRole: "Security Lead",
-    authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-    publishedDate: "Aug 1, 2025",
-    readTime: "5 min read",
-    views: "4.4K",
-    likes: 178,
-    comments: 24,
-    photo: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
-    keywords: ["Security", "Cyber", "IEEE", "Network"],
-  },
-  {
-    id: 102,
-    title: "The Future of AI in Electrical Engineering",
-    description:
-      "Exploring how artificial intelligence is transforming modern circuit design, power distribution, and automated manufacturing systems.",
-    categoryId: 2,
-    category: { categoryId: 2, name: "Technical" },
-    status: "Published",
-    authorName: "Nouran Ahmed",
-    authorRole: "AI Researcher",
-    authorAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
-    publishedDate: "Jul 28, 2025",
-    readTime: "8 min read",
-    views: "6.2K",
-    likes: 312,
-    comments: 45,
-    photo: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80",
-    keywords: ["AI", "ML", "Electrical", "Engineering"],
-  },
-  {
-    id: 103,
-    title: "IEEE Workshop: Master PCB Design from Scratch",
-    description:
-      "A detailed summary of key concepts covered in our hands-on workshop on multi-layer PCB routing and signal integrity.",
-    categoryId: 3,
-    category: { categoryId: 3, name: "Workshop" },
-    status: "Published",
-    authorName: "Wael Youssef",
-    authorRole: "Hardware Head",
-    publishedDate: "Jul 25, 2025",
-    readTime: "6 min read",
-    views: "3.8K",
-    likes: 240,
-    comments: 19,
-    photo: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
-    keywords: ["PCB", "Hardware", "Workshop"],
-  },
-  {
-    id: 104,
-    title: "Quantum Computing: Where We Stand in 2025",
-    description:
-      "A comprehensive overview of quantum supremacy milestones and real-world cryptographic applications.",
-    categoryId: 4,
-    category: { categoryId: 4, name: "Research" },
-    status: "Published",
-    authorName: "Tariq Helmy",
-    authorRole: "CS Advisor",
-    publishedDate: "Jul 20, 2025",
-    readTime: "10 min read",
-    views: "8.1K",
-    likes: 489,
-    comments: 62,
-    photo: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
-    keywords: ["Quantum", "Research", "Computing"],
-  },
-  {
-    id: 105,
-    title: "Web Development Roadmap for Computer Society",
-    description:
-      "Step-by-step guide for upcoming developers covering React, TypeScript, serverless functions, and modern UI architectures.",
-    categoryId: 2,
-    category: { categoryId: 2, name: "Technical" },
-    status: "Draft",
-    authorName: "Omar Khaled",
-    authorRole: "Web Developer",
-    publishedDate: "Draft",
-    readTime: "4 min read",
-    views: "0",
-    likes: 0,
-    comments: 0,
-    photo: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-    keywords: ["WebDev", "React", "TypeScript"],
-  },
-  {
-    id: 106,
-    title: "IEEE BNS Student Branch Annual Report",
-    description:
-      "A retrospective view of all events, competitions, workshops, and student accomplishments achieved in the past academic year.",
-    categoryId: 5,
-    category: { categoryId: 5, name: "Community" },
-    status: "Archived",
-    authorName: "Sara Mohamed",
-    authorRole: "Secretary",
-    publishedDate: "Jun 15, 2025",
-    readTime: "7 min read",
-    views: "2.1K",
-    likes: 115,
-    comments: 12,
-    photo: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
-    keywords: ["Report", "Community", "IEEE"],
-  },
-];
-
-const MOCK_CATEGORIES: Category[] = [
-  { id: 1, name: "Security" },
-  { id: 2, name: "Technical" },
-  { id: 3, name: "Workshop" },
-  { id: 4, name: "Research" },
-  { id: 5, name: "Community" },
-];
-
 const INITIAL_FILTERS: FilterState = {
   search: "",
   category: "",
@@ -207,11 +85,11 @@ const ArticlesManagement = () => {
   const { data: apiCategories, isLoading: categoriesLoading } = useAllCategories();
 
   const articlesList = useMemo(() => {
-    return apiArticles && apiArticles.length > 0 ? apiArticles : MOCK_ARTICLES;
+    return apiArticles || [];
   }, [apiArticles]);
 
   const categoriesList = useMemo(() => {
-    return apiCategories && apiCategories.length > 0 ? apiCategories : MOCK_CATEGORIES;
+    return apiCategories || [];
   }, [apiCategories]);
 
   // Mutations
@@ -466,8 +344,6 @@ const ArticlesManagement = () => {
           publishedCount={counts.published}
           draftsCount={counts.drafts}
           scheduledCount={counts.scheduled}
-          totalViews="33.6K"
-          engagementRate="87%"
         />
 
         {/* Tab & Status Navigation */}
@@ -534,14 +410,14 @@ const ArticlesManagement = () => {
               onSelect={() => handleOpenViewDetails(articlesList[0])}
             />
             <TopCategoriesWidget categories={categoriesList} />
-            <PublishingStatsCard />
-            <TrendingTopicsCard
+            {/* <PublishingStatsCard /> */}
+            {/* <TrendingTopicsCard
               selectedTag={filters.tag}
               onSelectTag={(t) =>
                 handleFilterChange("tag", filters.tag === t ? "" : t)
               }
-            />
-            <RecentActivity />
+            /> */}
+            {/* <RecentActivity /> */}
           </div>
         </div>
 

@@ -26,35 +26,7 @@ export const UpcomingScheduledModal: React.FC<UpcomingScheduledModalProps> = ({
   onEditInCompose,
   onSendNow,
 }) => {
-  const [scheduledList, setScheduledList] = useState<ScheduledEmailItem[]>([
-    {
-      id: 101,
-      subject: "Orientation Meeting — IEEE Beni Suef SB",
-      body: "Dear IEEE Member,\n\nWe are thrilled to welcome you to the IEEE Beni Suef Student Branch Orientation Meeting!\n\n📅 Date: July 31, 2026\n⏰ Time: 09:00 AM\n📍 Location: Engineering Faculty, Hall A\n\nThis meeting is designed to introduce new members to our branch activities, committees, and goals for this year.\n\nPlease arrive 10 minutes early. We look forward to seeing you!\n\nBest regards,\nIEEE BSB High Board",
-      scheduledTime: "Tomorrow at 09:00 AM",
-      recipientsText: "All Members",
-      memberCount: 248,
-      location: "Engineering Faculty, Hall A",
-      dateStr: "July 31, 2026",
-      timeStr: "09:00 AM",
-    },
-    {
-      id: 102,
-      subject: "Workshop Series: Frontend Development Basics",
-      body: "Hello Web Dev Team! Reminder for our upcoming workshop session tomorrow at 4 PM.",
-      scheduledTime: "Friday, Aug 14 at 04:00 PM",
-      recipientsText: "Web Committee",
-      memberCount: 42,
-    },
-    {
-      id: 103,
-      subject: "Monthly IEEE Newsletter - August Edition",
-      body: "Check out our monthly achievements, featured articles, and upcoming national IEEE events.",
-      scheduledTime: "Monday, Aug 17 at 10:00 AM",
-      recipientsText: "All Members",
-      memberCount: 248,
-    },
-  ]);
+  const [scheduledList, setScheduledList] = useState<ScheduledEmailItem[]>([]);
 
   const [selectedId, setSelectedId] = useState<number>(101);
   const [isDeleted, setIsDeleted] = useState(false);
