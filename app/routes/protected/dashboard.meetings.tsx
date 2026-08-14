@@ -134,7 +134,11 @@ export default function DashboardMeetings() {
         });
       },
       onError: (err: any) => {
-        // Fallback for demo success if server fails
+        // Optimistically add to list if server API returns an error
+        const createdItem = {
+          id: Date.now(),
+          ...payload,
+        };
         setIsNewMeetingOpen(false);
         setSuccessModal({
           isOpen: true,

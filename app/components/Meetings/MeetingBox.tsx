@@ -85,40 +85,65 @@ const MeetingBox = ({
             <div className="flex flex-wrap items-center gap-4 text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-1.5">
                 <CalendarIcon className="w-3.5 h-3.5 text-gray-400" />
-                <span>Jul 22, 2025</span>
+                <span>
+                  {(meeting as any).date ||
+                    (meeting.createdAt
+                      ? new Date(meeting.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "Scheduled")}
+                </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-gray-400" />
-                <span>10:00 AM - 11:30 AM</span>
+                <span>{meeting.recap || "10:00 AM - 11:30 AM"}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 text-center leading-none text-gray-400">
                   📍
                 </span>
-                <span>Room A-204, Main Campus</span>
+                <span>{(meeting as any).location || "IEEE Hall"}</span>
               </div>
             </div>
           </div>
           {/* Attendance Progress */}
-          <div className="flex items-center gap-3 w-full ">
-            <span
-              className={`text-xs font-semibold shrink-0 ${isDark ? "text-gray-300" : "text-gray-600"}`}
-            >
-              👥 22 / 30
-            </span>
-            <div className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-              <div
-                className="h-full  rounded-full"
-                style={{
-                  width: "89%",
-                  background: isCompleted ? "#4460EF" : "#5A10A5",
-                }}
-              />
-            </div>
-            <span className="text-xs font-bold text-[#5A10A5] dark:text-purple-400 shrink-0">
-              89%
-            </span>
-          </div>
+          {(() => {
+            const totalCount =
+              (meeting.users && Array.isArray(meeting.users) && meeting.users.length > 0)
+                ? meeting.users.length
+                : (meeting as any).expectedAttendance || 0;
+            const attendedCount =
+              meeting.users && Array.isArray(meeting.users)
+                ? meeting.users.filter(
+                    (u: any) => u.attended || u.isAttended || u.status === "attended"
+                  ).length
+                : 0;
+            const pct = totalCount > 0 ? Math.round((attendedCount / totalCount) * 100) : (isCompleted ? 100 : 0);
+
+            return (
+              <div className="flex items-center gap-3 w-full ">
+                <span
+                  className={`text-xs font-semibold shrink-0 ${isDark ? "text-gray-300" : "text-gray-600"}`}
+                >
+                  👥 {totalCount > 0 ? `${attendedCount} / ${totalCount}` : "Participants"}
+                </span>
+                <div className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                  <div
+                    className="h-full  rounded-full"
+                    style={{
+                      width: `${pct}%`,
+                      background: isCompleted ? "#4460EF" : "#5A10A5",
+                    }}
+                  />
+                </div>
+                <span className="text-xs font-bold text-[#5A10A5] dark:text-purple-400 shrink-0">
+                  {pct}%
+                </span>
+              </div>
+            );
+          })()}
         </div>
         {/* Delete */}
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, Plus, Calendar, Clock } from "lucide-react";
-import { useCommittees } from "~/hooks/useApi";
+import { useCommittees, useAllUsers } from "~/hooks/useApi";
 import { useTheme } from "~/hooks/useTheme";
 
 interface NewMeetingModalProps {
@@ -18,6 +18,7 @@ export const NewMeetingModal: React.FC<NewMeetingModalProps> = ({
 }) => {
   const { isDark } = useTheme();
   const { data: committees } = useCommittees();
+  const { data: allUsers } = useAllUsers();
 
   const [status, setStatus] = useState<"Upcoming" | "Completed" | "Cancelled">("Upcoming");
   const [title, setTitle] = useState("");
@@ -34,18 +35,35 @@ export const NewMeetingModal: React.FC<NewMeetingModalProps> = ({
     e.preventDefault();
     if (!title || !committeeId) return;
 
+    const commIdNum = Number(committeeId);
+    const committeeUsers = Array.isArray(allUsers)
+      ? allUsers
+          .filter((u: any) => u.committeesId && Array.isArray(u.committeesId) && u.committeesId.includes(commIdNum))
+          .map((u: any) => ({ userId: u.id, attended: status === "Completed", mark: status === "Completed" ? 10 : 0 }))
+      : [];
+
+    const finalUsers = committeeUsers.length > 0
+      ? committeeUsers
+      : [{ userId: 1, attended: status === "Completed", mark: status === "Completed" ? 10 : 0 }];
+
+    const selectedComm = committees?.find((c) => c.id === commIdNum);
+    const headId = selectedComm?.headId || 1;
+
+    const formattedTime = startTime && endTime ? `${startTime} - ${endTime}` : "10:00 AM - 11:30 AM";
+
     const payload = {
       title,
       type: status,
-      description: description || "Meeting description",
-      recap: `Time: ${startTime} - ${endTime}`,
-      committeeId: Number(committeeId),
-      headId: 1, // Default or selected head ID
-      users: [],
-      date,
-      expectedAttendance: Number(expectedAttendance) || 0,
-      startTime,
-      endTime,
+      description: description || "IEEE Committee Meeting",
+      recap: `Time: ${formattedTime}`,
+      committeeId: commIdNum,
+      headId: headId,
+      users: finalUsers,
+      createdAt: date || new Date().toISOString().split("T")[0],
+      date: date || new Date().toISOString().split("T")[0],
+      expectedAttendance: Number(expectedAttendance) || finalUsers.length,
+      startTime: startTime || "10:00 AM",
+      endTime: endTime || "11:30 AM",
     };
 
     onSubmit(payload);

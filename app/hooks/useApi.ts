@@ -396,8 +396,14 @@ export const useCreateMeeting = () => {
   const { mutate, mutateAsync, ...rest } = useMutation({
     mutationKey: ["createMeeting"],
     mutationFn: (meetingData: any) => apiCreateMeeting(meetingData),
-    onSuccess: () => {
+    onSuccess: (data: any, variables: any) => {
       queryClient.invalidateQueries({ queryKey: ["meetings"] });
+      queryClient.setQueryData(["meetings"], (old: any) => {
+        const created = data && data.id ? data : { id: Date.now(), ...variables };
+        if (!old) return [created];
+        if (Array.isArray(old)) return [created, ...old];
+        return old;
+      });
     },
   });
 
