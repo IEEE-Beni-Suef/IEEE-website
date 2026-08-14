@@ -15,7 +15,7 @@ export default [
     index("routes/protected/dashboard._index.tsx"),
     route("users", "routes/protected/dashboard.users.tsx"),
     route("profile", "routes/protected/dashboard.profile.tsx"),
-    route("settings", "routes/protected/dashboard.settings.tsx"),
+    // route("settings", "routes/protected/dashboard.settings.tsx"),
     route("committees", "routes/protected/dashboard.committees.tsx"),
     route("articles", "routes/protected/dashboard.articles.tsx"),
     route("meetings", "routes/protected/dashboard.meetings.tsx"),
@@ -23,6 +23,6 @@ export default [
     route("events", "routes/protected/dashboard.events.tsx"),
     route("categories", "routes/protected/dashboard.categories.tsx"),
     route("sponsors", "routes/protected/dashboard.sponsors.tsx"),
-    route("tasks", "routes/protected/dashboard.tasks.tsx"),
+    // route("tasks", "routes/protected/dashboard.tasks.tsx"),
   ]),
 ] satisfies RouteConfig;

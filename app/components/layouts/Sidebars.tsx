@@ -51,8 +51,9 @@ interface DynamicSidebarProps {
 
 export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
   const config =
-    sidebarConfigs[roleId as keyof typeof sidebarConfigs] ||
-    sidebarConfigs.default;
+    roleId !== undefined && roleId in sidebarConfigs
+      ? sidebarConfigs[roleId as keyof typeof sidebarConfigs]
+      : sidebarConfigs.default;
 
   const { user } = useAuth();
   const { isDark } = useTheme();
