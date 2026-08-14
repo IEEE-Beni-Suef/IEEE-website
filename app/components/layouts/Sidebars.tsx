@@ -16,6 +16,7 @@ import {
   ChevronUp,
   Mail,
   Award,
+  Home,
 } from "lucide-react";
 import { sidebarConfigs } from "../../utils/lists";
 import { SidebarItem } from "./SidebarItem";
@@ -41,6 +42,7 @@ const getIconComponent = (iconName: string) => {
     FileText: <FileText />,
     Mail: <Mail />,
     Award: <Award />,
+    Home: <Home />,
   };
   return iconMap[iconName] || <LayoutDashboard />;
 };
@@ -73,9 +75,9 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
       }`}
     >
       <div>
-        <div className="flex flex-col items-center mt-3 mb-10">
-          <Link to="/" className="flex items-center space-x-3 group">
-            <figure className="h-13 w-13 md:h-25 md:w-25 md:p-3">
+        <div className="flex flex-col items-center mt-3 mb-6 md:mb-10">
+          <Link to="/" className="flex items-center space-x-3 group" title="Return to Home">
+            <figure className="h-12 w-12 md:h-24 md:w-24 md:p-2">
               <Logo />
             </figure>
           </Link>
@@ -87,6 +89,7 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
           </p>
         </div>
         <nav className="space-y-2 lg:ml-8">
+          <SidebarItem to="/" icon={<Home />} label="Home" />
           {config.navigation.map((item, index) => (
             <SidebarItem
               key={index}
@@ -98,6 +101,15 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
         </nav>
       </div>
       <div className="space-y-2 p-2">
+        <Link
+          to="/"
+          className="flex items-center justify-center md:justify-start gap-2.5 p-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#5A10A5] transition-colors border border-purple-200/60 font-bold text-xs"
+          title="Exit to Website Home"
+        >
+          <Home className="w-4 h-4 shrink-0" />
+          <span className="hidden md:inline">Back to Home</span>
+        </Link>
+
         <div
           className={`w-full rounded-xl overflow-hidden p-3 border transition-colors ${
             isDark ? "bg-[#182033] border-[#253047]" : "bg-white border-gray-100 shadow-xs"
@@ -109,16 +121,16 @@ export const DynamicSidebar = ({ roleId }: DynamicSidebarProps) => {
               alt="User"
               className="w-9 h-9 rounded-full object-cover border-2 border-purple-500"
             />
-            <div className="flex-1 min-w-0 text-left">
+            <div className="flex-1 min-w-0 text-left hidden md:block">
               <p className={`text-sm font-semibold truncate ${isDark ? "text-white" : "text-[#000640]"}`}>
                 {user?.fName && user?.lName
                   ? `${user.fName} ${user.lName}`
                   : user?.firstName && user?.lastName
                   ? `${user.firstName} ${user.lastName}`
-                  : "Mohammed Sharaf"}
+                  : "IEEE Member"}
               </p>
               <p className={`text-xs truncate ${isDark ? "text-purple-400" : "text-[#3348B3]"}`}>
-                {getRoleName(user?.roleId) || "Chairman IEEE BSU"}
+                {getRoleName(user?.roleId) || "IEEE BSU"}
               </p>
             </div>
           </div>

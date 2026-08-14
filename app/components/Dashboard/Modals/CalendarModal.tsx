@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { X, Calendar as CalendarIcon, ChevronLeft, ChevronRight, MapPin, Clock } from "lucide-react";
 import type { DashboardEvent } from "~/types/dashboard";
+import { useAllEvents, useAllMeetings } from "~/hooks/useApi";
 
 interface CalendarModalProps {
   isOpen: boolean;
@@ -9,9 +10,10 @@ interface CalendarModalProps {
 }
 
 export const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose, events }) => {
-  if (!isOpen) return null;
+  const { data: apiEvents } = useAllEvents();
+  const { data: apiMeetings } = useAllMeetings();
 
-  const sampleEvents: DashboardEvent[] = events && events.length > 0 ? events : [
+  const sampleEventsFallback: DashboardEvent[] = [
     {
       id: 1,
       title: "UI/UX Committee Meeting",
@@ -40,6 +42,35 @@ export const CalendarModal: React.FC<CalendarModalProps> = ({ isOpen, onClose, e
       description: "All-members general assembly and mid-year progress review.",
     },
   ];
+
+  const sampleEvents: DashboardEvent[] = useMemo(() => {
+    if (events && events.length > 0) return events;
+
+    const mappedEvents: DashboardEvent[] = (apiEvents || []).map((ev: any) => ({
+      id: ev.id,
+      title: ev.name || ev.title || "IEEE Event",
+      date: ev.eventDate ? ev.eventDate.split("T")[0] : ev.createdAt ? ev.createdAt.split("T")[0] : "2026-07-20",
+      time: "10:00 AM - 02:00 PM",
+      location: ev.location || "Main Auditorium",
+      capacity: 100,
+      description: ev.description || "",
+    }));
+
+    const mappedMeetings: DashboardEvent[] = (apiMeetings || []).map((m: any) => ({
+      id: m.id + 1000,
+      title: m.title || "Committee Meeting",
+      date: m.createdAt ? m.createdAt.split("T")[0] : "2026-07-20",
+      time: m.recap || "06:00 PM - 07:30 PM",
+      location: m.description || "IEEE Hall",
+      capacity: 30,
+      description: m.description || "",
+    }));
+
+    const combined = [...mappedEvents, ...mappedMeetings];
+    return combined.length > 0 ? combined : sampleEventsFallback;
+  }, [events, apiEvents, apiMeetings]);
+
+  if (!isOpen) return null;
 
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 

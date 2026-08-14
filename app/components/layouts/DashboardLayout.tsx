@@ -27,26 +27,26 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto">
-            <div className="h-full p-0 sm:py-6 sm:px-1 py-0">
+            <div className="h-full p-2 sm:p-6 lg:p-8">
               <div className="h-full overflow-y-auto">
-                <div className="lg:px-12">
-                  <div className="mb-4 ">
+                <div className="max-w-7xl mx-auto px-1 sm:px-4 lg:px-8">
+                  <div className="mb-4">
                     <DashboardNavbar
                       onNotificationClick={() => setShowNotificationModal(true)}
                     />
                   </div>
-                  <div className="px-4 lg:px-0">{children || <Outlet />}</div>
+                  <div className="w-full">{children || <Outlet />}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Notification Modal */}
-        <NotificationModal
+        {/* Notification Modal (No backend API endpoint) */}
+        {/* <NotificationModal
           isOpen={showNotificationModal}
           onClose={() => setShowNotificationModal(false)}
-        />
+        /> */}
       </div>
     </div>
   );

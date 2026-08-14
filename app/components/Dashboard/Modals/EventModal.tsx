@@ -58,7 +58,7 @@ export const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSucce
               placeholder="e.g. Technical Workshop 2026"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all placeholder:text-gray-400"
+              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all"
             />
           </div>
 
@@ -74,7 +74,7 @@ export const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSucce
                   required
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all text-gray-700 dark:text-gray-200"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all"
                 />
               </div>
             </div>
@@ -89,7 +89,7 @@ export const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSucce
                   required
                   value={formData.time}
                   onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                  className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all text-gray-700 dark:text-gray-200"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all"
                 />
               </div>
             </div>
@@ -106,7 +106,7 @@ export const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSucce
                 placeholder="Venue or online link"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all placeholder:text-gray-400"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all"
               />
             </div>
 
@@ -119,7 +119,7 @@ export const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSucce
                 placeholder="Max attendees"
                 value={formData.capacity}
                 onChange={(e) => setFormData({ ...formData, capacity: Number(e.target.value) })}
-                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all placeholder:text-gray-400"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all"
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ export const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSucce
               placeholder="Describe the event..."
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all placeholder:text-gray-400 resize-none"
+              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#2E0B5D] outline-none transition-all resize-none"
             />
           </div>
 

@@ -20,7 +20,12 @@ import {
   useDashboardStats,
   useRecentActivities,
   useMembers,
+  useAllMeetings,
+  useCommittees,
+  useAllArticles,
+  useAllEvents,
 } from "~/hooks/useApi";
+import { useAuth } from "~/hooks/useAuth";
 import type { DashboardMember, SuccessModalProps } from "~/types/dashboard";
 
 // Modals
@@ -42,10 +47,32 @@ import RecentActivityCard from "./RecentActivityCard";
 import CalendarCard from "./CalendarCard";
 
 export const HighBoardDashboard: React.FC = () => {
+  // Auth & User
+  const { user } = useAuth();
+  const userName = user?.fName || user?.firstName || "Member";
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+
   // Queries
   const { data: stats } = useDashboardStats();
   const { data: activities } = useRecentActivities();
   const { data: membersList = [] } = useMembers();
+  const { data: meetingsList = [] } = useAllMeetings();
+  const { data: committeesList = [] } = useCommittees();
+  const { data: articlesList = [] } = useAllArticles();
+  const { data: eventsList = [] } = useAllEvents();
+
+  const latestMeeting = meetingsList && meetingsList.length > 0 ? meetingsList[0] : null;
+  const meetingCommitteeName = (() => {
+    if (!latestMeeting) return "UI/UX Committee";
+    const found = committeesList.find((c) => c.id === latestMeeting.committeeId);
+    return found?.name || "IEEE Committee";
+  })();
 
   // Modal States
   const [isUsersModalOpen, setUsersModalOpen] = useState(false);
@@ -90,88 +117,88 @@ export const HighBoardDashboard: React.FC = () => {
     });
   };
 
-  const pendingMembers = membersList.filter((m) => m.status === "Pending");
+  const pendingMembers = membersList.filter((m: any) => !m.isActive || m.status === "Pending");
 
   const statsCards = [
     {
       title: "Total Members",
-      number: stats?.totalMembers ?? 245,
-      subText: stats?.totalMembersChange ?? "+12 this month",
+      number: membersList.length || stats?.totalMembers || 0,
+      subText: "Registered members",
       icon: <Users className="w-4 h-4" color="#000640" />,
       iconBackground: "bg-[#EEF1FF]",
       iconColor: "text-indigo-600",
       chartColor: "#4460EF",
-      chartData: stats?.membersChartData ?? [4, 6, 5, 7, 8, 6],
+      chartData: [4, 6, 5, 7, 8, membersList.length || 6],
       onClick: () => setMembersTableOpen(true),
     },
     {
       title: "Pending Approvals",
-      number: stats?.pendingApprovals ?? 18,
-      subText: stats?.pendingSubtitle ?? "Requires action",
+      number: pendingMembers.length,
+      subText: pendingMembers.length > 0 ? "Requires action" : "All clear",
       icon: <AlertTriangle className="w-4 h-4" color="#FFC107" />,
       iconBackground: "bg-[#FFF8E1]",
       iconColor: "text-amber-500",
       chartColor: "#FFC107",
-      chartData: stats?.pendingChartData ?? [3, 5, 4, 6, 7, 8],
+      chartData: [3, 5, 4, 6, 7, pendingMembers.length],
       onClick: () => setApprovalModalOpen(true),
     },
     {
       title: "Upcoming Meetings",
-      number: stats?.upcomingMeetings ?? 3,
-      subText: stats?.meetingsSubtitle ?? "This Week",
+      number: meetingsList.length || stats?.upcomingMeetings || 0,
+      subText: "Scheduled",
       icon: <Video className="w-4 h-4" color="#000640" />,
       iconBackground: "bg-[#F3E8FF]",
       iconColor: "text-[#000640]",
       chartColor: "#5A10A5",
-      chartData: stats?.meetingsChartData ?? [2, 4, 3, 5, 4, 6],
+      chartData: [2, 4, 3, 5, 4, meetingsList.length || 3],
       onClick: () => setMeetingDetailsOpen(true),
     },
     {
       title: "Active Committees",
-      number: 15,
-      subText: "Running",
+      number: committeesList.length || 0,
+      subText: "Active in branch",
       icon: <Layers className="w-4 h-4" color="#000640" />,
       iconBackground: "bg-[#E0F7FA]",
       iconColor: "text-[#000640]",
       chartColor: "#17A2B8",
-      chartData: [3, 5, 4, 6, 5, 7],
+      chartData: [3, 5, 4, 6, 5, committeesList.length || 15],
     },
     {
       title: "Published Articles",
-      number: 42,
-      subText: "+5 this month",
+      number: articlesList.length || 0,
+      subText: "Published in branch",
       icon: <FileText className="w-4 h-4" color="#105E13" />,
       iconBackground: "bg-[#E8F5E9]",
       iconColor: "text-[#105E13]",
       chartColor: "#09800F",
-      chartData: [2, 4, 3, 6, 5, 7],
+      chartData: [2, 4, 3, 6, 5, articlesList.length || 42],
     },
     {
       title: "Upcoming Events",
-      number: stats?.upcomingEvents ?? 8,
-      subText: stats?.eventsSubtitle ?? "2 this week",
+      number: eventsList.length || stats?.upcomingEvents || 0,
+      subText: "Events in system",
       icon: <CalendarIcon className="w-4 h-4" color="#440C7C" />,
       iconBackground: "bg-[#EFE7F6]",
       iconColor: "text-purple-700",
       chartColor: "#1F063A",
-      chartData: stats?.eventsChartData ?? [1, 3, 2, 4, 3, 5],
+      chartData: [1, 3, 2, 4, 3, eventsList.length || 8],
       onClick: () => setCalendarOpen(true),
     },
   ];
 
   return (
-    <div className="space-y-6 my-10 ">
-      <div className="hidden md:flex items-center w-full h-10 border-1 border-[#CCB5E3] px-5 capitalize rounded-lg mt-3 mb-8 ">
+    <div className="space-y-5 sm:space-y-6 my-4 sm:my-8">
+      <div className="hidden md:flex items-center w-full h-10 border-1 border-[#CCB5E3] px-5 capitalize rounded-lg mt-3 mb-6">
         <span className="text-[#6C757D] text-sm">dashboard / </span>{" "}
         <span className="text-[#000640] font-semibold text-sm">
-          &nbsp;Dahboard
+          &nbsp;Dashboard
         </span>
       </div>
       {/* 1. Header Greeting & Action Buttons */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#000640] tracking-tight flex items-center gap-2">
-            Good Morning, Mohammed{" "}
+          <h1 className="text-xl sm:text-3xl font-extrabold text-[#000640] tracking-tight flex items-center gap-2">
+            {getGreeting()}, {userName}{" "}
             <span className="animate-bounce inline-block">👋</span>
           </h1>
           <p className="text-xs sm:text-sm font-normal text-[#3348B3] dark:text-gray-400 mt-1">
@@ -179,57 +206,47 @@ export const HighBoardDashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Action Buttons matching Figma exact colors & pills */}
-        <div className="flex flex-wrap items-center gap-2.5 my-5">
+        {/* Action Buttons: 2x2 Grid on Mobile, Flex on Desktop */}
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-2.5 my-2 sm:my-5">
           <button
             onClick={() => setUsersModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#5A10A5] hover:bg-[#581C87] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#5A10A540] transition-all"
+            className="flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 bg-[#5A10A5] hover:bg-[#581C87] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#5A10A540] transition-all"
           >
             <Plus className="w-3.5 h-3.5" /> Add User
           </button>
           <button
             onClick={() => setMeetingModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#4460EF] hover:bg-[#2563EB] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#4460EF40] transition-all "
+            className="flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 bg-[#4460EF] hover:bg-[#2563EB] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#4460EF40] transition-all"
           >
             <Plus className="w-3.5 h-3.5" /> Create Meeting
           </button>
           <button
             onClick={() => setArticleModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#0E2C5E] hover:bg-[#1E293B] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#0E2C5E40] transition-all "
+            className="flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 bg-[#0E2C5E] hover:bg-[#1E293B] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#0E2C5E40] transition-all"
           >
             <Plus className="w-3.5 h-3.5" /> Create Article
           </button>
           <button
             onClick={() => setEventModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#1F063A] hover:bg-[#210B37] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#E91E8C40] transition-all "
+            className="flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 bg-[#1F063A] hover:bg-[#210B37] text-white rounded-full text-xs font-bold shadow-[0px_2px_8px_0px_#E91E8C40] transition-all"
           >
             <Plus className="w-3.5 h-3.5" /> Create Event
           </button>
         </div>
       </div>
 
-      {/* 2. Top Stats Grid (6 Cards exactly as Figma screenshot) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
+      {/* 2. Top Stats Grid (2 per row on Mobile, 6 on Desktop) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-3.5">
         {statsCards.map((card) => (
           <DashboardStatsBox key={card.title} {...card} />
         ))}
       </div>
 
-      {/* 3. Info Alerts Row (4 Cards below stats) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <DashboardAlertCard
-          icon={<TrendingUp className="w-4 h-4" color="#09800F" />}
-          text="Membership increased by 12% this month."
-          cardBackground="bg-[#EEFBEF]"
-          iconBackground="bg-[#09800F20]"
-          iconColor="text-[#09800F]"
-          textColor="text-[#000640]"
-          borderClassName="border border-[#09800F22]"
-        />
-
+      {/* 3. Info Alerts Row (Dynamic Cards connected to API) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
         <DashboardAlertCard
           icon={<AlertTriangle className="w-4 h-4" color="#FFC107" />}
-          text="18 members are waiting for approval."
+          text={`${membersList.filter((m: any) => !m.isActive).length} members are waiting for approval.`}
           cardBackground="bg-[#FFF9E6]"
           iconBackground="bg-[#FFC10720]"
           iconColor="text-[#FFC107]"
@@ -241,7 +258,7 @@ export const HighBoardDashboard: React.FC = () => {
 
         <DashboardAlertCard
           icon={<CalendarCheck className="w-4 h-4" color="#4460EF" />}
-          text="Next meeting starts in 2 days."
+          text={latestMeeting ? `Next meeting: ${latestMeeting.title}` : "No upcoming meetings scheduled."}
           cardBackground="bg-[#EEF1FF]"
           iconBackground="bg-[#4460EF20]"
           iconColor="text-[#4460EF]"
@@ -253,7 +270,7 @@ export const HighBoardDashboard: React.FC = () => {
 
         <DashboardAlertCard
           icon={<CalendarIcon className="w-4 h-4" color="#440C7C" />}
-          text="3 events are scheduled this week."
+          text={`${meetingsList.length} meetings scheduled in system.`}
           cardBackground="bg-[#440C7C]"
           iconBackground="bg-[#EFE7F6]"
           iconColor="text-[#440C7C]"
@@ -267,19 +284,19 @@ export const HighBoardDashboard: React.FC = () => {
       {/* 4. Main Bottom 3-Column Layout (Meeting Card, Recent Activity, Calendar) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <MeetingCard
-          bannerTitle="BACKEND"
-          title="Weekly UI/UX Meeting"
-          committee="UI/UX Committee"
-          date="Thursday, July 20, 2026"
-          time="6:00 PM — 7:30 PM"
-          location="Room 304, Engineering Building"
-          attendanceCount={32}
-          totalCount={36}
+          bannerTitle={meetingCommitteeName}
+          title={latestMeeting?.title || "Weekly UI/UX Meeting"}
+          committee={meetingCommitteeName}
+          date={latestMeeting?.createdAt ? new Date(latestMeeting.createdAt).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" }) : "Thursday, July 20, 2026"}
+          time={latestMeeting?.recap || "6:00 PM — 7:30 PM"}
+          location={latestMeeting?.description || "Room 304, Engineering Building"}
+          attendanceCount={latestMeeting?.users?.filter((u) => u.attended)?.length ?? 32}
+          totalCount={latestMeeting?.users?.length || 36}
           avatars={["MA", "KN", "LI", "NH", "OY"]}
           onViewDetails={() => setMeetingDetailsOpen(true)}
         />
 
-        <RecentActivityCard
+        {/* <RecentActivityCard
           onViewAll={() => setApprovalModalOpen(true)}
           activities={[
             {
@@ -323,7 +340,7 @@ export const HighBoardDashboard: React.FC = () => {
               time: "Yesterday",
             },
           ]}
-        />
+        /> */}
 
         <CalendarCard
           monthLabel="July 2026"

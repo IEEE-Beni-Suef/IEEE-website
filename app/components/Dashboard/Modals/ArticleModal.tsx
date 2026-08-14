@@ -59,7 +59,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ isOpen, onClose, onS
               placeholder="e.g. IEEE Impact 2026"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all placeholder:text-gray-400"
+              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all"
             />
           </div>
 
@@ -72,7 +72,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ isOpen, onClose, onS
               <select
                 value={formData.committee}
                 onChange={(e) => setFormData({ ...formData, committee: e.target.value })}
-                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all text-gray-700 dark:text-gray-200"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all"
               >
                 <option value="Select a Committee...">Select a Committee...</option>
                 <option value="Technical">Technical</option>
@@ -91,7 +91,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ isOpen, onClose, onS
                 placeholder="tech, ai, design"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all placeholder:text-gray-400"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all"
               />
             </div>
           </div>
@@ -107,7 +107,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ isOpen, onClose, onS
               placeholder="Write your article content here..."
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all placeholder:text-gray-400 resize-none"
+              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#000640] dark:focus:ring-indigo-500 outline-none transition-all resize-none"
             />
           </div>
 

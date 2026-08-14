@@ -47,7 +47,7 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
               Full Name
             </label>
             <div className="relative">
@@ -58,14 +58,14 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
                 placeholder="e.g. Sara Ahmed"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#4F46E5] outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
                 Email Address
               </label>
               <div className="relative">
@@ -76,13 +76,13 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
                   placeholder="sara@ieee.org"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#4F46E5] outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
                 Phone Number
               </label>
               <div className="relative">
@@ -92,7 +92,7 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
                   placeholder="+20 100 123 4567"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#4F46E5] outline-none"
                 />
               </div>
             </div>
@@ -100,13 +100,13 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
                 Committee
               </label>
               <select
                 value={formData.committee}
                 onChange={(e) => setFormData({ ...formData, committee: e.target.value })}
-                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#4F46E5] outline-none"
               >
                 <option value="UI/UX">UI/UX</option>
                 <option value="AI">AI</option>
@@ -118,13 +118,13 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
                 Role
               </label>
               <select
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#4F46E5] outline-none"
               >
                 <option value="Member">Member</option>
                 <option value="Lead">Lead</option>
@@ -135,7 +135,7 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
               Academic Year
             </label>
             <div className="relative">
@@ -145,7 +145,7 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
                 placeholder="e.g. 3rd Year, ECE"
                 value={formData.academicYear}
                 onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#4F46E5] outline-none"
               />
             </div>
           </div>

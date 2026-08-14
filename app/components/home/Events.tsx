@@ -34,11 +34,11 @@ export default function Events() {
     }, [hoveredIndex]);
 
     return (
-        <section className="relative w-full overflow-hidden pt-10 pb-40 min-h-screen bg-white">
+        <section className="relative w-full overflow-hidden pt-8 sm:pt-10 pb-20 sm:pb-40 min-h-screen bg-white">
             {/* Background Circles */}
-            <div className="absolute top-[-633px] left-[-607px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full opacity-80 pointer-events-none" />
-            <div className="absolute top-[838px] right-[-480px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full pointer-events-none" />
-            <div className="absolute top-[935px] right-[-200px] w-[961px] h-[961px] bg-[#E6DBF2] rounded-full pointer-events-none" />
+            <div className="absolute top-[-633px] left-[-607px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full opacity-40 sm:opacity-80 pointer-events-none" />
+            <div className="absolute top-[838px] right-[-480px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full opacity-40 sm:opacity-100 pointer-events-none" />
+            <div className="absolute top-[935px] right-[-200px] w-[961px] h-[961px] bg-[#E6DBF2] rounded-full opacity-40 sm:opacity-100 pointer-events-none" />
             
             {/* Main Content Container */}
             <div className="relative z-10 container mx-auto px-4">
@@ -48,12 +48,12 @@ export default function Events() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    className="mx-auto max-w-4xl space-y-6 text-center"
+                    className="mx-auto max-w-4xl space-y-4 sm:space-y-6 text-center"
                 >
-                    <h1 className="text-4xl md:text-5xl lg:text-[50px] font-extrabold text-[#000640]">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] font-extrabold text-[#000640]">
                         Our Events & <span className="text-[#5A10A5]">Activities</span>
                     </h1>
-                    <p className="text-[#293A8F] leading-relaxed text-lg max-w-2xl mx-auto">
+                    <p className="text-[#293A8F] leading-relaxed text-sm sm:text-lg max-w-2xl mx-auto px-2">
                         Explore the events, workshops, and activities organized or participated in by our IEEE branch.
                         These events reflect our commitment to knowledge sharing, technical development,
                         and building a strong community of future engineers and innovators.
@@ -73,7 +73,7 @@ export default function Events() {
                         },
                         hidden: {}
                     }}
-                    className="mt-20 flex flex-row justify-center gap-8 md:gap-16 lg:gap-[200px] items-center w-full max-w-7xl mx-auto px-4 flex-wrap md:flex-nowrap"
+                    className="mt-10 sm:mt-20 flex flex-col md:flex-row justify-center gap-10 sm:gap-16 lg:gap-[200px] items-center w-full max-w-7xl mx-auto px-4"
                 >
                     {eventsData.map((event, index) => {
                         const isCenter = index === 1;
@@ -94,20 +94,21 @@ export default function Events() {
                                         transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
                                     }
                                 }}
-                                className="relative w-[250px] h-[452px] group"
+                                className="relative w-[230px] sm:w-[250px] h-[400px] sm:h-[452px] group"
                                 onMouseEnter={() => setHoveredIndex(index)}
                                 onMouseLeave={() => setHoveredIndex(null)}
+                                onClick={() => setHoveredIndex(hoveredIndex === index ? null : index)}
                             >
                                 {/* Slide-left Revealed Text Panel ("Book Opening") */}
-                                <div className={`absolute top-0 left-0 w-[280px] h-[452px] bg-white border border-[#5A10A5] rounded-[32px] p-8 pr-16 z-0 flex flex-col justify-center text-left transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 
-                                    ${isOpen ? '-translate-x-[160px] opacity-100 shadow-xl' : 'translate-x-0 opacity-0 pointer-events-none'}`}>
-                                    <h2 className="text-[#480D84] text-2xl font-bold mb-4 line-clamp-2">{event.title}</h2>
-                                    <p className="text-[#1C1A1A] text-sm leading-relaxed line-clamp-6">{event.description}</p>
+                                <div className={`absolute top-0 left-0 w-[240px] sm:w-[280px] h-[400px] sm:h-[452px] bg-white border border-[#5A10A5] rounded-[32px] p-6 sm:p-8 pr-12 sm:pr-16 z-0 flex flex-col justify-center text-left transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 
+                                    ${isOpen ? '-translate-x-[75px] sm:-translate-x-[160px] opacity-100 shadow-xl' : 'translate-x-0 opacity-0 pointer-events-none'}`}>
+                                    <h2 className="text-[#480D84] text-xl sm:text-2xl font-bold mb-3 sm:mb-4 line-clamp-2">{event.title}</h2>
+                                    <p className="text-[#1C1A1A] text-xs sm:text-sm leading-relaxed line-clamp-5 sm:line-clamp-6">{event.description}</p>
                                 </div>
 
                                 {/* Front Image Card Container */}
-                                <div className={`relative w-[250px] h-[452px] z-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] bg-white rounded-[40px] overflow-hidden
-                                    ${isOpen ? 'shadow-[25px_0_40px_-10px_rgba(109,16,165,0.5)] scale-[1.02]' : 'shadow-md scale-100'}`}>
+                                <div className={`relative w-[230px] sm:w-[250px] h-[400px] sm:h-[452px] z-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] bg-white rounded-[32px] sm:rounded-[40px] overflow-hidden
+                                    ${isOpen ? 'shadow-[15px_0_30px_-10px_rgba(109,16,165,0.5)] sm:shadow-[25px_0_40px_-10px_rgba(109,16,165,0.5)] scale-[1.02]' : 'shadow-md scale-100'}`}>
                                     <img 
                                         src={event.photo || defaultImage} 
                                         alt={event.title} 
@@ -125,7 +126,7 @@ export default function Events() {
                                         ${isOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-10 opacity-0 invisible'}`}>
                                         <Link 
                                             to={`/article/${event.id}`} 
-                                            className="flex items-center justify-center gap-2 w-full bg-[#5A10A5] text-white text-base font-semibold py-3 rounded-full hover:bg-[#480D84] transition-all duration-200 shadow-lg hover:shadow-purple-500/30 hover:scale-105 active:scale-95"
+                                            className="flex items-center justify-center gap-2 w-full bg-[#5A10A5] text-white text-sm sm:text-base font-semibold py-2.5 sm:py-3 rounded-full hover:bg-[#480D84] transition-all duration-200 shadow-lg hover:shadow-purple-500/30 hover:scale-105 active:scale-95"
                                         >
                                             Discover
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -147,17 +148,17 @@ export default function Events() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="mt-24 flex justify-center items-center gap-3"
+                    className="mt-12 sm:mt-24 flex justify-center items-center gap-3"
                 >
                     <button 
                         onClick={() => setCycleStep(0)} 
                         aria-label="First slide group"
-                        className={`w-[18px] h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${cycleStep === 0 ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
+                        className={`w-[16px] sm:w-[18px] h-[16px] sm:h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${cycleStep === 0 ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
                     />
                     <button 
                         onClick={() => setCycleStep(1)} 
                         aria-label="Second slide group"
-                        className={`w-[18px] h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${cycleStep === 1 ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
+                        className={`w-[16px] sm:w-[18px] h-[16px] sm:h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${cycleStep === 1 ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
                     />
                 </motion.div>
 
@@ -167,11 +168,11 @@ export default function Events() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.5, duration: 0.5 }}
-                    className="mt-10 flex justify-center"
+                    className="mt-6 sm:mt-10 flex justify-center"
                 >
                     <Link 
                         to="/events" 
-                        className="inline-block bg-[#5A10A5] text-white text-center text-lg font-semibold px-16 py-3 rounded-full hover:bg-[#480D84] transition-all duration-300 shadow-lg hover:shadow-purple-500/25 hover:scale-105 active:scale-95 min-w-[250px]"
+                        className="inline-block bg-[#5A10A5] text-white text-center text-base sm:text-lg font-semibold px-10 sm:px-16 py-3 rounded-full hover:bg-[#480D84] transition-all duration-300 shadow-lg hover:shadow-purple-500/25 hover:scale-105 active:scale-95 min-w-[200px] sm:min-w-[250px]"
                     >
                         Discover more
                     </Link>

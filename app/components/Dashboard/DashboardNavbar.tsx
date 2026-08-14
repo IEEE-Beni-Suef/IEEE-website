@@ -94,26 +94,14 @@ const DashboardNavbar = ({ onNotificationClick }: IProps) => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onNotificationClick}
-            className={`flex h-8 w-8 items-center justify-center rounded-full ${
-              isDark ? "bg-[#1E2738] text-[#A78BFA]" : "bg-[#F5F0FF] text-[#5A10A5]"
-            }`}
+          <Link
+            to="/"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-purple-50 text-[#5A10A5] text-xs font-bold border border-purple-200 hover:bg-purple-100 transition-colors"
+            title="Exit to Website Home"
           >
-            <BellDot className="h-4 w-4" />
-          </button>
-          
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-              isDark ? "bg-[#1E2738] text-yellow-400" : "bg-[#F5F0FF] text-[#5A10A5]"
-            }`}
-            title="Toggle theme"
-          >
-            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
+            <User2 className="w-3.5 h-3.5" />
+            <span>Home</span>
+          </Link>
 
           <img
             src={userPhoto}
@@ -145,7 +133,8 @@ const DashboardNavbar = ({ onNotificationClick }: IProps) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          {/* Notifications button (No backend API) */}
+          {/* <button
             type="button"
             onClick={onNotificationClick}
             className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
@@ -153,10 +142,10 @@ const DashboardNavbar = ({ onNotificationClick }: IProps) => {
             }`}
           >
             <BellDot className="h-4 w-4" />
-          </button>
+          </button> */}
 
-          {/* Theme toggle button */}
-          <button
+          {/* Theme toggle button (Disabled) */}
+          {/* <button
             type="button"
             onClick={toggleTheme}
             className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
@@ -165,7 +154,7 @@ const DashboardNavbar = ({ onNotificationClick }: IProps) => {
             title="Toggle theme"
           >
             {isDark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
-          </button>
+          </button> */}
 
           {/* User Photo Avatar */}
           <div className="relative group cursor-pointer">

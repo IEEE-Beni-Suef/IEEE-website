@@ -47,7 +47,7 @@ export const MeetingModal: React.FC<MeetingModalProps> = ({ isOpen, onClose, onS
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
               Meeting Title
             </label>
             <input
@@ -56,18 +56,18 @@ export const MeetingModal: React.FC<MeetingModalProps> = ({ isOpen, onClose, onS
               placeholder="e.g. AI Sync & Workshop"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+              className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#4F46E5] outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
               Committee
             </label>
             <select
               value={formData.committee}
               onChange={(e) => setFormData({ ...formData, committee: e.target.value })}
-              className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+              className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#4F46E5] outline-none"
             >
               <option value="AI Committee">AI Committee</option>
               <option value="UI/UX Team">UI/UX Team</option>
@@ -79,7 +79,7 @@ export const MeetingModal: React.FC<MeetingModalProps> = ({ isOpen, onClose, onS
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
                 Date
               </label>
               <input
@@ -87,12 +87,12 @@ export const MeetingModal: React.FC<MeetingModalProps> = ({ isOpen, onClose, onS
                 required
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#4F46E5] outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
                 Time
               </label>
               <input
@@ -100,13 +100,13 @@ export const MeetingModal: React.FC<MeetingModalProps> = ({ isOpen, onClose, onS
                 required
                 value={formData.time}
                 onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#4F46E5] outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
               Location
             </label>
             <div className="relative">
@@ -116,13 +116,13 @@ export const MeetingModal: React.FC<MeetingModalProps> = ({ isOpen, onClose, onS
                 placeholder="Hall B & Online Google Meet"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none"
+                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#4F46E5] outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
               Description / Agenda
             </label>
             <textarea
@@ -130,7 +130,7 @@ export const MeetingModal: React.FC<MeetingModalProps> = ({ isOpen, onClose, onS
               placeholder="Describe meeting topics and goals..."
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#4F46E5] outline-none resize-none"
+              className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900/60 border border-gray-300 dark:border-gray-800 rounded-xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-[#4F46E5] outline-none resize-none"
             />
           </div>
 

@@ -99,7 +99,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-purple-600 outline-none"
             />
           </div>
 
@@ -113,7 +113,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-purple-600 outline-none"
             />
           </div>
 
@@ -127,7 +127,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
                 type="text"
                 value={formData.committee}
                 onChange={(e) => setFormData({ ...formData, committee: e.target.value })}
-                className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-purple-600 outline-none"
+                className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-purple-600 outline-none"
               />
             </div>
 
@@ -139,7 +139,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
                 type="text"
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-purple-600 outline-none"
+                className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 placeholder:text-gray-500 placeholder:font-normal focus:ring-2 focus:ring-purple-600 outline-none"
               />
             </div>
           </div>
@@ -157,7 +157,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
                   status: e.target.value as DashboardMember["status"],
                 })
               }
-              className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-2xl text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-purple-600 outline-none"
             >
               <option value="Approved">Approved</option>
               <option value="Pending">Pending</option>
