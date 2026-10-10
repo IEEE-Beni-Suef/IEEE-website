@@ -37,6 +37,12 @@ import SponsersSection from "~/components/Sponsors/SponserSection";
 import toast from "react-hot-toast";
 
 import HeroSection from "../components/home/HeroSection";
+import WhoWeAreSection from "../components/WhoWeAre/WhoWeAreSection";
+import OurJourneySection from "../components/OurJourney/OurJourneySection";
+import AchievementsSection from "../components/Achievements/AchievementsSection";
+import AmbassadorsSection from "../components/Ambassadors/AmbassadorsSection";
+import WebsiteTeamSection from "../components/WebsiteTeam/WebsiteTeamSection";
+import OurCommunitySection from "../components/OurCommunity/OurCommunitySection";
 import Events from "../components/home/Events";
 import About from "../components/home/About";
 import Footer from "../components/home/Footer";
@@ -146,10 +152,29 @@ export default function Home() {
     <>
 
       <HeroSection />
-      <About />
+      <WhoWeAreSection />
+      <OurJourneySection />
+      <AchievementsSection />
+      <AmbassadorsSection />
       <Events />
+      <OurCommunitySection />
+      <Commitees />
+      <WebsiteTeamSection />
 
-      {/* About IEEE Section
+      {/* Committees Section */}
+      <HighBoardSection />
+
+      {/* Sponsers Section */}
+
+      <Sponsers />
+
+      <Footer />
+    </>
+  );
+}
+
+
+ {/* About IEEE Section
       <Section id="about" variant="primary" padding="xl">
         <div className="max-w-7xl mx-auto ">
           <SectionHeader>
@@ -222,18 +247,3 @@ export default function Home() {
           </div>
         </div>
       </Section> */}
-
-      {/* Committees Section */}
-      <Commitees />
-      <HighBoardSection />
-
-
-
-      {/* Sponsers Section */}
-
-      <Sponsers />
-
-      <Footer />
-    </>
-  );
-}

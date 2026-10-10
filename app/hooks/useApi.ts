@@ -590,8 +590,9 @@ export const useUpcomingEvents = () => {
 
 export const useAddUserMutation = () => {
   return useMutation({
-    mutationFn: (data: CreateUserData) => addUser(data),
+    mutationFn: (data: CreateUserData | any) => addUser(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardMembers"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
     },
@@ -600,8 +601,9 @@ export const useAddUserMutation = () => {
 
 export const useCreateMeetingMutation = () => {
   return useMutation({
-    mutationFn: (data: CreateMeetingData) => createMeeting(data),
+    mutationFn: (data: CreateMeetingData | any) => createMeeting(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
       queryClient.invalidateQueries({ queryKey: ["recentActivities"] });
     },
@@ -610,8 +612,9 @@ export const useCreateMeetingMutation = () => {
 
 export const useCreateArticleMutation = () => {
   return useMutation({
-    mutationFn: (data: CreateArticleData) => createArticle(data as any),
+    mutationFn: (data: FormData | CreateArticleData | any) => createArticle(data as any),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
       queryClient.invalidateQueries({ queryKey: ["recentActivities"] });
     },
   });
@@ -619,8 +622,9 @@ export const useCreateArticleMutation = () => {
 
 export const useCreateEventMutation = () => {
   return useMutation({
-    mutationFn: (data: CreateEventData) => createEvent(data),
+    mutationFn: (data: CreateEventData | any) => createEvent(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardUpcomingEvents"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
     },

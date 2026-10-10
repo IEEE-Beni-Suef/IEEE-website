@@ -78,7 +78,14 @@ export const MembersTableModal: React.FC<MembersTableModalProps> = ({
       <div className="bg-white dark:bg-[#101726] border border-[#E2E8F0] dark:border-[#232D42] rounded-3xl p-6 max-w-4xl w-full shadow-2xl animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
-          <h3 className="text-xl font-bold text-[#000640] dark:text-white">All Members</h3>
+          <div className="flex items-center gap-3">
+            <h3 className="text-xl font-bold text-[#000640] dark:text-white">
+              All Members
+            </h3>
+            <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-950/60 text-[#4F46E5] dark:text-indigo-400 text-xs font-extrabold rounded-full border border-indigo-200 dark:border-indigo-800/50">
+              Total Users: {safeMembers.length}
+            </span>
+          </div>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-gray-400 hover:text-gray-600 transition-colors"

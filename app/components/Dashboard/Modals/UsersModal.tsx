@@ -17,6 +17,7 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
     role: "Member",
     academicYear: "3rd Year, CS",
   });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const addUserMutation = useAddUserMutation();
 
@@ -24,10 +25,22 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     addUserMutation.mutate(formData, {
       onSuccess: () => {
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          committee: "UI/UX",
+          role: "Member",
+          academicYear: "3rd Year, CS",
+        });
         onClose();
         onSuccess();
+      },
+      onError: (err: any) => {
+        setErrorMessage(err?.message || "Failed to create user. Please try again.");
       },
     });
   };
@@ -45,7 +58,13 @@ export const UsersModal: React.FC<UsersModalProps> = ({ isOpen, onClose, onSucce
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        {errorMessage && (
+          <div className="mt-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs font-semibold rounded-xl">
+            {errorMessage}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div>
             <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 mb-1">
               Full Name

@@ -71,11 +71,12 @@ export interface CreateUserData {
 
 export interface CreateMeetingData {
   title: string;
-  committee: string;
-  date: string;
-  time: string;
-  location: string;
   description: string;
+  recap: string;
+  type: string;
+  dateTime: string;
+  committeeId: number;
+  headId: number;
 }
 
 export interface CreateArticleData {
@@ -87,12 +88,12 @@ export interface CreateArticleData {
 }
 
 export interface CreateEventData {
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  capacity: number;
-  description: string;
+  name: string;
+  keyWords: string[];
+  startDate: string;
+  endDate: string;
+  isCommingSoon: boolean;
+  categoryId: string;
 }
 
 export interface UpdateMemberData {

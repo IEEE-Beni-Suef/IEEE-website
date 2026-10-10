@@ -41,79 +41,74 @@ const Navbar = () => {
     }
   }, []);
 
-  // Shared nav items (added "Contact Us")
+  // Updated nav items according to design specs
   const navItems = [
-    { label: "Home", path: "/", icon: Home },
-    { label: "Committees", path: "/#committees", icon: Boxes },
-    { label: "Events", path: "/events", icon: Calendar },
-    { label: "Articles", path: "/articles", icon: FileText },
-    { label: "About", path: "/about", icon: Users },
-    { label: "Contact Us", path: "/contact", icon: Users },
+    { label: "Home", path: "/" },
+    { label: "Events", path: "/events" },
+    { label: "Chapters", path: "/#chapters" },
+    { label: "Committees", path: "/#committees" },
+    { label: "About", path: "/about" },
+    { label: "Achievements", path: "/#achievements" },
   ];
 
   const authNavItems = [
-    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { label: "Home", path: "/", icon: Home },
-    { label: "Committees", path: "/#committees", icon: Boxes },
-    { label: "Events", path: "/events", icon: Calendar },
-    { label: "Articles", path: "/articles", icon: FileText },
-    { label: "About", path: "/about", icon: Users },
-    { label: "Contact Us", path: "/contact", icon: Users },
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Home", path: "/" },
+    { label: "Events", path: "/events" },
+    { label: "Chapters", path: "/#chapters" },
+    { label: "Committees", path: "/#committees" },
+    { label: "About", path: "/about" },
+    { label: "Achievements", path: "/#achievements" },
   ];
 
   const currentNavItems = isMounted && isAuthenticated ? authNavItems : navItems;
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname + location.hash === path || location.pathname === path;
+  };
 
   const handleLogout = () => {
     clearAuth();
     navigate("/");
   };
 
-  // Logo color: light on dark hero, dark on all other backgrounds
   const isHomePage = location.pathname === "/";
-  const logoColor =
-    isHomePage && !isScrolled
-      ? "#EFE7F6"  // light primary — sits over dark Hero image
-      : "#0E2C5E"; // tertiary dark — sits over light/glass backgrounds
+  const logoColor = "#ECEFFD";
 
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-50"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-[#12111F]/90 backdrop-blur-md border-b border-white/10 shadow-lg"
+          : "bg-transparent backdrop-blur-none border-b border-transparent"
+      }`}
       initial={{ y: "-100%", opacity: 0 }}
       animate={
         introReady
           ? {
               y: 0,
               opacity: 1,
-              backgroundColor: "rgba(0, 0, 0, 0)",
-              backdropFilter: "none",
-              borderBottom: "none",
-              boxShadow: "none",
             }
           : { y: "-100%", opacity: 0 }
       }
       transition={{
         y: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
         opacity: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-        backgroundColor: { duration: 0.4, ease: "easeInOut" },
-        backdropFilter: { duration: 0.4, ease: "easeInOut" },
-        borderBottom: { duration: 0.4, ease: "easeInOut" },
-        boxShadow: { duration: 0.4, ease: "easeInOut" },
       }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
         <div className="flex justify-between items-center h-24">
-          {/* Logo */}
+          {/* Logo 80*80 */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <figure className="h-[105px] p-3">
+            <figure className="w-[80px] h-[80px] flex items-center justify-center p-1">
               <Logo color={logoColor} />
             </figure>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation Links */}
           <motion.div
-            className="hidden md:flex items-center space-x-1"
+            className="hidden md:flex items-center space-x-2 lg:space-x-3"
             variants={{
               visible: { transition: { staggerChildren: 0.07, delayChildren: 0.25 } },
               hidden: {},
@@ -122,7 +117,7 @@ const Navbar = () => {
             animate={introReady ? "visible" : "hidden"}
           >
             {currentNavItems.map((item) => {
-              const Icon = item.icon;
+              const active = isActive(item.path);
               return (
                 <motion.div
                   key={item.path}
@@ -133,57 +128,88 @@ const Navbar = () => {
                 >
                   <Link
                     to={item.path}
-                    className={`nav-item-hover flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
-                      isActive(item.path)
-                        ? "text-white bg-[var(--color-primary-normal)]"
-                        : isHomePage && !isScrolled
-                        ? "text-[#EFE7F6]"
-                        : "text-[#000640]"
+                    className={`flex items-center justify-center px-4 py-1.5 rounded-[12px] font-medium text-sm transition-all duration-200 ${
+                      active
+                        ? "bg-[#ECEFFD] text-[#4460EF] shadow-sm font-semibold"
+                        : "text-[#ECEFFD] hover:bg-white/10 hover:text-white"
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span className="font-medium">{item.label}</span>
+                    <span>{item.label}</span>
                   </Link>
                 </motion.div>
               );
             })}
           </motion.div>
 
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-2">
+          {/* Right Side Action Buttons */}
+          <div className="flex items-center space-x-3">
             {!isMounted || !isAuthenticated ? (
               <>
-                {/* Sign Up — outlined ghost */}
+                {/* Sign Up Button */}
                 <Link
                   to="/register"
-                  className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-lg border-2 border-[var(--color-primary-light)] text-[var(--color-primary-light)] hover:bg-[var(--color-primary-light)] hover:text-[var(--color-primary-normal)] transition-colors duration-200"
+                  style={{
+                    width: "105px",
+                    height: "40px",
+                    backgroundColor: "#ECEFFD",
+                    color: "#4460EF",
+                    borderRadius: "12px",
+                    paddingTop: "16px",
+                    paddingRight: "8px",
+                    paddingBottom: "16px",
+                    paddingLeft: "8px",
+                    opacity: 1,
+                  }}
+                  className="hidden sm:inline-flex items-center justify-center text-sm font-semibold transition-all duration-200 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <UserPlus className="w-4 h-4" />
-                  <span>Sign Up</span>
+                  Sign Up
                 </Link>
-                {/* Sign In — filled primary */}
+
+                {/* Join IEEE Button */}
                 <Link
-                  to="/login"
-                  className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200 shadow"
+                  to="/register"
+                  style={{
+                    height: "40px",
+                    borderTop: "1.6px solid #FFFFFF73",
+                    borderRight: "1.6px solid #FFFFFF73",
+                    borderBottom: "1.6px solid #FFFFFF73",
+                    borderLeft: "1.6px solid #FFFFFF73",
+                    borderRadius: "12px",
+                    paddingTop: "8px",
+                    paddingRight: "16px",
+                    paddingBottom: "8px",
+                    paddingLeft: "16px",
+                    color: "#FEFEFF",
+                    backgroundColor: "transparent",
+                    opacity: 1,
+                  }}
+                  className="hidden sm:inline-flex items-center justify-center text-sm font-medium transition-all duration-200 hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <LogIn className="w-4 h-4" />
-                  <span>Sign In</span>
+                  Join IEEE
                 </Link>
               </>
             ) : (
               <button
                 onClick={handleLogout}
-                className="hidden sm:flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200 shadow"
+                style={{
+                  height: "40px",
+                  borderTop: "1.6px solid #FFFFFF73",
+                  borderRadius: "12px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  backgroundColor: "#ECEFFD",
+                  color: "#4460EF",
+                }}
+                className="hidden sm:inline-flex items-center justify-center text-sm font-semibold transition-colors duration-200"
               >
-                <LogOut className="w-4 h-4" />
-                <span>Log out</span>
+                Log out
               </button>
             )}
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors duration-200"
+              className="md:hidden p-2 rounded-lg text-[#ECEFFD] hover:bg-white/10 transition-colors duration-200"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -191,67 +217,46 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer (solid white background, no dark mode) */}
+      {/* Mobile Drawer */}
       <div
         className={`md:hidden transition-all duration-300 overflow-hidden ${
           isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-4 py-3 bg-white border-t border-gray-200">
+        <div className="px-4 py-4 bg-[#12111F] border-t border-white/10">
           <div className="space-y-2">
             {currentNavItems.map((item) => {
-              const Icon = item.icon;
+              const active = isActive(item.path);
               return (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
-                    isActive(item.path)
-                      ? "bg-[var(--color-primary-light)] text-[var(--color-primary-normal)]"
-                      : "text-gray-700 hover:bg-[var(--color-primary-light)]"
+                  className={`flex items-center px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-200 ${
+                    active
+                      ? "bg-[#ECEFFD] text-[#4460EF]"
+                      : "text-[#ECEFFD] hover:bg-white/10"
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
+                  <span>{item.label}</span>
                 </Link>
               );
             })}
-            {/* Mobile auth buttons */}
-            <div className="pt-3 border-t border-gray-200 space-y-2">
-              {!isMounted || !isAuthenticated ? (
-                <>
-                  {/* Sign Up — outlined */}
-                  <Link
-                    to="/register"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center space-x-2 w-full px-4 py-2 border-2 border-[var(--color-primary-normal)] text-[var(--color-primary-normal)] rounded-lg hover:bg-[var(--color-primary-light)] transition-colors duration-200"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                    <span>Sign Up</span>
-                  </Link>
-                  {/* Sign In — filled */}
-                  <Link
-                    to="/login"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-[var(--color-primary-normal)] text-white rounded-lg hover:bg-[var(--color-primary-normal-hover)] transition-colors duration-200"
-                  >
-                    <LogIn className="w-4 h-4" />
-                    <span>Sign In</span>
-                  </Link>
-                </>
-              ) : (
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setIsMenuOpen(false);
-                  }}
-                  className="flex items-center justify-center space-x-2 w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Log out</span>
-                </button>
-              )}
+            <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
+              <Link
+                to="/register"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-center w-full py-2 bg-[#ECEFFD] text-[#4460EF] font-semibold rounded-[12px]"
+              >
+                Sign Up
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-center w-full py-2 border-[1.6px] border-[#FFFFFF73] text-[#FEFEFF] font-medium rounded-[12px]"
+              >
+                Join IEEE
+              </Link>
             </div>
           </div>
         </div>

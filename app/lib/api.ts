@@ -1093,7 +1093,7 @@ export const addUser = async (data: CreateUserData) => {
   }
 };
 
-export const createMeeting = async (data: CreateMeetingData) => {
+export const createMeeting = async (data: CreateMeetingData | any) => {
   try {
     const response = await apiClient.post("/Meetings", data);
     return response.data;
@@ -1105,21 +1105,9 @@ export const createMeeting = async (data: CreateMeetingData) => {
   }
 };
 
-// export const createArticle = async (data: CreateArticleData) => {
-//   try {
-//     const response = await apiClient.post("/Articles", data);
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       throw new Error(error.response?.data?.message || "Failed to create article");
-//     }
-//     throw new Error("An unexpected error occurred");
-//   }
-// };
-
-export const createEvent = async (data: CreateEventData) => {
+export const createEvent = async (data: CreateEventData | any) => {
   try {
-    const response = await apiClient.post("/events", data);
+    const response = await apiClient.post("/Events", data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

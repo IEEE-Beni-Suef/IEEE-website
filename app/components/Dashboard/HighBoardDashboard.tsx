@@ -20,6 +20,7 @@ import {
   useDashboardStats,
   useRecentActivities,
   useMembers,
+  useAllUsers,
   useAllMeetings,
   useCommittees,
   useAllArticles,
@@ -62,13 +63,16 @@ export const HighBoardDashboard: React.FC = () => {
   // Queries
   const { data: stats } = useDashboardStats();
   const { data: activities } = useRecentActivities();
+  const { data: rawUsersList = [] } = useAllUsers();
   const { data: rawMembersList = [] } = useMembers();
   const { data: rawMeetingsList = [] } = useAllMeetings();
   const { data: rawCommitteesList = [] } = useCommittees();
   const { data: rawArticlesList = [] } = useAllArticles();
   const { data: rawEventsList = [] } = useAllEvents();
 
-  const membersList = extractArrayData<DashboardMember>(rawMembersList);
+  const fetchedUsers = extractArrayData<DashboardMember>(rawUsersList);
+  const fetchedMembers = extractArrayData<DashboardMember>(rawMembersList);
+  const membersList = fetchedUsers.length > 0 ? fetchedUsers : fetchedMembers;
   const meetingsList = extractArrayData<any>(rawMeetingsList);
   const committeesList = extractArrayData<any>(rawCommitteesList);
   const articlesList = extractArrayData<any>(rawArticlesList);
