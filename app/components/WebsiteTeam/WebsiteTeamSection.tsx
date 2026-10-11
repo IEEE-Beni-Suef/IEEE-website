@@ -6,7 +6,12 @@ import elshishtawyImg from "~/assets/images/WebsiteTeam/Elshishtawy.jpeg";
 import youssefImg from "~/assets/images/WebsiteTeam/YoussefAlaa.jpg";
 import ahmedElBannaImg from "~/assets/images/WebsiteTeam/Ahmed El-Banna.png";
 import mariemImg from "~/assets/images/WebsiteTeam/Mariem Gamal.png";
+import MosatfaHatem from "~/assets/images/WebsiteTeam/Mostafa Hatem.png";
+import AhmedAbdelkereemImg from "~/assets/images/WebsiteTeam/Ahmed Abdelkereem.png";
+
 import placeholderImg from "~/assets/images/highBoard/webmaster.png";
+
+
 
 const teamMembers: WebsiteTeamMember[] = [
   {
@@ -23,7 +28,7 @@ const teamMembers: WebsiteTeamMember[] = [
     roleTag: "Front-End Developer",
     description:
       "Bringing designs to life through responsive, interactive, and user-friendly interfaces.",
-    image: placeholderImg,
+    image: MosatfaHatem,
   },
   {
     id: "member-3",
@@ -55,7 +60,7 @@ const teamMembers: WebsiteTeamMember[] = [
     roleTag: "UI/UX Designer",
     description:
       "Crafting intuitive user experiences and visually engaging designs that put users first.",
-    image: placeholderImg,
+    image: AhmedAbdelkereemImg,
   },
 ];
 

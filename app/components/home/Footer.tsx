@@ -3,14 +3,27 @@ import {
   ArrowRight, 
   MapPin, 
   Mail, 
-  Phone, 
-  Globe, 
-  Users, 
-  Share2
+  Facebook,
+  Instagram,
+  Linkedin
 } from 'lucide-react';
 import { Link } from 'react-router';
 
 import IEEE from "../../assets/IEEE.png";
+
+// Custom TikTok SVG Icon
+const TikTokIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.47V8.09a8.28 8.28 0 0 0 4.82 1.43v-3.4a4.85 4.85 0 0 1-1-.43z" />
+  </svg>
+);
 
 // --- Data Models ---
 interface LinkItem {
@@ -18,16 +31,21 @@ interface LinkItem {
   href: string;
 }
 
-interface SocialItem extends LinkItem {
-  icon: React.ElementType;
+interface SocialItem {
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
 // --- Constants ---
+// Quick Links matching Navbar items and navigation paths
 const QUICK_LINKS: LinkItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
-  { label: 'Events', href: '/events' },
-  { label: 'Membership', href: '/membership' },
+  { label: 'Events', href: '/#events' },
+  { label: 'Ch&G', href: '/#chg' },
+  { label: 'Committees', href: '/#committees' },
+  { label: 'About', href: '/#about' },
+  { label: 'Achievements', href: '/#achievements' },
 ];
 
 const RESOURCES: LinkItem[] = [
@@ -38,9 +56,21 @@ const RESOURCES: LinkItem[] = [
 ];
 
 const SOCIAL_LINKS: SocialItem[] = [
-  { label: 'Global Network', href: '#', icon: Globe },
-  { label: 'Community', href: '#', icon: Users },
-  { label: 'Share', href: '#', icon: Share2 },
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com/ieee.bsu',
+    icon: Facebook,
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/ieee_bsusb',
+    icon: Instagram,
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/ieee-benisuef-student-branch/posts/',
+    icon: Linkedin,
+  },
 ];
 
 export const Footer: React.FC = () => {
@@ -77,7 +107,7 @@ export const Footer: React.FC = () => {
             </Link>
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Column 2: Quick Links (Matches Navbar Navigation) */}
           <nav aria-label="Quick Links" className="lg:pl-4">
             <h3 className="text-white text-lg sm:text-xl font-bold mb-6">Quick Links</h3>
             <ul className="space-y-4 text-sm sm:text-base text-gray-300">
@@ -111,25 +141,19 @@ export const Footer: React.FC = () => {
             <ul className="space-y-4 text-sm sm:text-base text-gray-300">
               <li className="flex items-start gap-3">
                 <Mail className="text-[#4460EF] mt-1 flex-shrink-0" size={20} />
-                <a href="mailto:contact@ieee-sb.org" className="hover:text-white transition-colors">
-                  contact@ieee-sb.org
+                <a href="mailto:benisuef.ieee@gmail.com" className="hover:text-white transition-colors">
+                  benisuef.ieee@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="text-[#4460EF] mt-1 flex-shrink-0" size={20} />
                 <span>
-                  University Campus, Engineering Block A, Room 402
+                  Beni Suef, Egypt
                 </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone className="text-[#4460EF] mt-1 flex-shrink-0" size={20} />
-                <a href="tel:+15550001234" className="hover:text-white transition-colors">
-                  +1 (555) 000-1234
-                </a>
               </li>
             </ul>
 
-            {/* Social Media Circle Buttons (#4460EF background, #CBD5E1 icons) */}
+            {/* Social Media Circle Buttons (Facebook, Instagram, LinkedIn, TikTok) */}
             <div className="flex gap-3 pt-2">
               {SOCIAL_LINKS.map((social) => {
                 const Icon = social.icon;
@@ -137,8 +161,10 @@ export const Footer: React.FC = () => {
                   <a
                     key={social.label}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="h-10 w-10 rounded-full bg-[#4460EF] flex items-center justify-center text-[#CBD5E1] hover:bg-[#3450DF] hover:text-white transition-colors duration-200 shadow-md"
+                    className="h-10 w-10 rounded-full bg-[#4460EF] flex items-center justify-center text-[#CBD5E1] hover:bg-[#3450DF] hover:text-white transition-all duration-200 shadow-md hover:scale-105 active:scale-95"
                   >
                     <Icon size={18} />
                   </a>
@@ -150,7 +176,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Section: Copyright & Credits */}
         <div className="pt-8 border-t border-[#FFFFFF0D] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[#64748B]">
-          <p>© {new Date().getFullYear()} IEEE Student Branch. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} IEEE Beni Suef Student Branch. All rights reserved.</p>
           <p>
             Designed by{' '}
             <span className="text-[#4460EF] font-semibold">IEEE Student Branch</span>

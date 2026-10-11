@@ -1,12 +1,22 @@
-import React, { useState, useRef } from "react";
-import { motion, useScroll, useSpring, useReducedMotion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useReducedMotion,
+  useInView,
+  AnimatePresence,
+  type Variants,
+} from "framer-motion";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import AmbassadorCard from "./AmbassadorCard";
 import { ambassadors, type Ambassador } from "~/data/ambassadors";
 
 export const AmbassadorsSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const isInView = useInView(sectionRef, { amount: 0.2 });
 
   // Scroll animation setup for the connection arc
   const { scrollYProgress } = useScroll({
@@ -22,25 +32,81 @@ export const AmbassadorsSection: React.FC = () => {
 
   const pathLength = shouldReduceMotion ? 1 : smoothProgress;
 
+  // Pagination configuration
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [direction, setDirection] = useState<number>(1);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [previewAmbassador, setPreviewAmbassador] = useState<Ambassador | null>(null);
+
   const itemsPerPage = 4;
   const totalPages = Math.ceil(ambassadors.length / itemsPerPage);
 
-  const nextPage = () => {
+  const nextPage = useCallback(() => {
+    setDirection(1);
     setCurrentPage((prev) => (prev + 1) % totalPages);
-  };
+  }, [totalPages]);
 
-  const prevPage = () => {
+  const prevPage = useCallback(() => {
+    setDirection(-1);
     setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
-  };
+  }, [totalPages]);
 
+  const goToPage = useCallback(
+    (index: number) => {
+      setDirection(index > currentPage ? 1 : -1);
+      setCurrentPage(index);
+    },
+    [currentPage]
+  );
+
+  // Auto-slide to the right when user is in the section; loops continuously
+  useEffect(() => {
+    if (!isInView || isPaused || previewAmbassador !== null || totalPages <= 1) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      nextPage();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isInView, isPaused, previewAmbassador, totalPages, nextPage]);
+
+  // Current page cards
   const currentAmbassadors = ambassadors.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
 
+  // Framer Motion slide variants
+  const slideVariants: Variants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 70 : -70,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        x: { type: "spring" as const, stiffness: 300, damping: 30 },
+        opacity: { duration: 0.3 },
+      },
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -70 : 70,
+      opacity: 0,
+      transition: {
+        x: { type: "spring" as const, stiffness: 300, damping: 30 },
+        opacity: { duration: 0.25 },
+      },
+    }),
+  };
+
   return (
-    <section ref={sectionRef} className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden select-none"
+    >
       <div className="max-w-[1060px] mx-auto flex flex-col items-center">
         {/* Section Header */}
         <div className="flex flex-col items-center justify-center text-center space-y-3 mb-10 md:mb-12">
@@ -83,7 +149,7 @@ export const AmbassadorsSection: React.FC = () => {
 
         {/* ── Main Connection Banner Div ── */}
         <div
-          className="relative w-full max-w-[1060px] min-h-[300px] rounded-3xl p-6 sm:p-8 overflow-hidden shadow-2xl mb-4 flex flex-col justify-between"
+          className="relative w-full max-w-[1060px] min-h-[300px] rounded-3xl p-6 sm:p-8 overflow-hidden shadow-2xl mb-12 flex flex-col justify-between"
           style={{
             background: "linear-gradient(135deg, #0E2C5E 0%, #1A3A7A 100%)",
             borderTop: "0.8px solid #4460EF33",
@@ -202,75 +268,140 @@ export const AmbassadorsSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Small Caption Disclaimer */}
-        <p className="text-xs text-gray-400 text-center mb-10 italic">
-          Real ambassador profiles, names, and photos can be easily configured in the static data file.
-        </p>
+        {/* ── Ambassadors Cards Grid / Animated Pagination ── */}
+        <div
+          ref={cardsContainerRef}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          className="relative w-full max-w-[1060px]"
+        >
+          {/* Side navigation arrows for desktop */}
+          <button
+            onClick={prevPage}
+            aria-label="Previous Page"
+            className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] items-center justify-center shadow-lg hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
 
-        {/* ── Ambassadors Cards Grid / Slider ── */}
-        <div className="w-full max-w-[1060px]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentPage}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
-            >
-              {currentAmbassadors.map((amb: Ambassador) => (
-                <AmbassadorCard
-                  key={amb.id}
-                  id={amb.id}
-                  name={amb.name}
-                  role={amb.role}
-                  description={amb.description}
-                  image={amb.image}
-                />
-              ))}
-            </motion.div>
-          </AnimatePresence>
+          <button
+            onClick={nextPage}
+            aria-label="Next Page"
+            className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] items-center justify-center shadow-lg hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Cards Container with AnimatePresence */}
+          <div className="overflow-hidden py-2 px-1">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={currentPage}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
+              >
+                {currentAmbassadors.map((amb: Ambassador) => (
+                  <AmbassadorCard
+                    key={amb.id}
+                    id={amb.id}
+                    name={amb.name}
+                    place={amb.place}
+                    image={amb.image}
+                    onPreview={() => setPreviewAmbassador(amb)}
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* ── Pagination Controls (renders if totalPages > 1) ── */}
+        {/* ── Pagination Controls ── */}
         {totalPages > 1 && (
-          <div className="flex flex-col items-center space-y-4 pt-10">
-            {/* Pagination Dots */}
-            <div className="flex items-center gap-2">
+          <div
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            className="flex flex-col items-center space-y-4 pt-8"
+          >
+            {/* Pagination Indicator Dots */}
+            <div className="flex items-center gap-2.5 bg-purple-50/60 px-4 py-2 rounded-full border border-purple-100/60">
               {Array.from({ length: totalPages }).map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => setCurrentPage(idx)}
+                  onClick={() => goToPage(idx)}
                   className={`transition-all duration-300 rounded-full ${
                     currentPage === idx
-                      ? "w-3 h-3 bg-[#5A10A5] scale-110"
-                      : "w-2.5 h-2.5 bg-[#5A10A5]/20 hover:bg-[#5A10A5]/40"
+                      ? "w-7 h-2.5 bg-[#5A10A5] shadow-sm shadow-purple-500/30"
+                      : "w-2.5 h-2.5 bg-[#5A10A5]/25 hover:bg-[#5A10A5]/50"
                   }`}
-                  aria-label={`Go to slide ${idx + 1}`}
+                  aria-label={`Go to page ${idx + 1}`}
                 />
               ))}
             </div>
 
-            {/* Navigation Prev / Next Arrows */}
-            <div className="flex items-center gap-4">
-              <button
-                onClick={prevPage}
-                className="w-10 h-10 rounded-full border border-purple-200 text-[#5A10A5] flex items-center justify-center transition-all duration-300 hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 shadow-sm"
-                aria-label="Previous Page"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={nextPage}
-                className="w-10 h-10 rounded-full border border-purple-200 text-[#5A10A5] flex items-center justify-center transition-all duration-300 hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 shadow-sm"
-                aria-label="Next Page"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
+           
           </div>
         )}
       </div>
+
+      {/* ── Image Lightbox Modal ── */}
+      <AnimatePresence>
+        {previewAmbassador && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPreviewAmbassador(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-lg w-full bg-white rounded-3xl overflow-hidden shadow-2xl border border-purple-100 flex flex-col max-h-[90vh]"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setPreviewAmbassador(null)}
+                aria-label="Close Preview"
+                className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Full Image */}
+              <div className="relative w-full flex-1 overflow-auto bg-slate-900 flex items-center justify-center">
+                <img
+                  src={previewAmbassador.image}
+                  alt={previewAmbassador.name}
+                  className="w-full h-auto max-h-[70vh] object-contain"
+                />
+              </div>
+
+              {/* Modal Caption: Title & Place only */}
+              <div className="p-5 bg-white border-t border-purple-50 flex flex-col space-y-1">
+                <h3
+                  className="text-lg font-extrabold text-[#000640]"
+                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                >
+                  {previewAmbassador.name}
+                </h3>
+                <p
+                  className="text-xs sm:text-sm font-semibold text-[#5A10A5]"
+                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                >
+                  {previewAmbassador.place}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

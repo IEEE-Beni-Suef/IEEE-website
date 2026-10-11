@@ -58,6 +58,10 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "ahmedalbanna1111@gmail.com",
+      password: "HG23#@12e",
+    },
   });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -211,8 +215,8 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setValue("email", "demo@ieee-bns.org");
-                  setValue("password", "password123");
+                  setValue("email", "ahmedalbanna1111@gmail.com");
+                  setValue("password", "HG23#@12e");
                 }}
                 className="text-xs font-bold text-[#5A10A5] hover:text-[#480D85] underline cursor-pointer"
               >
@@ -225,14 +229,14 @@ const Login = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               <div className="bg-white px-3 py-2 rounded-xl border border-purple-100 flex flex-col">
                 <span className="text-[10px] text-gray-500 font-semibold uppercase">Email</span>
-                <span className="font-mono font-medium text-slate-800 select-all">
-                  demo@ieee-bns.org
+                <span className="font-mono font-medium text-slate-800 select-all truncate" title="ahmedalbanna1111@gmail.com">
+                  ahmedalbanna1111@gmail.com
                 </span>
               </div>
               <div className="bg-white px-3 py-2 rounded-xl border border-purple-100 flex flex-col">
                 <span className="text-[10px] text-gray-500 font-semibold uppercase">Password</span>
                 <span className="font-mono font-medium text-slate-800 select-all">
-                  password123
+                  HG23#@12e
                 </span>
               </div>
             </div>

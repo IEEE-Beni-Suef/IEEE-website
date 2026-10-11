@@ -3,9 +3,8 @@ import React from 'react';
 
 import chairman from "../../assets/images/highBoard/chairman.png"
 import viceChairman from "../../assets/images/highBoard/viceChairman.png"
-import viceChairwoman from "../../assets/images/highBoard/viceChairwoman.jpg"
 import webmaster from "../../assets/images/highBoard/webmaster.png"
-import treasure from "../../assets/images/highBoard/treasure.jpg"
+import treasure from "../../assets/images/highBoard/treasure.png"
 import secretary from "../../assets/images/highBoard/secretary.png"
 
 export interface SocialLinks {
@@ -28,14 +27,14 @@ export const boardData: BoardMember[] = [
     name: 'Ahmed El-Banna',
     role: 'CHAIRMAN',
     imageUrl: chairman,
-    socials: { linkedin: 'https://www.linkedin.com/in/ahmed-m-el-banna-10268b200/', email: 'mailto:ahmedsharaf1965.n@gmail.com' }
+    socials: { linkedin: 'https://www.linkedin.com/in/ahmed-m-el-banna-10268b200/', email: 'mailto:ahmedalbanna142@gmail.com' }
   },
   {
     id: '2',
     name: 'Sama Mohsen',
     role: 'VICE CHAIRMAN',
     imageUrl: viceChairman,
-    socials: { linkedin: 'https://www.linkedin.com/in/sama-mohsen-a69b28334/', email: 'mailto:amrhassanhd@gmail.com' }
+    socials: { linkedin: 'https://www.linkedin.com/in/sama-mohsen-a69b28334/', email: 'mailto:sama222mohsen@gmail.com' }
   },
   {
     id: '4',

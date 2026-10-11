@@ -50,8 +50,7 @@ import HighBoardSection from "../components/home/HighBoardSection";
 
 import Sponsers from "./sponsors";
 
-
-export function meta({ }: MetaArgs) {
+export function meta({}: MetaArgs) {
   return [
     { title: "IEEE BNS - Beni Suef University Student Branch" },
     {
@@ -89,7 +88,6 @@ export function meta({ }: MetaArgs) {
 }
 
 export default function Home() {
-
   const { data: articles, isLoading, error } = useAllArticles();
   const {
     data: committees,
@@ -150,100 +148,29 @@ export default function Home() {
 
   return (
     <>
-
       <HeroSection />
+      
       <WhoWeAreSection />
+
       <OurJourneySection />
+
       <AchievementsSection />
+
       <AmbassadorsSection />
+
       <Events />
+
       <OurCommunitySection />
+
       <Commitees />
+
       <WebsiteTeamSection />
 
-      {/* Committees Section */}
       <HighBoardSection />
 
-      {/* Sponsers Section */}
-
-  <Sponsers />
+      <Sponsers />
 
       <Footer />
     </>
   );
 }
-
-
- {/* About IEEE Section
-      <Section id="about" variant="primary" padding="xl">
-        <div className="max-w-7xl mx-auto ">
-          <SectionHeader>
-            <SectionTitle className="text-blue-600">
-              IEEE BNS: Where Knowledge Meets Passion!
-            </SectionTitle>
-            <SectionSubtitle>
-              Connecting students with cutting-edge technology, professional
-              development, and innovation opportunities
-            </SectionSubtitle>
-          </SectionHeader>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <Card variant="feature" className="p-8">
-                <h3 className="text-2xl font-bold text-blue-800 mb-4">
-                  What is IEEE?
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  IEEE is the world's largest technical professional
-                  association, focused on advancing technology for the benefit
-                  of humanity. It publishes a wide range of journals and
-                  standards in the fields of electrical engineering and computer
-                  science.
-                </p>
-              </Card>
-
-              <Card variant="elevated" className="p-8">
-                <h3 className="text-2xl font-bold text-purple-800 mb-4">
-                  Who Are We?
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  IEEE BNS Student Branch is a volunteer organization at Beni
-                  Suef University, led by students. Our branch consists of two
-                  societies: Technical Society and Non-Technical Society.
-                </p>
-              </Card>
-            </div>
-
-            <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
-                {statistics.map((stat, index) => {
-                  const IconComponent = stat.icon;
-                  return (
-                    <Card
-                      key={index}
-                      variant="glass"
-                      hover
-                      glow
-                      className={`p-6 text-center ${
-                        index === statistics.length - 1
-                          ? "col-span-2 mx-auto"
-                          : ""
-                      }`}
-                    >
-                      <div className="flex justify-center mb-2">
-                        <IconComponent className="w-8 h-8 text-blue-600" />
-                      </div>
-                      <div className="text-3xl font-bold text-blue-600 mb-1">
-                        {stat.value}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {stat.label}
-                      </div>
-                    </Card>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section> */}
