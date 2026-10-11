@@ -247,8 +247,8 @@ const CommitteesManagement = () => {
   return (
     <ProtectedRoute allowedRoles={[1, 2]}>
       <div className="space-y-6 pb-12">
-        {/* Sticky Header Section */}
-        <div className="sticky top-0 z-20 backdrop-blur-md bg-white/90  pb-4 pt-1 transition-colors">
+        {/* Header Section */}
+        <div className="pb-4 pt-1 transition-colors">
           {/* Page Header Title */}
           <div className="hidden md:flex items-center w-full h-10 border-1 border-[#CCB5E3] px-5 capitalize rounded-lg mt-3 mb-8 ">
             <span className="text-[#6C757D] text-sm">dashboard / </span>{" "}

@@ -1,4 +1,16 @@
-import { BellDot, Layers, User2, Sun, Moon } from "lucide-react";
+import {
+  BellDot,
+  Layers,
+  User2,
+  Sun,
+  Moon,
+  LayoutDashboard,
+  Home,
+  Calendar,
+  Users,
+  Info,
+  Award,
+} from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useIntro } from "~/context/IntroContext";
@@ -38,30 +50,51 @@ const DashboardNavbar = ({ onNotificationClick }: IProps) => {
     (user as any)?.imageUrl ||
     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80";
 
-  // Shared nav items (added "Contact Us")
+  // Shared nav items matching main website Navbar
   const navItems = [
-    { label: "Home", path: "/", icon: User2 },
-    { label: "Committees", path: "/#committees", icon: User2 },
-    { label: "Events", path: "/events", icon: User2 },
-    { label: "Articles", path: "/articles", icon: User2 },
-    { label: "About", path: "/about", icon: User2 },
-    { label: "Contact Us", path: "/contact", icon: User2 },
+    { label: "Home", path: "/", icon: Home },
+    { label: "Events", path: "/#events", icon: Calendar },
+    { label: "Ch&G", path: "/#chg", icon: Users },
+    { label: "Committees", path: "/#committees", icon: Layers },
+    { label: "About", path: "/#about", icon: Info },
+    { label: "Achievements", path: "/#achievements", icon: Award },
   ];
 
   const authNavItems = [
-    { label: "Dashboard", path: "/dashboard", icon: User2 },
-    { label: "Home", path: "/", icon: User2 },
-    { label: "Events", path: "/events", icon: User2 },
-    { label: "Articles", path: "/articles", icon: User2 },
-    { label: "Committees", path: "/#committees", icon: User2 },
-    { label: "About", path: "/about", icon: User2 },
-    { label: "Contact Us", path: "/contact", icon: User2 },
+    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { label: "Home", path: "/", icon: Home },
+    { label: "Events", path: "/#events", icon: Calendar },
+    { label: "Ch&G", path: "/#chg", icon: Users },
+    { label: "Committees", path: "/#committees", icon: Layers },
+    { label: "About", path: "/#about", icon: Info },
+    { label: "Achievements", path: "/#achievements", icon: Award },
   ];
 
   const currentNavItems =
     isMounted && isAuthenticated ? authNavItems : navItems;
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/" && !location.hash;
+    if (path.startsWith("/#")) {
+      return location.pathname === "/" && location.hash === path.replace("/", "");
+    }
+    return location.pathname + location.hash === path || location.pathname === path;
+  };
+
+  const handleNavClick = (path: string) => {
+    setIsMenuOpen(false);
+    if (path.startsWith("/#")) {
+      const id = path.replace("/#", "");
+      if (location.pathname === "/") {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    } else if (path === "/" && location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="relative flex w-full flex-col md:flex-row md:items-center md:justify-between">
@@ -118,6 +151,7 @@ const DashboardNavbar = ({ onNotificationClick }: IProps) => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={() => handleNavClick(item.path)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-3xl transition-all duration-200 font-medium text-sm ${
                   isActive(item.path)
                     ? "bg-[#5A10A5] text-white shadow-md shadow-purple-500/20"
@@ -180,7 +214,7 @@ const DashboardNavbar = ({ onNotificationClick }: IProps) => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => handleNavClick(item.path)}
                   className={`flex items-center space-x-3 rounded-lg px-3 py-2 transition-all duration-200 ${
                     isActive(item.path)
                       ? "bg-[#F5F0FF] text-[#5A10A5]"

@@ -80,6 +80,21 @@ const Navbar = () => {
     return location.pathname + location.hash === path || location.pathname === path;
   };
 
+  const handleNavClick = (path: string) => {
+    setIsMenuOpen(false);
+    if (path.startsWith("/#")) {
+      const id = path.replace("/#", "");
+      if (location.pathname === "/") {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    } else if (path === "/" && location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   const handleLogout = () => {
     clearAuth();
     navigate("/");
@@ -141,6 +156,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={item.path}
+                    onClick={() => handleNavClick(item.path)}
                     className={`flex items-center justify-center px-4 py-1.5 rounded-[12px] font-medium text-sm transition-all duration-200 ${
                       active
                         ? isScrolled
@@ -253,7 +269,7 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => handleNavClick(item.path)}
                   className={`flex items-center px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-200 ${
                     active
                       ? isScrolled

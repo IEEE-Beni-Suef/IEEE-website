@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -66,6 +67,31 @@ function AppShell() {
   const isAuthRoute =
     location.pathname === "/login" || location.pathname === "/register";
   const hideNavbar = isDashboardRoute || isAuthRoute;
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const scrollToTarget = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+          return true;
+        }
+        return false;
+      };
+
+      if (!scrollToTarget()) {
+        const t1 = setTimeout(scrollToTarget, 100);
+        const t2 = setTimeout(scrollToTarget, 300);
+        const t3 = setTimeout(scrollToTarget, 700);
+        return () => {
+          clearTimeout(t1);
+          clearTimeout(t2);
+          clearTimeout(t3);
+        };
+      }
+    }
+  }, [location.pathname, location.hash]);
 
   return (
     <>
