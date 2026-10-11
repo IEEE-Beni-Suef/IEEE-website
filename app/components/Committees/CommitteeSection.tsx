@@ -2,8 +2,6 @@ import { useState, type MouseEvent } from "react";
 import CommitteesSwipper from "./CommitteeSwipper";
 import CommitteeToggleButton from "./CommitteeToggleButton";
 import type { Committee } from "~/types";
-import { SwiperSlide } from "swiper/react";
-import CommitteeCardSkeleton from "./CommitteeCardSkeleton";
 
 import aiImg from "~/assets/images/Committees/AI.png";
 import astronomyImg from "~/assets/images/Committees/Astronomy.png";
@@ -19,10 +17,10 @@ import prImg from "~/assets/images/Committees/PR.png";
 import socialMediaImg from "~/assets/images/Committees/SocialMedia.png";
 
 interface IProps {
-  committees: Committee[];
-  isLoading: boolean;
-  isError: boolean;
-  error: Error | null;
+  committees?: Committee[];
+  isLoading?: boolean;
+  isError?: boolean;
+  error?: Error | null;
 }
 
 const defaultTechnicalCommittees: Committee[] = [
@@ -151,12 +149,7 @@ const defaultOperationalCommittees: Committee[] = [
   },
 ];
 
-const CommitteesSection = ({
-  committees,
-  isLoading,
-  isError,
-  error,
-}: IProps) => {
+const CommitteesSection = ({}: IProps = {}) => {
   const [commmitteList, setCommmitteList] = useState<
     "technicalcommittees" | "operationalcommittees"
   >("technicalcommittees");
@@ -170,51 +163,10 @@ const CommitteesSection = ({
     }
   };
 
-  const technicalNames = [
-    "backend",
-    "frontend",
-    "astronomy",
-    "power",
-    "embedded systems",
-    "gnc",
-    "ai",
-    "cybersecurity",
-    "cyber security",
-    "data analysis",
-    "dataanalysis",
-  ];
-
-  const fetchedTechnical = (committees || []).filter((c) =>
-    c.name && technicalNames.some((name) => c.name.toLowerCase().includes(name)),
-  );
-
-  const fetchedOperational = (committees || []).filter(
-    (c) => c.name && !technicalNames.some((name) => c.name.toLowerCase().includes(name)),
-  );
-
-  const technicalList =
-    fetchedTechnical.length > 0 ? fetchedTechnical : defaultTechnicalCommittees;
-
-  const operationalList =
-    fetchedOperational.length > 0 ? fetchedOperational : defaultOperationalCommittees;
-
-  if (isLoading) {
-    return (
-      <div className="flex gap-6">
-        {Array.from({ length: 8 }, (_, idx) => (
-          <SwiperSlide
-            key={idx}
-            className="flex! justify-center! items-center!"
-          >
-            <CommitteeCardSkeleton />
-          </SwiperSlide>
-        ))}
-      </div>
-    );
-  }
-
   const currentDisplayList =
-    commmitteList === "technicalcommittees" ? technicalList : operationalList;
+    commmitteList === "technicalcommittees"
+      ? defaultTechnicalCommittees
+      : defaultOperationalCommittees;
 
   return (
     <div>

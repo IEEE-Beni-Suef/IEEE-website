@@ -50,6 +50,37 @@ export default function Events() {
     // Default active index is the middle card (index 1)
     const defaultActiveIndex = 1;
     const [activeIndex, setActiveIndex] = useState<number>(defaultActiveIndex);
+    const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+
+    const scrollToMobileCard = (index: number) => {
+        setActiveIndex(index);
+        if (mobileScrollRef.current) {
+            const cardEl = mobileScrollRef.current.children[index] as HTMLElement | undefined;
+            if (cardEl) {
+                cardEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+        }
+    };
+
+    const handleMobileScroll = () => {
+        if (!mobileScrollRef.current) return;
+        const container = mobileScrollRef.current;
+        const scrollCenter = container.scrollLeft + container.clientWidth / 2;
+        const children = Array.from(container.children) as HTMLElement[];
+        let closestIndex = 0;
+        let minDistance = Infinity;
+        children.forEach((child, idx) => {
+            const childCenter = child.offsetLeft + child.clientWidth / 2;
+            const distance = Math.abs(scrollCenter - childCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = idx;
+            }
+        });
+        if (closestIndex !== activeIndex) {
+            setActiveIndex(closestIndex);
+        }
+    };
 
     return (
         <section id="events" className="relative w-full overflow-hidden pt-8 sm:pt-10 pb-12 sm:pb-20 min-h-screen bg-white">
@@ -92,7 +123,7 @@ export default function Events() {
                         hidden: {}
                     }}
                     onMouseLeave={() => setActiveIndex(defaultActiveIndex)}
-                    className="mt-10 sm:mt-20 flex flex-col md:flex-row justify-center items-center gap-10 sm:gap-14 md:gap-16 lg:gap-24 w-full max-w-[1440px] mx-auto min-h-[540px]"
+                    className="mt-10 sm:mt-20 hidden md:flex flex-row justify-center items-center gap-10 sm:gap-14 md:gap-16 lg:gap-24 w-full max-w-[1440px] mx-auto min-h-[540px]"
                 >
                     {eventsData.map((event, index) => {
                         const isOpen = activeIndex === index;
@@ -105,7 +136,7 @@ export default function Events() {
                                     visible: { 
                                         opacity: 1, 
                                         scale: 1, 
-                                        y: 0,
+                                        y: 0, 
                                         transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
                                     }
                                 }}
@@ -172,18 +203,106 @@ export default function Events() {
                     })}
                 </motion.div>
 
+                {/* Mobile View: Event Card with Full-Width Image on Top and Content Below (Sponsor Card Style) */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="md:hidden mt-8 w-full max-w-sm mx-auto"
+                >
+                    <div
+                        ref={mobileScrollRef}
+                        onScroll={handleMobileScroll}
+                        className="flex flex-row gap-5 overflow-x-auto snap-x snap-mandatory px-4 py-4 scrollbar-none items-center"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                    >
+                        {eventsData.map((event, index) => (
+                            <div
+                                key={`mobile-${event.id}`}
+                                onClick={() => scrollToMobileCard(index)}
+                                className={`snap-center shrink-0 w-[85vw] max-w-[310px] bg-white rounded-[28px] p-5 flex flex-col justify-between items-center border transition-all duration-300 shadow-md ${
+                                    activeIndex === index
+                                        ? "border-[#5A10A5] shadow-purple-500/20 scale-[1.01]"
+                                        : "border-[#CCB5E3]/80 opacity-90 scale-[0.98]"
+                                }`}
+                            >
+                                {/* Full-Width Image at the Top */}
+                                <div className="h-44 w-full rounded-[20px] overflow-hidden shrink-0 relative bg-gray-50 border border-gray-100">
+                                    <img
+                                        src={event.photo || defaultImage}
+                                        alt={event.title}
+                                        onError={(e) => {
+                                            const target = e.currentTarget;
+                                            if (target.src !== defaultImage) {
+                                                target.src = defaultImage;
+                                            }
+                                        }}
+                                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                    />
+                                </div>
+
+                                {/* Text & Details Below Image (like Sponsor Card styled for Events) */}
+                                <div className="w-full flex flex-col space-y-1.5 text-center mt-3.5">
+                                    <h3 className="font-extrabold text-xl text-[#480D84] line-clamp-1">
+                                        {event.title}
+                                    </h3>
+                                    {event.subtitle && (
+                                        <p className="text-xs font-semibold text-[#5A10A5]">
+                                            {event.subtitle}
+                                        </p>
+                                    )}
+                                    <p className="text-xs text-slate-600 font-normal line-clamp-3 leading-relaxed">
+                                        {event.description}
+                                    </p>
+                                    {event.venue && (
+                                        <div className="pt-2 border-t border-purple-100 text-[11px] text-[#5A6A8A] space-y-0.5">
+                                            <p><span className="font-bold text-[#000640]">Venue:</span> {event.venue}</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Discover CTA Button */}
+                                <div className="pt-3 w-full">
+                                    <Link
+                                        to={`/article/${event.id}`}
+                                        className="flex items-center justify-center gap-2 w-full bg-[#5A10A5] text-white text-xs sm:text-sm font-semibold py-2.5 rounded-full hover:bg-[#480D84] active:scale-95 transition-all duration-200 shadow-md shadow-purple-900/10 hover:shadow-purple-500/30"
+                                    >
+                                        Discover
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        >
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 16 16 12 12 8"></polyline>
+                                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                                        </svg>
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </motion.div>
+
                 {/* Slider Dots */}
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="mt-12 sm:mt-16 flex justify-center items-center gap-3"
+                    className="mt-8 sm:mt-16 flex justify-center items-center gap-3"
                 >
                     {eventsData.map((_, idx) => (
                         <button 
                             key={`dot-${idx}`}
-                            onClick={() => setActiveIndex(idx)} 
+                            onClick={() => scrollToMobileCard(idx)} 
                             aria-label={`Slide card ${idx + 1}`}
                             className={`w-[16px] sm:w-[18px] h-[16px] sm:h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${activeIndex === idx ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
                         />

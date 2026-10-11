@@ -173,7 +173,7 @@ export const AmbassadorsSection: React.FC = () => {
 
           {/* Connection Arc & Nodes Area */}
           <div className="relative z-10 w-full h-[220px]">
-            {/* SVG Scroll-Animated Arc Line Starting at Circle 1 (295, 155) & Ending at Circle 2 (705, 115) */}
+            {/* SVG Scroll-Animated Arc Line Starting at Circle 1 (295, 138) & Ending at Circle 2 (705, 95) */}
             <svg
               className="absolute inset-0 w-full h-full pointer-events-none z-10"
               viewBox="0 0 1000 220"
@@ -182,14 +182,14 @@ export const AmbassadorsSection: React.FC = () => {
             >
               {/* Background Faint Path */}
               <path
-                d="M 295 155 Q 500 50 705 115"
+                d="M 295 138 Q 500 35 705 95"
                 stroke="rgba(255, 255, 255, 0.15)"
                 strokeWidth="2.5"
                 fill="none"
               />
               {/* Scroll-Progressive Animated Line */}
               <motion.path
-                d="M 295 155 Q 500 50 705 115"
+                d="M 295 138 Q 500 35 705 95"
                 stroke="url(#arc-gradient)"
                 strokeWidth="3.5"
                 strokeLinecap="round"
@@ -205,38 +205,40 @@ export const AmbassadorsSection: React.FC = () => {
               </defs>
             </svg>
 
-            {/* Left Node: Beni-Suef, Egypt (Dot center matching SVG start: 29.5%, 155px) */}
-            <div className="absolute left-[29.5%] top-[155px] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center text-center">
-              {/* Node Dot Circle */}
-              <div className="relative flex items-center justify-center">
+            {/* Left Node: Beni-Suef, Egypt (Dot center matching SVG start: 29.5%, 138px) */}
+            <div className="absolute left-[29.5%] top-[138px] z-20">
+              {/* Node Dot Circle centered exactly at (0, 0) */}
+              <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
                 <span className="absolute w-8 h-8 rounded-full bg-purple-500/30 animate-ping" />
                 <span className="w-5 h-5 rounded-full bg-[#9333EA] border-2 border-white shadow-lg shadow-purple-500/50" />
               </div>
               {/* Centered Typography for Beni-Suef, Egypt */}
-              <h4
-                style={{
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 700,
-                  fontSize: "15.66px",
-                  lineHeight: "100%",
-                  textAlign: "center",
-                  color: "#FFFFFF",
-                }}
-                className="mt-3 whitespace-nowrap"
-              >
-                Beni-Suef, Egypt
-              </h4>
+              <div className="absolute top-3.5 left-0 -translate-x-1/2 flex flex-col items-center text-center mt-2 pointer-events-auto">
+                <h4
+                  style={{
+                    fontFamily: "Montserrat, sans-serif",
+                    fontWeight: 700,
+                    fontSize: "15.66px",
+                    lineHeight: "100%",
+                    textAlign: "center",
+                    color: "#FFFFFF",
+                  }}
+                  className="whitespace-nowrap"
+                >
+                  Beni-Suef, Egypt
+                </h4>
+              </div>
             </div>
 
-            {/* Right Node: IEEE Region 8 (Dot center matching SVG end: 70.5%, 115px) */}
-            <div className="absolute left-[70.5%] top-[115px] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center text-center">
-              {/* Node Dot Circle */}
-              <div className="relative flex items-center justify-center">
+            {/* Right Node: IEEE Region 8 (Dot center matching SVG end: 70.5%, 95px) */}
+            <div className="absolute left-[70.5%] top-[95px] z-20">
+              {/* Node Dot Circle centered exactly at (0, 0) */}
+              <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
                 <span className="absolute w-10 h-10 rounded-full bg-cyan-400/30 animate-ping" />
                 <span className="w-6 h-6 rounded-full bg-[#00F0FF] border-2 border-white shadow-lg shadow-cyan-400/50" />
               </div>
               {/* Centered Typography for IEEE Region 8 */}
-              <div className="mt-3 flex flex-col items-center justify-center text-center">
+              <div className="absolute top-4.5 left-0 -translate-x-1/2 flex flex-col items-center justify-center text-center mt-2 pointer-events-auto">
                 <h4
                   style={{
                     fontFamily: "Montserrat, sans-serif",
@@ -279,17 +281,17 @@ export const AmbassadorsSection: React.FC = () => {
           <button
             onClick={prevPage}
             aria-label="Previous Page"
-            className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] items-center justify-center shadow-lg hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200"
+            className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] items-center justify-center shadow-md hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
 
           <button
             onClick={nextPage}
             aria-label="Next Page"
-            className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] items-center justify-center shadow-lg hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200"
+            className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] items-center justify-center shadow-md hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-4 h-4" />
           </button>
 
           {/* Cards Container with AnimatePresence */}

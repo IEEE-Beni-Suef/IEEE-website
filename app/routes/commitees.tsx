@@ -1,5 +1,4 @@
 import React from "react";
-import { useCommittees } from "../hooks/useApi";
 import type { Committee } from "../types";
 import { Users } from "lucide-react";
 import { Section } from "../components/ui/Section";
@@ -16,7 +15,6 @@ const StarSparkle = ({ className = "" }: { className?: string }) => (
 );
 
 const Commitees = () => {
-  const { data: committees, isLoading, isError, error } = useCommittees();
 
   return (
     <section
@@ -51,12 +49,7 @@ const Commitees = () => {
 
         {/* Committees Toggle & Swiper Section */}
         <div className="w-full pt-4">
-          <CommitteesSection
-            error={error}
-            isLoading={isLoading}
-            isError={isError}
-            committees={committees || []}
-          />
+          <CommitteesSection />
         </div>
       </div>
     </section>

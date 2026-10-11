@@ -7,7 +7,7 @@ import {
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { ArticleDisplay } from "../components/ArticleDisplay";
-import { useAllArticles, useCommittees } from "../hooks/useApi";
+import { useAllArticles } from "../hooks/useApi";
 
 import { Link, type MetaArgs } from "react-router";
 import type { Article, Committee } from "../types";
@@ -89,11 +89,6 @@ export function meta({}: MetaArgs) {
 
 export default function Home() {
   const { data: articles, isLoading, error } = useAllArticles();
-  const {
-    data: committees,
-    isLoading: committeesLoading,
-    error: committeesError,
-  } = useCommittees();
 
   const statistics = [
     { label: "Active Members", value: "250+", icon: Users },

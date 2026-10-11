@@ -1,8 +1,10 @@
+import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/autoplay";
-import { Navigation, Autoplay } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import CommitteeCard from "./CommitteeCard";
 import type { Committee } from "~/types";
 
@@ -11,8 +13,10 @@ interface IProps {
 }
 
 const CommitteesSwipper = ({ data }: IProps) => {
+  const swiperRef = useRef<SwiperType | null>(null);
+
   return (
-    <div className="relative w-full px-2 md:px-12 py-8 bg-transparent">
+    <div className="relative w-full px-4 md:px-10 py-8 bg-transparent">
       <style>{`
         .committees-swiper {
           overflow: hidden !important;
@@ -26,39 +30,32 @@ const CommitteesSwipper = ({ data }: IProps) => {
           height: auto;
           display: flex;
         }
-        .swiper-button-next, .swiper-button-prev {
-          background-color: #FFFFFF;
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          color: #1E1E2F;
-          border: 1px solid #E2E8F0;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-          transition: all 0.2s ease-in-out;
-        }
-        .swiper-button-next:after, .swiper-button-prev:after {
-          font-size: 16px;
-          font-weight: 800;
-          color: #1E1E2F;
-        }
-        .swiper-button-next:hover, .swiper-button-prev:hover {
-          background-color: #F8F9FF;
-          border-color: #5A10A5;
-          color: #5A10A5;
-          transform: scale(1.05);
-        }
-        .swiper-button-prev {
-          left: 0px !important;
-        }
-        .swiper-button-next {
-          right: 0px !important;
-        }
       `}</style>
 
+      {/* Side navigation arrows matching Ambassadors section */}
+      <button
+        onClick={() => swiperRef.current?.slidePrev()}
+        aria-label="Previous Committee"
+        className="absolute left-0 md:left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] flex items-center justify-center shadow-md hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200 cursor-pointer"
+      >
+        <ChevronLeft className="w-4 h-4" />
+      </button>
+
+      <button
+        onClick={() => swiperRef.current?.slideNext()}
+        aria-label="Next Committee"
+        className="absolute right-0 md:right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-purple-200 text-[#5A10A5] flex items-center justify-center shadow-md hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 transition-all duration-200 cursor-pointer"
+      >
+        <ChevronRight className="w-4 h-4" />
+      </button>
+
       <Swiper
+        onBeforeInit={(swiper) => {
+          swiperRef.current = swiper;
+        }}
         key={data.map((c) => c.id).join("-")}
-        modules={[Navigation, Autoplay]}
-        navigation={true}
+        modules={[Autoplay]}
+        loop={true}
         autoplay={{
           delay: 3000,
           disableOnInteraction: true,
