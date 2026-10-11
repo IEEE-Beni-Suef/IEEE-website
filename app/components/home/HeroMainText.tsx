@@ -3,21 +3,13 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { Compass, UserPlus } from "lucide-react";
 
-// Fallback user avatar images
-import img1 from "../../assets/images/heroImage1.png";
-import img2 from "../../assets/images/heroImage2.png";
-import img3 from "../../assets/images/heroImage3.png";
-import img4 from "../../assets/images/heroImage4.png";
-
-const userAvatars = [img1, img2, img3, img4];
-
 export default function HeroMainText() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="w-full max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center gap-7 pt-[40px] sm:pt-[50px] md:pt-[60px] pb-2 px-4"
+      className="w-full max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center gap-7 pt-[40px] sm:pt-[50px] md:pt-[60px] pb-4 px-4"
     >
       {/* Main Title & Subtitles */}
       <div className="space-y-6 max-w-5xl mx-auto">
@@ -62,9 +54,9 @@ export default function HeroMainText() {
           <span>Explore Our Journey</span>
         </Link>
 
-        {/* Join IEEE Button */}
+        {/* Hero Button: Try Our Dashboard */}
         <Link
-          to="/register"
+          to="/login"
           style={{
             height: "48px",
             borderRadius: "12px",
@@ -79,26 +71,8 @@ export default function HeroMainText() {
           className="inline-flex items-center justify-center gap-2.5 text-base sm:text-lg font-semibold transition-all duration-300 hover:bg-white/10 hover:border-white hover:scale-[1.03] active:scale-[0.98]"
         >
           <UserPlus className="w-5 h-5 sm:w-6 sm:h-6 text-[#FEFEFF]" />
-          <span>Join IEEE</span>
+          <span>Try Our Dashboard</span>
         </Link>
-      </div>
-
-      {/* User Avatars & Branch Description */}
-      <div className="flex flex-wrap items-center justify-center gap-3.5 pt-3">
-        <div className="flex -space-x-3 overflow-hidden py-1">
-          {userAvatars.map((src, i) => (
-            <img
-              key={`user-avatar-${i}`}
-              src={src}
-              alt={`IEEE Member ${i + 1}`}
-              className="inline-block w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full border-2 border-[#0E2C5E] object-cover shadow-md transition-transform duration-300 hover:scale-110 hover:z-30"
-            />
-          ))}
-        </div>
-        <p className="text-sm sm:text-base md:text-lg text-[#FEFEFF] font-medium">
-          <span className="font-bold text-[#FEFEFF]">Students across disciplines</span>{" "}
-          <span className="font-normal text-[#FEFEFF]/90">— one branch.</span>
-        </p>
       </div>
     </motion.div>
   );

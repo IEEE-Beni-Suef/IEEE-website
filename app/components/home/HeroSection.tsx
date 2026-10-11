@@ -8,7 +8,7 @@ export default function HeroSection() {
   const { introReady } = useIntro();
 
   return (
-    <section className="relative w-full bg-[#12111F] text-white overflow-hidden flex flex-col items-center justify-start pb-8 pt-16 sm:pt-20">
+    <section id="hero" className="relative w-full bg-[#1f2b6c] text-white overflow-hidden flex flex-col items-center justify-start pb-8 pt-16 sm:pt-20">
       {/* ── Background Texture ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Subtle dot grid pattern */}
@@ -71,21 +71,12 @@ export default function HeroSection() {
             className="absolute left-1/2 top-[84%] -translate-x-1/2 -translate-y-1/2 w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-[#00F0FF] pointer-events-none z-0 opacity-90"
           />
 
-          {/* 3. FHeroImage with matching brightness higher/lower animation */}
-          <motion.img
+          {/* 3. FHeroImage with stable nodes (no outer node filter animations) */}
+          <img
             src={FHeroImage}
             alt="IEEE Branch Network Diagram"
-            animate={{
-              filter: [
-                "brightness(0.95) drop-shadow(0 0 15px rgba(68, 96, 239, 0.35))",
-                "brightness(1.25) drop-shadow(0 0 45px rgba(0, 240, 255, 0.85))",
-                "brightness(0.95) drop-shadow(0 0 15px rgba(68, 96, 239, 0.35))",
-              ],
-            }}
-            transition={{
-              duration: 3.2,
-              repeat: Infinity,
-              ease: "easeInOut",
+            style={{
+              filter: "drop-shadow(0 0 25px rgba(68, 96, 239, 0.45))",
             }}
             className="relative z-10 w-full h-auto object-contain max-h-[500px]"
           />

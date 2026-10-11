@@ -166,7 +166,7 @@ export default function Home() {
 
       {/* Sponsers Section */}
 
-      <Sponsers />
+  <Sponsers />
 
       <Footer />
     </>

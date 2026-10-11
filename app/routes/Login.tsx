@@ -54,6 +54,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -193,6 +194,48 @@ const Login = () => {
             <p className="text-xs text-gray-500 mt-1">
               Sign in to access your IEEE Performance Dashboard.
             </p>
+          </div>
+
+          {/* ── Demo Credentials to Try Dashboard ── */}
+          <div className="mb-5 p-4 rounded-2xl bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 border border-[#5A10A5]/30 shadow-sm text-left">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <h4 className="text-xs font-bold text-[#5A10A5] uppercase tracking-wider">
+                  Try Dashboard (Demo Account)
+                </h4>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setValue("email", "demo@ieee-bns.org");
+                  setValue("password", "password123");
+                }}
+                className="text-xs font-bold text-[#5A10A5] hover:text-[#480D85] underline cursor-pointer"
+              >
+                Auto-fill Demo
+              </button>
+            </div>
+            <p className="text-[11px] text-gray-600 mb-2.5">
+              Use these credentials to sign in and explore the dashboard:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div className="bg-white px-3 py-2 rounded-xl border border-purple-100 flex flex-col">
+                <span className="text-[10px] text-gray-500 font-semibold uppercase">Email</span>
+                <span className="font-mono font-medium text-slate-800 select-all">
+                  demo@ieee-bns.org
+                </span>
+              </div>
+              <div className="bg-white px-3 py-2 rounded-xl border border-purple-100 flex flex-col">
+                <span className="text-[10px] text-gray-500 font-semibold uppercase">Password</span>
+                <span className="font-mono font-medium text-slate-800 select-all">
+                  password123
+                </span>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

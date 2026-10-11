@@ -33,7 +33,7 @@ const SponsorCard = ({
   const finalImageUrl = imageError || !img ? DEFAULT_IMAGE : img;
 
   return (
-    <div className="relative w-full max-w-[280px] h-[280px] bg-white rounded-[28px] p-5 flex flex-col justify-between items-center border border-[#CCB5E3]/80 hover:border-[#5A10A5] shadow-sm hover:shadow-xl transition-all duration-300 group">
+    <div className="relative w-full max-w-[280px] h-[300px] bg-white rounded-[28px] p-5 flex flex-col justify-between items-center border border-[#CCB5E3]/80 hover:border-[#5A10A5] shadow-sm hover:shadow-xl transition-all duration-300 group">
       {/* Actions (Edit / Delete) */}
       {(onEdit || onDelete) && (
         <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -60,10 +60,10 @@ const SponsorCard = ({
         </div>
       )}
 
-      {/* Image Container */}
-      <div className="h-32 w-full rounded-[20px] overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center p-2 border border-gray-100">
+      {/* Image Container - Full Width and Height */}
+      <div className="h-36 w-full rounded-[20px] overflow-hidden shrink-0 relative bg-gray-50 border border-gray-100">
         <img
-          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           src={finalImageUrl}
           alt={title}
           onError={handleImageError}
@@ -72,7 +72,7 @@ const SponsorCard = ({
       </div>
 
       {/* Title & Description Container */}
-      <div className="w-full flex flex-col space-y-1 text-center mt-2">
+      <div className="w-full flex flex-col space-y-1 text-center mt-3">
         <h3 className="font-bold text-lg text-[#000640] line-clamp-1">
           {txtSlicer(title, 22)}
         </h3>

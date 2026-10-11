@@ -1,4 +1,5 @@
 import type { ICommittee } from "~/types";
+export * from "./ambassadors";
 
 export const teCommittees: ICommittee[] = [
   {

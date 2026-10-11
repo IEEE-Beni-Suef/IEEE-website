@@ -1,85 +1,30 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef } from "react";
+import { motion, useScroll, useSpring, useReducedMotion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AmbassadorCard from "./AmbassadorCard";
-
-import img1 from "~/assets/images/heroImage1.png";
-import img2 from "~/assets/images/heroImage2.png";
-import img3 from "~/assets/images/heroImage3.png";
-import img4 from "~/assets/images/heroImage4.png";
-import WhoWeAreImage from "~/assets/images/WhoWeAreImage.jpg";
-
-export interface AmbassadorData {
-  id: string;
-  name: string;
-  role: string;
-  season: string;
-  image: string;
-}
-
-const ambassadorsList: AmbassadorData[] = [
-  {
-    id: "amb-1",
-    name: "[ Ambassador Name ]",
-    role: "IEEE SAC Ambassador",
-    season: "Season 10",
-    image: img1,
-  },
-  {
-    id: "amb-2",
-    name: "[ Ambassador Name ]",
-    role: "IEEE SAC Ambassador",
-    season: "Season 10",
-    image: img2,
-  },
-  {
-    id: "amb-3",
-    name: "[ Ambassador Name ]",
-    role: "IEEE SAC Ambassador",
-    season: "Season 10",
-    image: img3,
-  },
-  {
-    id: "amb-4",
-    name: "[ Ambassador Name ]",
-    role: "IEEE SAC Ambassador",
-    season: "Season 10",
-    image: img4,
-  },
-  {
-    id: "amb-5",
-    name: "[ Ambassador Name ]",
-    role: "IEEE Region 8 Student Representative",
-    season: "Season 11",
-    image: WhoWeAreImage,
-  },
-  {
-    id: "amb-6",
-    name: "[ Ambassador Name ]",
-    role: "IEEE WIE Lead Ambassador",
-    season: "Season 11",
-    image: img1,
-  },
-  {
-    id: "amb-7",
-    name: "[ Ambassador Name ]",
-    role: "IEEE Technical Society Ambassador",
-    season: "Season 10",
-    image: img2,
-  },
-  {
-    id: "amb-8",
-    name: "[ Ambassador Name ]",
-    role: "IEEE Student Branch Ambassador",
-    season: "Season 9",
-    image: img3,
-  },
-];
+import { ambassadors, type Ambassador } from "~/data/ambassadors";
 
 export const AmbassadorsSection: React.FC = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  // Scroll animation setup for the connection arc
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 85%", "center 45%"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
+  const pathLength = shouldReduceMotion ? 1 : smoothProgress;
+
   const [currentPage, setCurrentPage] = useState<number>(0);
   const itemsPerPage = 4;
-  const totalPages = Math.ceil(ambassadorsList.length / itemsPerPage);
+  const totalPages = Math.ceil(ambassadors.length / itemsPerPage);
 
   const nextPage = () => {
     setCurrentPage((prev) => (prev + 1) % totalPages);
@@ -89,13 +34,13 @@ export const AmbassadorsSection: React.FC = () => {
     setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
   };
 
-  const currentAmbassadors = ambassadorsList.slice(
+  const currentAmbassadors = ambassadors.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
 
   return (
-    <section className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section ref={sectionRef} className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-[1060px] mx-auto flex flex-col items-center">
         {/* Section Header */}
         <div className="flex flex-col items-center justify-center text-center space-y-3 mb-10 md:mb-12">
@@ -103,7 +48,7 @@ export const AmbassadorsSection: React.FC = () => {
           <div className="flex flex-col items-center gap-1.5">
             <span
               style={{
-                fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                fontFamily: "Montserrat, sans-serif",
                 fontWeight: 700,
                 fontSize: "11px",
                 letterSpacing: "2px",
@@ -126,7 +71,7 @@ export const AmbassadorsSection: React.FC = () => {
           <p
             className="max-w-2xl text-center text-sm sm:text-base"
             style={{
-              fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+              fontFamily: "Montserrat, sans-serif",
               color: "#4460EF",
               lineHeight: "1.6",
               fontWeight: 500,
@@ -136,7 +81,7 @@ export const AmbassadorsSection: React.FC = () => {
           </p>
         </div>
 
-        {/* ── Main Connection Banner Div (Smaller width: max-w-[1060px]) ── */}
+        {/* ── Main Connection Banner Div ── */}
         <div
           className="relative w-full max-w-[1060px] min-h-[300px] rounded-3xl p-6 sm:p-8 overflow-hidden shadow-2xl mb-4 flex flex-col justify-between"
           style={{
@@ -162,23 +107,33 @@ export const AmbassadorsSection: React.FC = () => {
 
           {/* Connection Arc & Nodes Area */}
           <div className="relative z-10 w-full h-[220px]">
-            {/* SVG Solid Arc Line Starting Exactly at Circle 1 Center (295, 155) and Ending at Circle 2 Center (705, 115) */}
+            {/* SVG Scroll-Animated Arc Line Starting at Circle 1 (295, 155) & Ending at Circle 2 (705, 115) */}
             <svg
               className="absolute inset-0 w-full h-full pointer-events-none z-10"
               viewBox="0 0 1000 220"
               fill="none"
               preserveAspectRatio="none"
             >
+              {/* Background Faint Path */}
               <path
                 d="M 295 155 Q 500 50 705 115"
-                stroke="url(#arc-gradient)"
+                stroke="rgba(255, 255, 255, 0.15)"
                 strokeWidth="2.5"
                 fill="none"
+              />
+              {/* Scroll-Progressive Animated Line */}
+              <motion.path
+                d="M 295 155 Q 500 50 705 115"
+                stroke="url(#arc-gradient)"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                style={{ pathLength }}
               />
               <defs>
                 <linearGradient id="arc-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#9333EA" />
-                  <stop offset="60%" stopColor="#4460EF" />
+                  <stop offset="50%" stopColor="#4460EF" />
                   <stop offset="100%" stopColor="#00F0FF" />
                 </linearGradient>
               </defs>
@@ -194,11 +149,10 @@ export const AmbassadorsSection: React.FC = () => {
               {/* Centered Typography for Beni-Suef, Egypt */}
               <h4
                 style={{
-                  fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                  fontFamily: "Montserrat, sans-serif",
                   fontWeight: 700,
                   fontSize: "15.66px",
                   lineHeight: "100%",
-                  letterSpacing: "0%",
                   textAlign: "center",
                   color: "#FFFFFF",
                 }}
@@ -219,11 +173,10 @@ export const AmbassadorsSection: React.FC = () => {
               <div className="mt-3 flex flex-col items-center justify-center text-center">
                 <h4
                   style={{
-                    fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                    fontFamily: "Montserrat, sans-serif",
                     fontWeight: 700,
                     fontSize: "15.66px",
                     lineHeight: "100%",
-                    letterSpacing: "0%",
                     textAlign: "center",
                     color: "#FFFFFF",
                   }}
@@ -231,14 +184,12 @@ export const AmbassadorsSection: React.FC = () => {
                 >
                   IEEE Region 8
                 </h4>
-                {/* Second Line Centered */}
                 <p
                   style={{
-                    fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                    fontFamily: "Montserrat, sans-serif",
                     fontWeight: 400,
                     fontSize: "12px",
                     lineHeight: "100%",
-                    letterSpacing: "0%",
                     textAlign: "center",
                     color: "rgba(255, 255, 255, 0.6)",
                   }}
@@ -253,10 +204,10 @@ export const AmbassadorsSection: React.FC = () => {
 
         {/* Small Caption Disclaimer */}
         <p className="text-xs text-gray-400 text-center mb-10 italic">
-          Real ambassador profiles, names, and photos will replace these placeholders.
+          Real ambassador profiles, names, and photos can be easily configured in the static data file.
         </p>
 
-        {/* ── Ambassadors Cards Grid / Slider (Smaller width matching banner: max-w-[1060px]) ── */}
+        {/* ── Ambassadors Cards Grid / Slider ── */}
         <div className="w-full max-w-[1060px]">
           <AnimatePresence mode="wait">
             <motion.div
@@ -267,13 +218,13 @@ export const AmbassadorsSection: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
             >
-              {currentAmbassadors.map((amb) => (
+              {currentAmbassadors.map((amb: Ambassador) => (
                 <AmbassadorCard
                   key={amb.id}
                   id={amb.id}
                   name={amb.name}
                   role={amb.role}
-                  season={amb.season}
+                  description={amb.description}
                   image={amb.image}
                 />
               ))}
@@ -281,42 +232,44 @@ export const AmbassadorsSection: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        {/* ── Pagination Controls ── */}
-        <div className="flex flex-col items-center space-y-4 pt-10">
-          {/* Pagination Dots */}
-          <div className="flex items-center gap-2">
-            {Array.from({ length: totalPages }).map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentPage(idx)}
-                className={`transition-all duration-300 rounded-full ${
-                  currentPage === idx
-                    ? "w-3 h-3 bg-[#5A10A5] scale-110"
-                    : "w-2.5 h-2.5 bg-[#5A10A5]/20 hover:bg-[#5A10A5]/40"
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
+        {/* ── Pagination Controls (renders if totalPages > 1) ── */}
+        {totalPages > 1 && (
+          <div className="flex flex-col items-center space-y-4 pt-10">
+            {/* Pagination Dots */}
+            <div className="flex items-center gap-2">
+              {Array.from({ length: totalPages }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentPage(idx)}
+                  className={`transition-all duration-300 rounded-full ${
+                    currentPage === idx
+                      ? "w-3 h-3 bg-[#5A10A5] scale-110"
+                      : "w-2.5 h-2.5 bg-[#5A10A5]/20 hover:bg-[#5A10A5]/40"
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
 
-          {/* Navigation Prev / Next Arrows */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={prevPage}
-              className="w-10 h-10 rounded-full border border-purple-200 text-[#5A10A5] flex items-center justify-center transition-all duration-300 hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 shadow-sm"
-              aria-label="Previous Page"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={nextPage}
-              className="w-10 h-10 rounded-full border border-purple-200 text-[#5A10A5] flex items-center justify-center transition-all duration-300 hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 shadow-sm"
-              aria-label="Next Page"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+            {/* Navigation Prev / Next Arrows */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={prevPage}
+                className="w-10 h-10 rounded-full border border-purple-200 text-[#5A10A5] flex items-center justify-center transition-all duration-300 hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 shadow-sm"
+                aria-label="Previous Page"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={nextPage}
+                className="w-10 h-10 rounded-full border border-purple-200 text-[#5A10A5] flex items-center justify-center transition-all duration-300 hover:bg-[#5A10A5] hover:text-white hover:border-[#5A10A5] active:scale-95 shadow-sm"
+                aria-label="Next Page"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

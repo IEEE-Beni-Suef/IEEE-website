@@ -2,7 +2,8 @@ import React from "react";
 import { ArrowUpRight } from "lucide-react";
 
 export interface CommunityCardProps {
-  icon: React.ReactNode;
+  icon: string | React.ReactNode;
+  bgImage?: string;
   title: string;
   subtitle: string;
   description: string;
@@ -19,6 +20,7 @@ export interface CommunityCardProps {
 
 export const CommunityCard: React.FC<CommunityCardProps> = ({
   icon,
+  bgImage,
   title,
   subtitle,
   description,
@@ -52,14 +54,25 @@ export const CommunityCard: React.FC<CommunityCardProps> = ({
       className="relative flex flex-col justify-between p-6 sm:p-8 bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
       style={{
         width: "100%",
-        minHeight: "300px",
-        borderRadius: "16px",
-        border: "0.8px solid #E2E8F0",
+        minHeight: "320px",
+        borderRadius: "20px",
+        border: "1px solid #E2E8F0",
         overflow: "hidden",
       }}
     >
-      {/* Background Graphic Watermark if provided */}
-      {bgWatermark && (
+      {/* Background Graphic Watermark Image from Chapter folder */}
+      {bgImage && (
+        <div className="absolute right-0 top-0 bottom-0 w-[55%] max-w-[260px] pointer-events-none overflow-hidden flex items-center justify-end z-0">
+          <img
+            src={bgImage}
+            alt=""
+            className="w-full h-full object-contain object-right opacity-25 mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      )}
+
+      {/* Fallback SVG background watermark if provided */}
+      {!bgImage && bgWatermark && (
         <div className="absolute right-0 bottom-0 pointer-events-none opacity-20 sm:opacity-30 z-0">
           {bgWatermark}
         </div>
@@ -85,7 +98,11 @@ export const CommunityCard: React.FC<CommunityCardProps> = ({
             color: activeTheme.text,
           }}
         >
-          {icon}
+          {typeof icon === "string" ? (
+            <img src={icon} alt="" className="w-6 h-6 object-contain" />
+          ) : (
+            icon
+          )}
         </div>
 
         {/* Title & Subtitle */}

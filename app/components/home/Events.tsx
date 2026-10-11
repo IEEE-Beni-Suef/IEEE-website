@@ -1,28 +1,58 @@
 import React, { useState } from 'react';
-import { useAllArticles } from '../../hooks/useApi';
 import { Link } from 'react-router';
 import { motion } from 'framer-motion';
 
+import timeImg from "../../assets/images/Events/TimeImage.png";
+import rymImg from "../../assets/images/Events/RYMImage.png";
+import ewImg from "../../assets/images/Events/EnterpreneurshipWeekImage.png";
 import defaultImage from "../../assets/images/heroImage1.png";
 
+export interface EventItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  venue?: string;
+  organizer?: string;
+  photo: string;
+}
+
+const defaultEvents: EventItem[] = [
+  {
+    id: "time-event",
+    title: "T.I.M.E",
+    description:
+      "T.I.M.E is an event that brings together Technology, Innovation, Management, and Entrepreneurship, offering students an opportunity to explore emerging ideas, broaden their perspectives, and discover new possibilities at the intersection of technology and business.",
+    venue: "Creativa Hub, Beni Suef — Silicon Waha, Smart Village.",
+    organizer: "IEEE Beni Suef Student Branch.",
+    photo: timeImg,
+  },
+  {
+    id: "rym-event",
+    title: "RYM",
+    subtitle: "Recode Your Mind",
+    description:
+      "Recode Your Mind (RYM) is an engaging event designed to encourage personal growth, reshape perspectives, and inspire positive change. Through interactive sessions and thought-provoking discussions, participants are encouraged to challenge their mindsets, unlock their potential, and develop a more focused and growth-oriented approach to their personal and academic journeys.",
+    photo: rymImg,
+  },
+  {
+    id: "entrepreneurship-week",
+    title: "IEEE Entrepreneurship Week",
+    description:
+      "IEEE Beni Suef Student Branch participated in IEEE Entrepreneurship Week, an opportunity to explore entrepreneurship, exchange ideas, and connect with fellow IEEE members. The experience encouraged learning, collaboration, and exposure to new perspectives on innovation and entrepreneurial thinking.",
+    photo: ewImg,
+  },
+];
+
 export default function Events() {
-    const { data: articles } = useAllArticles();
-    
-    // Fetch articles directly from API. Filter by "Events" category or take top articles
-    const eventsData = React.useMemo(() => {
-        if (!Array.isArray(articles) || articles.length === 0) return [];
-        const eventsCategoryArticles = articles.filter(a => a.categoryName === "Events");
-        return eventsCategoryArticles.length > 0 
-            ? eventsCategoryArticles.slice(0, 3) 
-            : articles.slice(0, 3);
-    }, [articles]);
+    const eventsData = defaultEvents;
 
     // Default active index is the middle card (index 1)
     const defaultActiveIndex = 1;
     const [activeIndex, setActiveIndex] = useState<number>(defaultActiveIndex);
 
     return (
-        <section className="relative w-full overflow-hidden pt-8 sm:pt-10 pb-20 sm:pb-40 min-h-screen bg-white">
+        <section id="events" className="relative w-full overflow-hidden pt-8 sm:pt-10 pb-12 sm:pb-20 min-h-screen bg-white">
             {/* Background Circles */}
             <div className="absolute top-[-633px] left-[-607px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full opacity-40 sm:opacity-80 pointer-events-none" />
             <div className="absolute top-[838px] right-[-480px] w-[961px] h-[961px] bg-[#CCB5E3] rounded-full opacity-40 sm:opacity-100 pointer-events-none" />
@@ -48,7 +78,7 @@ export default function Events() {
                     </p>
                 </motion.div>
 
-                {/* 4-Column Cards Container */}
+                {/* 3-Column Cards Container */}
                 <motion.div 
                     initial="hidden"
                     whileInView="visible"
@@ -87,13 +117,22 @@ export default function Events() {
                                 {/* Card Inner Container */}
                                 <div className="relative w-full h-full flex items-center">
                                     
-                                    {/* Left Text Description Panel (Occupies Left Column of Expanded Card) */}
+                                    {/* Left Text Description Panel */}
                                     <div className={`absolute top-0 left-0 w-[245px] sm:w-[275px] md:w-[295px] h-full bg-white border border-[#5A10A5] rounded-[32px] sm:rounded-[40px] p-6 sm:p-7 z-0 flex flex-col justify-between text-left transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 
                                         ${isOpen ? 'opacity-100 translate-x-0 shadow-xl pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}`}>
                                         
-                                        <div className="space-y-3 sm:space-y-4">
-                                            <h2 className="text-[#480D84] text-xl sm:text-2xl font-extrabold leading-snug line-clamp-2">{event.title}</h2>
-                                            <p className="text-[#1C1A1A] text-xs sm:text-sm md:text-base leading-relaxed overflow-y-auto max-h-[250px] sm:max-h-[300px] md:max-h-[330px] pr-1.5">{event.description}</p>
+                                        <div className="space-y-2.5 sm:space-y-3">
+                                            <h2 className="text-[#480D84] text-lg sm:text-xl md:text-2xl font-extrabold leading-snug line-clamp-2">{event.title}</h2>
+                                            {event.subtitle && (
+                                                <p className="text-[#5A10A5] text-xs sm:text-sm font-semibold tracking-wide">{event.subtitle}</p>
+                                            )}
+                                            <p className="text-[#1C1A1A] text-xs sm:text-sm md:text-base leading-relaxed overflow-y-auto max-h-[200px] sm:max-h-[240px] md:max-h-[270px] pr-1.5 font-normal">{event.description}</p>
+                                            {event.venue && (
+                                                <div className="pt-2 border-t border-purple-100 text-xs sm:text-sm space-y-0.5 text-[#5A6A8A]">
+                                                    <p><span className="font-bold text-[#000640]">Venue:</span> {event.venue}</p>
+                                                    {event.organizer && <p><span className="font-bold text-[#000640]">Organizer:</span> {event.organizer}</p>}
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Discover CTA Button */}
@@ -112,7 +151,7 @@ export default function Events() {
                                         </div>
                                     </div>
 
-                                    {/* Right Front Image Card (Occupies Right Column of Card Slot) */}
+                                    {/* Right Front Image Card */}
                                     <div className={`absolute top-0 right-0 w-[230px] sm:w-[260px] md:w-[280px] h-full z-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] bg-white rounded-[32px] sm:rounded-[40px] overflow-hidden
                                         ${isOpen ? 'shadow-[15px_0_30px_-10px_rgba(109,16,165,0.5)] scale-[1.01]' : 'shadow-md scale-100'}`}>
                                         <img 
@@ -139,7 +178,7 @@ export default function Events() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="mt-12 sm:mt-24 flex justify-center items-center gap-3"
+                    className="mt-12 sm:mt-16 flex justify-center items-center gap-3"
                 >
                     {eventsData.map((_, idx) => (
                         <button 
@@ -149,22 +188,6 @@ export default function Events() {
                             className={`w-[16px] sm:w-[18px] h-[16px] sm:h-[18px] rounded-full shadow-sm cursor-pointer transition-all duration-300 ${activeIndex === idx ? 'bg-[#5A10A5] scale-110' : 'bg-[#CCB5E3] opacity-60 hover:opacity-100 scale-100'}`}
                         />
                     ))}
-                </motion.div>
-
-                {/* Discover More CTA Button */}
-                <motion.div 
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5, duration: 0.5 }}
-                    className="mt-6 sm:mt-10 flex justify-center"
-                >
-                    <Link 
-                        to="/events" 
-                        className="inline-block bg-[#5A10A5] text-white text-center text-base sm:text-lg font-semibold px-10 sm:px-16 py-3 rounded-full hover:bg-[#480D84] transition-all duration-300 shadow-lg hover:shadow-purple-500/25 hover:scale-105 active:scale-95 min-w-[200px] sm:min-w-[250px]"
-                    >
-                        Discover more
-                    </Link>
                 </motion.div>
             </div>
         </section>

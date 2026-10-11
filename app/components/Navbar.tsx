@@ -34,37 +34,49 @@ const Navbar = () => {
     setIsMounted(true);
     if (typeof window !== "undefined") {
       const handleScroll = () => {
-        setIsScrolled(window.scrollY > 20);
+        const heroElement = document.getElementById("hero");
+        if (heroElement) {
+          const heroRect = heroElement.getBoundingClientRect();
+          // Transition navbar when scrolling past the Hero section
+          setIsScrolled(heroRect.bottom <= 80);
+        } else {
+          setIsScrolled(window.scrollY > 50);
+        }
       };
-      window.addEventListener("scroll", handleScroll);
+
+      handleScroll();
+      window.addEventListener("scroll", handleScroll, { passive: true });
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, []);
+  }, [location.pathname]);
 
   // Updated nav items according to design specs
   const navItems = [
     { label: "Home", path: "/" },
-    { label: "Events", path: "/events" },
-    { label: "Chapters", path: "/#chapters" },
+    { label: "Events", path: "/#events" },
+    { label: "Ch&G", path: "/#chg" },
     { label: "Committees", path: "/#committees" },
-    { label: "About", path: "/about" },
+    { label: "About", path: "/#about" },
     { label: "Achievements", path: "/#achievements" },
   ];
 
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard" },
     { label: "Home", path: "/" },
-    { label: "Events", path: "/events" },
-    { label: "Chapters", path: "/#chapters" },
+    { label: "Events", path: "/#events" },
+    { label: "Ch&G", path: "/#chg" },
     { label: "Committees", path: "/#committees" },
-    { label: "About", path: "/about" },
+    { label: "About", path: "/#about" },
     { label: "Achievements", path: "/#achievements" },
   ];
 
   const currentNavItems = isMounted && isAuthenticated ? authNavItems : navItems;
 
   const isActive = (path: string) => {
-    if (path === "/") return location.pathname === "/";
+    if (path === "/") return location.pathname === "/" && !location.hash;
+    if (path.startsWith("/#")) {
+      return location.pathname === "/" && location.hash === path.replace("/", "");
+    }
     return location.pathname + location.hash === path || location.pathname === path;
   };
 
@@ -73,14 +85,11 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const isHomePage = location.pathname === "/";
-  const logoColor = "#ECEFFD";
-
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-[#12111F]/90 backdrop-blur-md border-b border-white/10 shadow-lg"
+          ? "bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-md"
           : "bg-transparent backdrop-blur-none border-b border-transparent"
       }`}
       initial={{ y: "-100%", opacity: 0 }}
@@ -99,10 +108,14 @@ const Navbar = () => {
     >
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
         <div className="flex justify-between items-center h-24">
-          {/* Logo 80*80 */}
+          {/* Logo switching between light asset and dark asset based on scroll */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <figure className="w-[80px] h-[80px] flex items-center justify-center p-1">
-              <Logo color={logoColor} />
+            <figure className="h-[60px] sm:h-[70px] flex items-center justify-center p-1">
+              <img
+                src={isScrolled ? "/IEEE BNS DARK .png" : "/IEEE BNS LIGHT.png"}
+                alt="IEEE Beni-Suef Student Branch"
+                className="h-12 sm:h-14 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+              />
             </figure>
           </Link>
 
@@ -130,7 +143,11 @@ const Navbar = () => {
                     to={item.path}
                     className={`flex items-center justify-center px-4 py-1.5 rounded-[12px] font-medium text-sm transition-all duration-200 ${
                       active
-                        ? "bg-[#ECEFFD] text-[#4460EF] shadow-sm font-semibold"
+                        ? isScrolled
+                          ? "bg-[#5A10A5] text-white shadow-sm font-semibold"
+                          : "bg-[#ECEFFD] text-[#4460EF] shadow-sm font-semibold"
+                        : isScrolled
+                        ? "text-[#000640] hover:bg-[#5A10A5]/10 hover:text-[#5A10A5]"
                         : "text-[#ECEFFD] hover:bg-white/10 hover:text-white"
                     }`}
                   >
@@ -151,8 +168,8 @@ const Navbar = () => {
                   style={{
                     width: "105px",
                     height: "40px",
-                    backgroundColor: "#ECEFFD",
-                    color: "#4460EF",
+                    backgroundColor: isScrolled ? "#5A10A5" : "#ECEFFD",
+                    color: isScrolled ? "#FFFFFF" : "#4460EF",
                     borderRadius: "12px",
                     paddingTop: "16px",
                     paddingRight: "8px",
@@ -170,20 +187,19 @@ const Navbar = () => {
                   to="/register"
                   style={{
                     height: "40px",
-                    borderTop: "1.6px solid #FFFFFF73",
-                    borderRight: "1.6px solid #FFFFFF73",
-                    borderBottom: "1.6px solid #FFFFFF73",
-                    borderLeft: "1.6px solid #FFFFFF73",
+                    border: isScrolled ? "1.6px solid #5A10A5" : "1.6px solid #FFFFFF73",
                     borderRadius: "12px",
                     paddingTop: "8px",
                     paddingRight: "16px",
                     paddingBottom: "8px",
                     paddingLeft: "16px",
-                    color: "#FEFEFF",
+                    color: isScrolled ? "#5A10A5" : "#FEFEFF",
                     backgroundColor: "transparent",
                     opacity: 1,
                   }}
-                  className="hidden sm:inline-flex items-center justify-center text-sm font-medium transition-all duration-200 hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98]"
+                  className={`hidden sm:inline-flex items-center justify-center text-sm font-medium transition-all duration-200 ${
+                    isScrolled ? "hover:bg-[#5A10A5]/10" : "hover:bg-white/10"
+                  } hover:scale-[1.02] active:scale-[0.98]`}
                 >
                   Join IEEE
                 </Link>
@@ -193,12 +209,12 @@ const Navbar = () => {
                 onClick={handleLogout}
                 style={{
                   height: "40px",
-                  borderTop: "1.6px solid #FFFFFF73",
+                  border: isScrolled ? "1.6px solid #5A10A5" : "1.6px solid #FFFFFF73",
                   borderRadius: "12px",
                   paddingLeft: "16px",
                   paddingRight: "16px",
-                  backgroundColor: "#ECEFFD",
-                  color: "#4460EF",
+                  backgroundColor: isScrolled ? "#5A10A5" : "#ECEFFD",
+                  color: isScrolled ? "#FFFFFF" : "#4460EF",
                 }}
                 className="hidden sm:inline-flex items-center justify-center text-sm font-semibold transition-colors duration-200"
               >
@@ -209,7 +225,9 @@ const Navbar = () => {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-[#ECEFFD] hover:bg-white/10 transition-colors duration-200"
+              className={`md:hidden p-2 rounded-lg transition-colors duration-200 ${
+                isScrolled ? "text-[#000640] hover:bg-slate-100" : "text-[#ECEFFD] hover:bg-white/10"
+              }`}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -223,7 +241,11 @@ const Navbar = () => {
           isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-4 py-4 bg-[#12111F] border-t border-white/10">
+        <div className={`px-4 py-4 border-t ${
+          isScrolled
+            ? "bg-white border-slate-200 text-[#000640]"
+            : "bg-[#1f2b6c] border-white/10 text-white"
+        }`}>
           <div className="space-y-2">
             {currentNavItems.map((item) => {
               const active = isActive(item.path);
@@ -234,26 +256,36 @@ const Navbar = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className={`flex items-center px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-200 ${
                     active
-                      ? "bg-[#ECEFFD] text-[#4460EF]"
-                      : "text-[#ECEFFD] hover:bg-white/10"
+                      ? isScrolled
+                        ? "bg-[#5A10A5] text-white"
+                        : "bg-[#4460EF] text-white"
+                      : isScrolled
+                      ? "text-[#000640] hover:bg-slate-100"
+                      : "text-white hover:bg-white/10"
                   }`}
                 >
                   <span>{item.label}</span>
                 </Link>
               );
             })}
-            <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
+            <div className={`pt-3 border-t flex flex-col gap-2 ${
+              isScrolled ? "border-slate-200" : "border-white/10"
+            }`}>
               <Link
                 to="/register"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center w-full py-2 bg-[#ECEFFD] text-[#4460EF] font-semibold rounded-[12px]"
+                className={`flex items-center justify-center w-full py-2 font-semibold rounded-[12px] ${
+                  isScrolled ? "bg-[#5A10A5] text-white" : "bg-[#ECEFFD] text-[#4460EF]"
+                }`}
               >
                 Sign Up
               </Link>
               <Link
                 to="/register"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center w-full py-2 border-[1.6px] border-[#FFFFFF73] text-[#FEFEFF] font-medium rounded-[12px]"
+                className={`flex items-center justify-center w-full py-2 border-[1.6px] font-medium rounded-[12px] ${
+                  isScrolled ? "border-[#5A10A5] text-[#5A10A5]" : "border-[#FFFFFF73] text-[#FEFEFF]"
+                }`}
               >
                 Join IEEE
               </Link>

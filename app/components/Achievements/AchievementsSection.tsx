@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Trophy, Award, Star, Medal } from "lucide-react";
+import { Trophy, Star } from "lucide-react";
 
 export interface AchievementItem {
   id: string;
@@ -13,37 +13,28 @@ export interface AchievementItem {
 
 const achievementsData: AchievementItem[] = [
   {
-    id: "eco-pulse",
-    title: "Eco Pulse",
-    category: "Award",
-    year: "2026",
-    description:
-      "Recognized by IEEE Region 8 for outstanding student branch activities and community impact.",
-    icon: Trophy,
-  },
-  {
     id: "counselor-award",
     title: "Counselor Award",
-    category: "Recognition",
+    category: "Sectional",
     year: "2026",
     description:
       "Acknowledged for organizing the most impactful technical event within the Egypt Section.",
     icon: Star,
   },
   {
-    id: "exemplary-branch",
-    title: "Exemplary Branch",
-    category: "Excellence",
-    year: "2025",
+    id: "eco-pulse",
+    title: "Eco Pulse",
+    category: "Competition Win",
+    year: "2026",
     description:
-      "Awarded for exceptional leadership, high member engagement, and technical excellence across Region 8.",
-    icon: Medal,
+      "Secured $1,800 in funding through a competition for a university project, supporting the development of an innovative idea.",
+    icon: Trophy,
   },
 ];
 
 export const AchievementsSection: React.FC = () => {
   return (
-    <section className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section id="achievements" className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         {/* Section Header */}
         <div className="flex flex-col items-center justify-center text-center space-y-3 mb-10 md:mb-14">
@@ -51,7 +42,7 @@ export const AchievementsSection: React.FC = () => {
           <div className="flex flex-col items-center gap-1.5">
             <span
               style={{
-                fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                fontFamily: "Montserrat, sans-serif",
                 fontWeight: 700,
                 fontSize: "11px",
                 letterSpacing: "2px",
@@ -74,17 +65,17 @@ export const AchievementsSection: React.FC = () => {
           <p
             className="max-w-2xl text-center text-sm sm:text-base"
             style={{
-              fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+              fontFamily: "Montserrat, sans-serif",
               color: "#5A6A8A",
               lineHeight: "1.6",
             }}
           >
-            A record of recognition, innovation, and student-led impact. Real awards will be added here.
+            A record of recognition, innovation, and student-led impact.
           </p>
         </div>
 
-        {/* Cards Grid */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl">
+        {/* Cards Grid - Exactly 2 cards centered */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {achievementsData.map((item, index) => {
             const IconComponent = item.icon;
             return (
@@ -109,7 +100,7 @@ export const AchievementsSection: React.FC = () => {
                       <span
                         className="text-xs font-bold text-[#5A10A5]"
                         style={{
-                          fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                          fontFamily: "Montserrat, sans-serif",
                         }}
                       >
                         {item.category}
@@ -117,7 +108,7 @@ export const AchievementsSection: React.FC = () => {
                       <span
                         className="text-base font-extrabold text-[#4460EF]"
                         style={{
-                          fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                          fontFamily: "Montserrat, sans-serif",
                         }}
                       >
                         {item.year}
@@ -129,7 +120,7 @@ export const AchievementsSection: React.FC = () => {
                   <h3
                     className="text-xl font-extrabold text-[#000640] mb-2 group-hover:text-[#5A10A5] transition-colors"
                     style={{
-                      fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                      fontFamily: "Montserrat, sans-serif",
                     }}
                   >
                     {item.title}
@@ -139,7 +130,7 @@ export const AchievementsSection: React.FC = () => {
                   <p
                     className="text-xs sm:text-sm text-[#5A6A8A] leading-relaxed mb-6"
                     style={{
-                      fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                      fontFamily: "Montserrat, sans-serif",
                     }}
                   >
                     {item.description}

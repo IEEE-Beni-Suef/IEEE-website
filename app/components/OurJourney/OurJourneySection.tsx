@@ -5,69 +5,54 @@ import { Globe, ChevronRight, Sparkles } from "lucide-react";
 export interface JourneySeason {
   id: string;
   seasonNumber: string;
-  tag: string;
-  badge: string;
   title: string;
   points: string[];
-  footerNote: string;
 }
 
 const seasonsData: JourneySeason[] = [
   {
     id: "season-8",
     seasonNumber: "Season 8",
-    tag: "FOUNDATION",
-    badge: "Official Branch Launch",
     title: "Season 8",
     points: [
-      "Branch establishment and official IEEE affiliation",
-      "Founding committees formed across technical and organizational tracks",
-      "First set of technical workshops and orientation events",
-      "Initial community partnerships and outreach efforts",
+      "Strengthening our community through collaboration and teamwork.",
+      "Creating opportunities for technical learning and personal development.",
+      "Encouraging members to explore new ideas and challenge themselves.",
+      "Building a stronger foundation for future growth.",
     ],
-    footerNote: "Real season data and verified achievements will replace these placeholders.",
   },
   {
     id: "season-9",
     seasonNumber: "Season 9",
-    tag: "EXPANSION",
-    badge: "Community Growth",
     title: "Season 9",
     points: [
-      "Expanded member intake reaching over 150+ active student members",
-      "Launched first annual Hackathon and technical competition series",
-      "Established partnerships with local tech companies and university labs",
-      "Introduced specialized track workshops in Web, AI, and Embedded Systems",
+      "Expanding opportunities for learning, collaboration, and innovation.",
+      "Bringing students together through shared interests and ambitions.",
+      "Encouraging active participation in technical and organizational activities.",
+      "Creating new possibilities for growth and community engagement.",
     ],
-    footerNote: "Real season data and verified achievements will replace these placeholders.",
   },
   {
     id: "season-10",
     seasonNumber: "Season 10",
-    tag: "INNOVATION",
-    badge: "Regional Recognition",
     title: "Season 10",
     points: [
-      "Achieved top ranking in IEEE Region 8 Student Branch Exemplary Award",
-      "Hosted multi-university tech summit with 500+ attendees",
-      "Formed dedicated research and development project teams",
-      "Strengthened alumni network and career mentorship programs",
+      "Encouraging innovation and creative problem-solving.",
+      "Supporting members in developing their technical and leadership skills.",
+      "Promoting teamwork through shared projects and initiatives.",
+      "Creating meaningful experiences that inspire continuous learning.",
     ],
-    footerNote: "Real season data and verified achievements will replace these placeholders.",
   },
   {
     id: "season-11",
     seasonNumber: "Season 11",
-    tag: "EXCELLENCE",
-    badge: "Current Season",
     title: "Season 11",
     points: [
-      "Pioneering student-led innovation labs and open-source initiatives",
-      "Scaling inter-college technical hackathons and career fairs",
-      "Continuous skill empowerment across technical & non-technical societies",
-      "Setting new benchmarks for community impact and leadership",
+      "Building on the experience and progress of previous seasons.",
+      "Empowering members to grow, lead, and make an impact.",
+      "Pursuing new opportunities for collaboration and innovation.",
+      "Shaping the next chapter of IEEE Beni Suef Student Branch.",
     ],
-    footerNote: "Real season data and verified achievements will replace these placeholders.",
   },
 ];
 
@@ -78,7 +63,7 @@ export const OurJourneySection: React.FC = () => {
     seasonsData.find((s) => s.id === activeSeasonId) || seasonsData[0];
 
   return (
-    <section className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section id="about" className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         {/* Section Header */}
         <div className="flex flex-col items-center justify-center text-center space-y-3 mb-10 md:mb-12">
@@ -89,7 +74,7 @@ export const OurJourneySection: React.FC = () => {
             </div>
             <span
               style={{
-                fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                fontFamily: "Montserrat, sans-serif",
                 fontWeight: 700,
                 fontSize: "11px",
                 letterSpacing: "2px",
@@ -112,7 +97,7 @@ export const OurJourneySection: React.FC = () => {
           <p
             className="max-w-2xl text-center text-sm sm:text-base"
             style={{
-              fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+              fontFamily: "Montserrat, sans-serif",
               color: "#5A6A8A",
               lineHeight: "1.6",
             }}
@@ -134,7 +119,7 @@ export const OurJourneySection: React.FC = () => {
                       : "bg-[#5A10A5]/5 text-[#5A6A8A] hover:bg-[#5A10A5]/10 hover:text-[#5A10A5]"
                   }`}
                   style={{
-                    fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                    fontFamily: "Montserrat, sans-serif",
                   }}
                 >
                   {season.seasonNumber}
@@ -174,13 +159,10 @@ export const OurJourneySection: React.FC = () => {
                         isActive ? "text-[#5A10A5]" : "text-gray-600 group-hover:text-[#5A10A5]"
                       }`}
                       style={{
-                        fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                        fontFamily: "Montserrat, sans-serif",
                       }}
                     >
                       {season.seasonNumber}
-                    </span>
-                    <span className="text-xs text-gray-400 font-medium">
-                      {season.tag}
                     </span>
                   </div>
                 </button>
@@ -199,45 +181,25 @@ export const OurJourneySection: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="relative bg-white rounded-2xl p-6 sm:p-8 shadow-xl shadow-purple-500/5 border border-purple-100/80 overflow-hidden"
               >
-                {/* Header Row: Tag + Badge */}
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                  <span
-                    className="text-xs font-extrabold tracking-wider text-[#5A10A5] uppercase"
-                    style={{
-                      fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
-                    }}
-                  >
-                    {activeSeason.tag}
-                  </span>
-                  <span
-                    className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-[#5A10A5]/10 text-[#5A10A5]"
-                    style={{
-                      fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
-                    }}
-                  >
-                    {activeSeason.badge}
-                  </span>
-                </div>
-
                 {/* Season Title */}
                 <h3
                   className="text-2xl font-extrabold text-[#000640] mb-5"
                   style={{
-                    fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                    fontFamily: "Montserrat, sans-serif",
                   }}
                 >
                   {activeSeason.title}
                 </h3>
 
                 {/* Bullet Points */}
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-3">
                   {activeSeason.points.map((point, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#5A10A5] mt-2 flex-shrink-0" />
                       <span
                         className="text-sm text-[#5A6A8A] leading-relaxed"
                         style={{
-                          fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
+                          fontFamily: "Montserrat, sans-serif",
                         }}
                       >
                         {point}
@@ -245,19 +207,6 @@ export const OurJourneySection: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-
-                {/* Bottom Disclaimer / Footer Note */}
-                <div className="pt-4 border-t border-purple-50 flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" />
-                  <p
-                    className="text-xs text-gray-400 italic"
-                    style={{
-                      fontFamily: "Font/Font Family/Font Family#01, Montserrat, sans-serif",
-                    }}
-                  >
-                    {activeSeason.footerNote}
-                  </p>
-                </div>
               </motion.div>
             </AnimatePresence>
           </div>

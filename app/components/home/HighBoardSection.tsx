@@ -1,12 +1,12 @@
 
 import React from 'react';
 
-import chairman from "../../assets/images/highBoard/chairman.jpeg"
-import viceChairman from "../../assets/images/highBoard/viceChairman.jpg"
+import chairman from "../../assets/images/highBoard/chairman.png"
+import viceChairman from "../../assets/images/highBoard/viceChairman.png"
 import viceChairwoman from "../../assets/images/highBoard/viceChairwoman.jpg"
-import webmaster from "../../assets/images/highBoard/webmaster.jpg"
+import webmaster from "../../assets/images/highBoard/webmaster.png"
 import treasure from "../../assets/images/highBoard/treasure.jpg"
-import secretary from "../../assets/images/highBoard/secretary.jpg"
+import secretary from "../../assets/images/highBoard/secretary.png"
 
 export interface SocialLinks {
   linkedin?: string;
@@ -25,45 +25,38 @@ export interface BoardMember {
 export const boardData: BoardMember[] = [
   {
     id: '1',
-    name: 'MOHAMED SHARAF',
+    name: 'Ahmed El-Banna',
     role: 'CHAIRMAN',
-    imageUrl: chairman, 
-    socials: { linkedin: 'https://www.linkedin.com/in/mohamed-sharaf01/', email: 'mailto:ahmedsharaf1965.n@gmail.com' }
+    imageUrl: chairman,
+    socials: { linkedin: 'https://www.linkedin.com/in/ahmed-m-el-banna-10268b200/', email: 'mailto:ahmedsharaf1965.n@gmail.com' }
   },
   {
     id: '2',
-    name: 'AMR HASSAN',
+    name: 'Sama Mohsen',
     role: 'VICE CHAIRMAN',
     imageUrl: viceChairman,
-    socials: { linkedin: 'https://www.linkedin.com/in/amrhk/', email: 'mailto:amrhassanhd@gmail.com' }
-  },
-  {
-    id: '3',
-    name: 'SAHAR EHAB',
-    role: 'VICE CHAIRWOMAN',
-    imageUrl: viceChairwoman,
-    socials: { linkedin: 'https://www.linkedin.com/in/sahar-ehab125/', email: 'mailto:saharehab54321@gmail.com' }
+    socials: { linkedin: 'https://www.linkedin.com/in/sama-mohsen-a69b28334/', email: 'mailto:amrhassanhd@gmail.com' }
   },
   {
     id: '4',
-    name: 'MOHAMED ELSHISHTAWY',
+    name: 'Mariam Gamal',
     role: 'WEBMASTER',
     imageUrl: webmaster,
-    socials: { linkedin: 'https://www.linkedin.com/in/mo-shish/', email: 'mailto:mohamed.elshishtawy11@gmail.com' }
+    socials: { linkedin: 'https://www.linkedin.com/in/mariam-gamal-98873b26b', email: 'mailto:gamalmariam52@gmail.com' }
   },
   {
     id: '5',
-    name: 'SULTAN AMED',
+    name: 'Basmala Mohammed',
     role: 'TREASURE',
     imageUrl: treasure,
-    socials: { linkedin: 'https://www.linkedin.com/in/sultan-a7med/', email: 'mailto:sultan393493@gmail.com' }
+    socials: { linkedin: 'https://www.linkedin.com/in/basmala-mohamed1/', email: 'mailto:sayedbasmala00@gmail.com' }
   },
   {
     id: '6',
-    name: 'MOHAMED MEDHAT',
+    name: 'Kamal Alashry',
     role: 'SECRETARY',
     imageUrl: secretary,
-    socials: { linkedin: 'https://www.linkedin.com/in/m0-medhat/', email: 'mailto:mo.medhat.me@gmail.com' }
+    socials: { linkedin: 'https://www.linkedin.com/in/kamal-elashry/', email: 'mailto:Kamal.elashry16@gmail.com' }
   }
 ];
 
@@ -71,27 +64,27 @@ export const boardData: BoardMember[] = [
 
 const LinkedInIcon = () => (
   <svg className="w-5 h-5 text-white hover:text-purple-300 transition-colors" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
   </svg>
 );
 
 const MailIcon = () => (
   <svg className="w-6 h-6 text-white hover:text-purple-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-    <polyline points="22,6 12,13 2,6"/>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
   </svg>
 );
 
 const MemberCard: React.FC<{ member: BoardMember }> = ({ member }) => (
   <div className="relative group overflow-hidden rounded-2xl aspect-[3/4] bg-gray-900 shadow-xl transition-transform duration-300 hover:-translate-y-2">
     {/* Profile Image */}
-    <img 
-      src={member.imageUrl} 
+    <img
+      src={member.imageUrl}
       alt={`${member.name} - ${member.role}`}
       className="absolute inset-0 w-full h-full object-cover object-top"
       loading="lazy"
     />
-    
+
     {/* Dark Gradient Overlay for Text Readability */}
     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
 

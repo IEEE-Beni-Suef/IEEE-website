@@ -2,8 +2,21 @@ import { useState, type MouseEvent } from "react";
 import CommitteesSwipper from "./CommitteeSwipper";
 import CommitteeToggleButton from "./CommitteeToggleButton";
 import type { Committee } from "~/types";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { SwiperSlide } from "swiper/react";
 import CommitteeCardSkeleton from "./CommitteeCardSkeleton";
+
+import aiImg from "~/assets/images/Committees/AI.png";
+import astronomyImg from "~/assets/images/Committees/Astronomy.png";
+import backendImg from "~/assets/images/Committees/Backend.png";
+import cyberSecurityImg from "~/assets/images/Committees/CyberSecurity.png";
+import dataAnalysisImg from "~/assets/images/Committees/DataAnalysis.png";
+import entrepreneurshipImg from "~/assets/images/Committees/Entrepreneurship.png";
+import frontendImg from "~/assets/images/Committees/Frontend.png";
+import generalImg from "~/assets/images/Committees/General.png";
+import graphicDesignImg from "~/assets/images/Committees/GraphicDesign.png";
+import hrImg from "~/assets/images/Committees/HR.png";
+import prImg from "~/assets/images/Committees/PR.png";
+import socialMediaImg from "~/assets/images/Committees/SocialMedia.png";
 
 interface IProps {
   committees: Committee[];
@@ -11,6 +24,132 @@ interface IProps {
   isError: boolean;
   error: Error | null;
 }
+
+const defaultTechnicalCommittees: Committee[] = [
+  {
+    id: 1,
+    name: "AI",
+    description:
+      "Focuses on artificial intelligence, machine learning, deep learning, and intelligent system development.",
+    imageUrl: aiImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 2,
+    name: "Astronomy",
+    description:
+      "Explores space science, astrophysics, stargazing events, and scientific space exploration.",
+    imageUrl: astronomyImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 3,
+    name: "Backend",
+    description:
+      "Powers digital infrastructure, builds robust server systems, APIs, databases, and core application logic.",
+    imageUrl: backendImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 4,
+    name: "Cyber Security",
+    description:
+      "Focuses on information security, ethical hacking, network defense, and protecting digital assets.",
+    imageUrl: cyberSecurityImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 5,
+    name: "Data Analysis",
+    description:
+      "Extracts insights from complex datasets using statistical modeling, data visualization, and analytics.",
+    imageUrl: dataAnalysisImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 6,
+    name: "Frontend",
+    description:
+      "Crafts intuitive, responsive, and visually stunning web interfaces and client-side applications.",
+    imageUrl: frontendImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+];
+
+const defaultOperationalCommittees: Committee[] = [
+  {
+    id: 7,
+    name: "Entrepreneurship",
+    description:
+      "Fosters business acumen, startup culture, pitch competitions, and entrepreneurial mindsets.",
+    imageUrl: entrepreneurshipImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 8,
+    name: "General",
+    description:
+      "Coordinates inter-committee activities, branch operations, event support, and member engagement.",
+    imageUrl: generalImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 9,
+    name: "Graphic Design",
+    description:
+      "Creates visual branding, promotional graphics, UI assets, and creative design materials.",
+    imageUrl: graphicDesignImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 10,
+    name: "HR",
+    description:
+      "Manages recruitment, member evaluation, team dynamics, internal communications, and member welfare.",
+    imageUrl: hrImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 11,
+    name: "PR",
+    description:
+      "Handles public relations, media coverage, sponsorships, speaker outreach, and external partnerships.",
+    imageUrl: prImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+  {
+    id: 12,
+    name: "Social Media",
+    description:
+      "Drives digital presence, content strategy, social media campaigns, and online audience engagement.",
+    imageUrl: socialMediaImg,
+    headId: 0,
+    vicesId: [],
+    memberCount: 0,
+  },
+];
 
 const CommitteesSection = ({
   committees,
@@ -31,7 +170,6 @@ const CommitteesSection = ({
     }
   };
 
-  // Categorize committees into technical and operational based on their names
   const technicalNames = [
     "backend",
     "frontend",
@@ -41,22 +179,24 @@ const CommitteesSection = ({
     "gnc",
     "ai",
     "cybersecurity",
+    "cyber security",
     "data analysis",
+    "dataanalysis",
   ];
 
-  const technical = committees.filter((c) =>
+  const fetchedTechnical = (committees || []).filter((c) =>
     c.name && technicalNames.some((name) => c.name.toLowerCase().includes(name)),
   );
 
-  const operational = committees.filter(
+  const fetchedOperational = (committees || []).filter(
     (c) => c.name && !technicalNames.some((name) => c.name.toLowerCase().includes(name)),
   );
 
-  // Fallback: if filtering produces nothing, show all committees
-  const currentList =
-    commmitteList === "technicalcommittees"
-      ? technical.length > 0 ? technical : committees
-      : operational.length > 0 ? operational : committees;
+  const technicalList =
+    fetchedTechnical.length > 0 ? fetchedTechnical : defaultTechnicalCommittees;
+
+  const operationalList =
+    fetchedOperational.length > 0 ? fetchedOperational : defaultOperationalCommittees;
 
   if (isLoading) {
     return (
@@ -72,48 +212,22 @@ const CommitteesSection = ({
       </div>
     );
   }
-  if (isError) {
-    console.log(error);
 
-    return (
-      <div className="flex justify-center items-center text-red-500">
-        {error?.message || "Failed to load committees."}
-      </div>
-    );
-  }
-  console.log(committees);
-  
+  const currentDisplayList =
+    commmitteList === "technicalcommittees" ? technicalList : operationalList;
+
   return (
     <div>
-      {/* BUTTONS========================================= */}
+      {/* BUTTONS */}
       <CommitteeToggleButton
         commmitteList={commmitteList}
         handleChange={handleChange}
       />
-      {/* BUTTONS========================================= */}
 
-      {/* COMMITTEES========================================= */}
-      {commmitteList === "technicalcommittees" && technical.length === 0 ? (
-        <div className="flex justify-center items-center py-12 text-gray-500">
-          No technical committees found.
-        </div>
-      ) : commmitteList === "operationalcommittees" &&
-        operational.length === 0 ? (
-        <div className="flex justify-center items-center py-12 text-gray-500">
-          No operational committees found.
-        </div>
-      ) : (
-        <CommitteesSwipper
-          data={
-            commmitteList === "technicalcommittees" ? technical : operational
-          }
-        />
-      )}
-
-      {/* COMMITTEES========================================= */}
+      {/* COMMITTEES SWIPER */}
+      <CommitteesSwipper data={currentDisplayList} />
     </div>
   );
 };
 
 export default CommitteesSection;
-

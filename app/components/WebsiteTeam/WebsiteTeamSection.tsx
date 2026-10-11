@@ -1,57 +1,61 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { Users } from "lucide-react";
 import WebsiteTeamCard, { type WebsiteTeamMember } from "./WebsiteTeamCard";
 
-import webmasterImg from "~/assets/images/highBoard/webmaster.jpg";
-import heroImg1 from "~/assets/images/heroImage1.png";
-import heroImg2 from "~/assets/images/heroImage2.png";
-import heroImg3 from "~/assets/images/heroImage3.png";
-import heroImg4 from "~/assets/images/heroImage4.png";
-import WhoWeAreImage from "~/assets/images/WhoWeAreImage.jpg";
+import elshishtawyImg from "~/assets/images/WebsiteTeam/Elshishtawy.jpeg";
+import youssefImg from "~/assets/images/WebsiteTeam/YoussefAlaa.jpg";
+import ahmedElBannaImg from "~/assets/images/WebsiteTeam/Ahmed El-Banna.png";
+import mariemImg from "~/assets/images/WebsiteTeam/Mariem Gamal.png";
+import placeholderImg from "~/assets/images/highBoard/webmaster.png";
 
 const teamMembers: WebsiteTeamMember[] = [
   {
     id: "member-1",
-    name: "[ Mariam Gamal ]",
-    roleTag: "Webmaster",
-    description: "Technical direction, architecture & project coordination",
-    image: webmasterImg,
+    name: "Mohammed Elshishtawy",
+    roleTag: "Web Master",
+    description:
+      "Overseeing the website's development and ensuring a seamless digital experience.",
+    image: elshishtawyImg,
   },
   {
     id: "member-2",
-    name: "[ Mariam Gamal ]",
-    roleTag: "UI/UX Designer",
-    description: "Technical direction, architecture & project coordination",
-    image: webmasterImg,
+    name: "Mostafa Hatem",
+    roleTag: "Front-End Developer",
+    description:
+      "Bringing designs to life through responsive, interactive, and user-friendly interfaces.",
+    image: placeholderImg,
   },
   {
     id: "member-3",
-    name: "[ Mariam Gamal ]",
-    roleTag: "Front-End",
-    description: "Technical direction, architecture & project coordination",
-    image: webmasterImg,
+    name: "Youssef Alaa",
+    roleTag: "Front-End Developer",
+    description:
+      "Bringing designs to life through responsive, interactive, and user-friendly interfaces.",
+    image: youssefImg,
   },
   {
     id: "member-4",
-    name: "[ Mariam Gamal ]",
-    roleTag: "Front-End",
-    description: "Technical direction, architecture & project coordination",
-    image: webmasterImg,
+    name: "Ahmed El-Banna",
+    roleTag: "Back-End Developer",
+    description:
+      "Building the functionality behind the scenes to ensure reliable performance and smooth data management.",
+    image: ahmedElBannaImg,
   },
   {
     id: "member-5",
-    name: "[ Mariam Gamal ]",
-    roleTag: "Back-End",
-    description: "Technical direction, architecture & project coordination",
-    image: webmasterImg,
+    name: "Mariam Gamal",
+    roleTag: "UI/UX Designer",
+    description:
+      "Crafting intuitive user experiences and visually engaging designs that put users first.",
+    image: mariemImg,
   },
   {
     id: "member-6",
-    name: "[ Mariam Gamal ]",
-    roleTag: "Back-End",
-    description: "Technical direction, architecture & project coordination",
-    image: webmasterImg,
+    name: "Ahmed Abdelkereem",
+    roleTag: "UI/UX Designer",
+    description:
+      "Crafting intuitive user experiences and visually engaging designs that put users first.",
+    image: placeholderImg,
   },
 ];
 
@@ -73,15 +77,15 @@ export const WebsiteTeamSection: React.FC = () => {
                 color: "#5A10A5",
               }}
             >
-              WEBSITE TEAM
+              WEBSITE TEAM S10
             </span>
             <div className="w-6 h-[2px] bg-[#5A10A5] rounded-full" />
           </div>
 
           {/* Main Heading */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-center">
-            <span style={{ color: "#000640" }}>Behind the </span>
-            <span style={{ color: "#5A10A5" }}>Experience</span>
+            <span style={{ color: "#000640" }}>Website Team </span>
+            <span style={{ color: "#5A10A5" }}>S10</span>
           </h2>
 
           {/* Subtitle */}
@@ -125,7 +129,7 @@ export const WebsiteTeamSection: React.FC = () => {
 
         {/* ── Team Cards Grid (Matching max-w-[1060px] & 3 Cols) ── */}
         <div className="w-full max-w-[1060px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {teamMembers.map((member, index) => (
+          {teamMembers.map((member) => (
             <WebsiteTeamCard
               key={member.id}
               id={member.id}
